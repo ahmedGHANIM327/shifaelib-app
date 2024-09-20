@@ -42,7 +42,9 @@ const LoginForm = () => {
       try {
         const response: ServerResponse<User> = await loginUser(data);
         if (response.ok) {
-          router.push('/');
+          localStorage.setItem('currentUser', JSON.stringify(response.data));
+          router.push("/");
+          router.refresh();
         } else {
           setError(response.error as string);
         }
