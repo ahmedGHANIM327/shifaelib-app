@@ -171,11 +171,11 @@ export const resetPasswordUser = async (
     }
 
     return { ok: true };
-  } catch (error) {
-    if (error && error.message.includes('jwt')) {
+  } catch (error: any) {
+    if (error && error.message.includes('jwt') as string) {
       return { ok: false, error: 'INVALID_TOKEN' };
     }
-    return { ok: false, error: error.message };
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -404,7 +404,7 @@ export const updatePasswordUser = async (
     // compar old password
     const comparPasswords = await bcrypt.compare(
       validData.currentPassword,
-      user.password,
+      user.password! as string,
     );
     if (!comparPasswords) throw new Error('INCORRECT_PASSWORD');
 
@@ -454,7 +454,7 @@ export const updateCurrentPasswordUser = async (
     // compar old password
     const comparPasswords = await bcrypt.compare(
       validData.currentPassword,
-      user.password,
+      user.password! as string,
     );
     if (!comparPasswords) throw new Error('INCORRECT_PASSWORD');
 
