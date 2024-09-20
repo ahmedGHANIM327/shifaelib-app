@@ -63,8 +63,8 @@ export const loginUser = async (data: LoginUserType) => {
     await signIn('credentials', { email, password, redirect: false });
 
     return { ok: true, data: omit(['password'], user) };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -88,8 +88,8 @@ export const getUserByEmail = async (
     if (!user) throw new Error('USER_NOT_FOUND');
 
     return { ok: true, data: user };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -129,8 +129,8 @@ export const requestResetPassword = async (
     });
 
     return { ok: true };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -195,8 +195,8 @@ export const getCurrentUser = async (): Promise<ServerResponse<User>> => {
     if (!user) throw new Error('USER_NOT_FOUND');
 
     return { ok: true, data: user };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -207,8 +207,8 @@ export const getCabinetUsers = async (): Promise<ServerResponse<User[]>> => {
     const users = (await prisma.user.findMany()) as User[];
 
     return { ok: true, data: users };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -236,8 +236,8 @@ export const getUserById = async (
     if (!user) throw new Error('USER_NOT_FOUND');
 
     return { ok: true, data: user };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -278,8 +278,8 @@ export const createUser = async (
     });
 
     return { ok: true, data: JSON.parse(JSON.stringify(createdUser)) };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -305,8 +305,8 @@ export const deleteUser = async (id: string): Promise<ServerResponse<User>> => {
     });
 
     return { ok: true, data: JSON.parse(JSON.stringify(user)) };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -336,8 +336,8 @@ export const updateUser = async (
     }
 
     return { ok: true, data: updatedUser };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -366,8 +366,8 @@ export const updateCurrentUser = async (
     }
 
     return { ok: true, data: updatedUser };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -417,8 +417,8 @@ export const updatePasswordUser = async (
     });
 
     return { ok: true };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -466,7 +466,7 @@ export const updateCurrentPasswordUser = async (
     });
 
     return { ok: true };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };

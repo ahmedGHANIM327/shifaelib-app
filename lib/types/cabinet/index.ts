@@ -17,7 +17,7 @@ export type Cabinet = {
   email?: string;
   speciality: string;
   description?: string;
-  openingHours?: any;
+  openingHours?: object;
   logo?: string;
   //Relations
   users?: User[];
