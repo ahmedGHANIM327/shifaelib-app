@@ -1,4 +1,4 @@
-import { AccountStatus, WeekOpeningHours } from '@/lib/types';
+import { AccountStatus } from '@/lib/types';
 import { User } from '@/lib/types/users';
 import { z } from 'zod';
 import {
@@ -17,7 +17,7 @@ export type Cabinet = {
   email?: string;
   speciality: string;
   description?: string;
-  openingHours?: WeekOpeningHours;
+  openingHours?: any;
   logo?: string;
   //Relations
   users?: User[];
