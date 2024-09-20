@@ -1,8 +1,7 @@
 'use client';
 
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Card } from '@/components/ui/card';
-import { useCurrentUserContext } from '@/contextes/user/CurrentUserContext';
 import { Skeleton } from '@/components/ui/skeleton';
 
 type LoadingCardProps = {

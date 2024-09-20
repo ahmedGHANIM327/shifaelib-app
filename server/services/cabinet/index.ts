@@ -16,7 +16,7 @@ import {
   UpdateCabinetInput,
   WeekOpeningHoursInput,
 } from '@/lib/types/cabinet';
-import { validateAuthSession } from '@/server/services/common/helpers';
+import { validateAuthSession } from '../common/helpers';
 
 export const createCabinet = async (
   data: CreateCabinetInput,

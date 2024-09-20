@@ -15,7 +15,7 @@ export type User = {
   lastName: string;
   status: AccountStatus;
   email: string;
-  password: string;
+  password?: string;
   photo?: string;
   gender: Gender;
   phone?: string;

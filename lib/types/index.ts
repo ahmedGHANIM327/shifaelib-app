@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+
 export type ServerResponse<T = any> = {
   ok: boolean;
   error?: string;

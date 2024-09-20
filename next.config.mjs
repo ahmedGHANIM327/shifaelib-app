@@ -7,9 +7,6 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-  },
-  eslint: {
-    ignoreDuringBuilds: false
   }
 };
 
