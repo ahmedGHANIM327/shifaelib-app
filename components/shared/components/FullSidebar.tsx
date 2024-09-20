@@ -19,6 +19,7 @@ export const FullSidebar = () => {
       </div>
       <div className="w-full mt-16">
         {navItems.map((item) => (
+          // eslint-disable-next-line react/jsx-key
           <NavItemLink item={item} type={'full'} />
         ))}
       </div>
