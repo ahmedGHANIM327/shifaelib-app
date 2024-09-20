@@ -52,8 +52,8 @@ export const createCabinet = async (
     });
 
     return { ok: true, data: JSON.parse(JSON.stringify(createdCabinet)) };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -71,8 +71,8 @@ export const getCabinet = async (): Promise<ServerResponse<Cabinet>> => {
     }
 
     return { ok: true, data: JSON.parse(JSON.stringify(cabinet)) };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -91,8 +91,8 @@ export const deleteCabinet = async (): Promise<ServerResponse<Cabinet>> => {
     });
 
     return { ok: true, data: JSON.parse(JSON.stringify(cabinet)) };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -121,8 +121,8 @@ export const updateCabinet = async (
     })) as Cabinet;
 
     return { ok: true, data: JSON.parse(JSON.stringify(updatedCabinet)) };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
 
@@ -153,7 +153,7 @@ export const updateOpeningHoursCabinet = async (
     })) as Cabinet;
 
     return { ok: true, data: JSON.parse(JSON.stringify(updatedCabinet)) };
-  } catch (error) {
-    return { ok: false, error: error.message };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
   }
 };
