@@ -410,7 +410,7 @@ export const updatePasswordUser = async (
 
     const hashedPassword = await bcrypt.hash(validData.password, 10);
 
-    await prisma.user.update({
+    const updatedUser = (await prisma.user.update({
       where: {
         id,
       },
@@ -418,7 +418,16 @@ export const updatePasswordUser = async (
         password: hashedPassword,
         isTemporaryPassword: false,
       },
-    });
+      include: {
+        cabinet: {
+          include: {
+            services: true,
+          },
+        },
+      },
+    })) as User;
+
+    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
 
     return { ok: true };
   } catch (error: any) {
@@ -460,16 +469,24 @@ export const updateCurrentPasswordUser = async (
 
     const hashedPassword = await bcrypt.hash(validData.password, 10);
 
-    await prisma.user.update({
+    const updatedUser = (await prisma.user.update({
       where: {
         id,
       },
       data: {
         password: hashedPassword,
+        isTemporaryPassword: false,
       },
-    });
+      include: {
+        cabinet: {
+          include: {
+            services: true,
+          },
+        },
+      },
+    })) as User;
 
-    return { ok: true };
+    return { ok: true, data: updatedUser };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }

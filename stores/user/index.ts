@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { User } from '@/lib/types/users';
+import { UpdatePasswordUserInput, User } from '@/lib/types/users';
 import { getCurrentUser } from '@/server/services/users';
 import { signOut } from 'next-auth/react';
 
@@ -7,6 +7,7 @@ interface UserState {
   currentUser: User;
   isCurrentUserLoading: boolean;
   getCurrentUser: () => Promise<void>;
+  setCurrentUser: (newUser: User) => void;
 }
 
 const useUserStore = create<UserState>((set) => ({
@@ -29,6 +30,9 @@ const useUserStore = create<UserState>((set) => ({
       set({ currentUser: JSON.parse(currentUser) });
     }
     set({ isCurrentUserLoading: false });
+  },
+  setCurrentUser: (newUser: User) => {
+    set({ currentUser: newUser });
   },
   currentUser: {} as User,
   isCurrentUserLoading: false,
