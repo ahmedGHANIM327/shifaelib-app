@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Maximize, Minimize } from 'lucide-react';
 import { MobileNavbar } from '@/components/shared/components/MobileNavbar';
 import { HeaderProfileMenu } from '@/components/shared/components/HeaderProfileMenu';
+import { UpdatePasswordUserForm } from '@/components/dashboard/user/forms/UpdatePasswordUserForm';
 
 export const DashboardHeader = () => {
   const [fullScreen, setFullScreen] = React.useState(false);
@@ -26,6 +27,7 @@ export const DashboardHeader = () => {
             <MobileNavbar />
           </div>
         </div>
+        <UpdatePasswordUserForm />
         <div className="flex items-stretch xl:gap-x-2 gap-x-0">
           <Button
             onClick={toggle}
