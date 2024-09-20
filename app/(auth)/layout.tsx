@@ -7,6 +7,7 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // @ts-ignore
   return (
     <div className="w-full h-screen bg-accent">
       <ToastContainer
