@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cabinet {
+  id                  String   @id @default(uuid())
+  name                String
+  address             String
+  status              Status   @default(ACTIF)
+  subscriptionEndDate DateTime
+  phone               String?
+  email               String?
+  speciality          String
+  description         String?
+  openingHours        Json?
+  logo                String?
+
+  users    User[]
+  services Service[]
+}
+
+model Service {
+  id     String @id @default(uuid())
+  name   String
+  tarif  String
+  color  String
+  config Json?
+
+  treatments Treatment[]
+
+  cabinet   Cabinet @relation(fields: [cabinetId], references: [id], onDelete: Cascade)
+  cabinetId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model User {
+  id                  String  @id @default(uuid())
+  firstName           String
+  lastName            String
+  status              Status  @default(ACTIF)
+  email               String  @unique
+  password            String
+  photo               String?
+  gender              Gender
+  phone               String?
+  isTemporaryPassword Boolean @default(true)
+  isOwner             Boolean @default(false)
+
+  patientsCreated        Patient[]        @relation("CreatedPatients")
+  patientsUpdated        Patient[]        @relation("UpdatedPatients")
+  treatmentsCreated      Treatment[]      @relation("CreatedTreatments")
+  treatmentsUpdated      Treatment[]      @relation("UpdatedTreatments")
+  sessionsCreated        Session[]        @relation("CreatedSessions")
+  sessionsUpdated        Session[]        @relation("UpdatedSessions")
+  paymentsCreated        Payment[]        @relation("CreatedPayments")
+  paymentsUpdated        Payment[]        @relation("UpdatedPayments")
+  patientCommentsCreated PatientComment[] @relation("CreatedPatientComments")
+  patientCommentsUpdated PatientComment[] @relation("UpdatedPatientComments")
+
+  cabinet   Cabinet @relation(fields: [cabinetId], references: [id], onDelete: Cascade)
+  cabinetId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([email, id])
+}
+
+model Patient {
+  id        String  @id @default(uuid())
+  firstName String
+  lastName  String
+  gender    Gender
+  email     String?
+  phone     String?
+  birthDate String?
+  address   String?
+
+  sessions   Session[]
+  treatments Treatment[]
+  payments   Payment[]
+  comments   PatientComment[]
+
+  createdByUser User      @relation("CreatedPatients", fields: [createdBy], references: [id], onDelete: SetDefault)
+  createdBy     String    @default("xxxx-xxxx-xxxx-xxxx")
+  updatedByUser User      @relation("UpdatedPatients", fields: [updatedBy], references: [id], onDelete: SetDefault)
+  updatedBy     String    @default("xxxx-xxxx-xxxx-xxxx")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+model Treatment {
+  id         String          @id @default(uuid())
+  code       String
+  nbSessions String
+  status     TreatmentStatus @default(IN_PROGRESS)
+  data       Json?
+
+  sessions Session[]
+  payments Payment[]
+
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: SetDefault)
+  serviceId String  @default("xxxx-xxxx-xxxx-xxxx")
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId String
+
+  createdByUser User      @relation("CreatedTreatments", fields: [createdBy], references: [id], onDelete: SetDefault)
+  createdBy     String    @default("xxxx-xxxx-xxxx-xxxx")
+  updatedByUser User      @relation("UpdatedTreatments", fields: [updatedBy], references: [id], onDelete: SetDefault)
+  updatedBy     String    @default("xxxx-xxxx-xxxx-xxxx")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+model Session {
+  id        String        @id @default(uuid())
+  title     String
+  startTime DateTime
+  endTime   DateTime
+  status    SessionStatus @default(SCHEDULED)
+  tarif     String
+  note      String?
+  paymentId String?
+
+  treatment   Treatment @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+  treatmentId String
+  patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId   String
+
+  createdByUser User      @relation("CreatedSessions", fields: [createdBy], references: [id], onDelete: SetDefault)
+  createdBy     String    @default("xxxx-xxxx-xxxx-xxxx")
+  updatedByUser User      @relation("UpdatedSessions", fields: [updatedBy], references: [id], onDelete: SetDefault)
+  updatedBy     String    @default("xxxx-xxxx-xxxx-xxxx")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+model Payment {
+  id     String   @id @default(uuid())
+  amount String
+  date   DateTime @default(now())
+
+  treatment   Treatment @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+  treatmentId String
+  patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId   String
+
+  createdByUser User      @relation("CreatedPayments", fields: [createdBy], references: [id], onDelete: SetDefault)
+  createdBy     String    @default("xxxx-xxxx-xxxx-xxxx")
+  updatedByUser User      @relation("UpdatedPayments", fields: [updatedBy], references: [id], onDelete: SetDefault)
+  updatedBy     String    @default("xxxx-xxxx-xxxx-xxxx")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+model PatientComment {
+  id      String @id @default(uuid())
+  comment String
+
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId String
+
+  createdByUser User      @relation("CreatedPatientComments", fields: [createdBy], references: [id], onDelete: SetDefault)
+  createdBy     String    @default("xxxx-xxxx-xxxx-xxxx")
+  updatedByUser User      @relation("UpdatedPatientComments", fields: [updatedBy], references: [id], onDelete: SetDefault)
+  updatedBy     String    @default("xxxx-xxxx-xxxx-xxxx")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+enum Status {
+  ACTIF
+  INACTIF
+  BLOCKED
+  DELETED
+}
+
+enum TreatmentStatus {
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum SessionStatus {
+  SCHEDULED
+  ATTENDED
+  NOT_ATTENDED
+  CANCELED
+}
+
+enum Gender {
+  M
+  F
+}
