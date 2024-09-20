@@ -29,6 +29,10 @@ import jwt from 'jsonwebtoken';
 import { Resend } from 'resend';
 import { ResetPassword } from '@/lib/email-templates/reset-password';
 
+type ResetPasswordJwtPayload = {
+  id: string;
+}
+
 export const loginUser = async (data: LoginUserType) => {
   try {
     const { email, password } = (await zodValidationData(
@@ -112,7 +116,7 @@ export const requestResetPassword = async (
 
     const resendKey = (process.env.RESEND_API || '') as string;
     const secretKey = (process.env.JWT_SECRET_KEY || '') as string;
-    const payload = {
+    const payload: ResetPasswordJwtPayload = {
       id: user.id,
     };
 
@@ -140,7 +144,7 @@ export const resetPasswordUser = async (
 ): Promise<ServerResponse> => {
   try {
     const secretKey = (process.env.JWT_SECRET_KEY || '') as string;
-    const res = jwt.verify(token, secretKey);
+    const res: ResetPasswordJwtPayload = jwt.verify(token, secretKey) as ResetPasswordJwtPayload;
     if (!res?.id) {
       throw new Error('INVALID_TOKEN');
     }
