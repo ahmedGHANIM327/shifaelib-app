@@ -36,7 +36,7 @@ export const loginUser = async (data: LoginUserType) => {
       loginUserSchema,
     )) as LoginUserType;
 
-    const user = (await prisma.user.findUnique({
+    const user: User = (await prisma.user.findUnique({
       where: {
         email: email,
       },
@@ -56,7 +56,7 @@ export const loginUser = async (data: LoginUserType) => {
 
     const comparPasswords = await bcrypt.compare(password, user.password!);
     if (!comparPasswords) return { ok: false, error: 'INVALID_CREDENTIALS' };
-    
+
     // check user status
     checkLoginStatus(user);
 
