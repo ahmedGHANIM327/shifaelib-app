@@ -7,12 +7,10 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // @ts-ignore
   return (
     <div className="w-full h-screen bg-accent">
       <ToastContainer
         position={'bottom-right'}
-        duration={2000}
         rtl={false}
         closeOnClick
         theme={'colored'}
