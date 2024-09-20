@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { getUserByEmail } from '@/server/services/users';
+import { User } from '@/lib/types/users';
 
 // @ts-ignore
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -29,12 +30,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return null;
           }
 
-          const user = response.data;
+          const user = response.data as User;
 
           return {
             id: user.id,
             email: user.email,
-            cabinetId: user.cabinet.id!,
+            cabinetId: user.cabinet?.id as string,
           };
         } catch (error: any) {
           return null;
