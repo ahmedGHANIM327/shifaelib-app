@@ -49,7 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return {
           ...token,
           id: user.id,
-          cabinetId: user.cabinetId,
+          cabinetId: user?.cabinetId || '',
         };
       }
       return token;
@@ -59,8 +59,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         ...session,
         user: {
           ...session.user,
-          id: token.id as string,
-          cabinetId: token.cabinetId as string,
+          id: token?.id || '',
+          cabinetId: token?.cabinetId || '',
         },
       };
     },
