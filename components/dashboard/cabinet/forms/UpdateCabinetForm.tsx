@@ -1,16 +1,15 @@
-import React, { useTransition } from 'react';
+'use client';
+
+import React, { useState, useTransition } from 'react';
 import useCabinetStore from '@/stores/cabinet';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { updateCabinetSchema } from '@/lib/schemas/cabinet';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { CardTitle } from '@/components/shared/components/CardTitle';
 import { toast } from 'react-toastify';
 import { updateCabinet } from '@/server/services/cabinet';
 import { Cabinet, UpdateCabinetInput } from '@/lib/types/cabinet';
-import {Hospital} from "lucide-react";
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import {
   Form,
@@ -23,12 +22,17 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { CabinetTypeSelect } from '@/components/shared/inputs/CabinetTypeSelect';
+import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { DialogFormTitle } from '@/components/shared/components/DialogFormTitle';
+import { DialogFormActions } from '@/components/shared/components/DialogFormActions';
+import { PencilIcon } from 'lucide-react';
 
 export const UpdateCabinetForm = () => {
 
   const currentCabinet = useCabinetStore((state) => state.currentCabinet);
   const setCurrentCabinet = useCabinetStore((state) => state.setCurrentCabinet);
   const [isPending, startTransition] = useTransition();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const form = useForm<z.infer<typeof updateCabinetSchema>>({
     resolver: zodResolver(updateCabinetSchema),
@@ -43,11 +47,13 @@ export const UpdateCabinetForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof updateCabinetSchema>) => {
+    console.log('heeree');
     startTransition(async () => {
       try {
         const response = await updateCabinet(data as UpdateCabinetInput);
         if(response.ok) {
           setCurrentCabinet(response.data as Cabinet);
+          setIsDialogOpen(false);
           // @ts-ignore
           toast.success('Votre cabinet profile est mis à jour avec succès.');
         } else {
@@ -61,26 +67,24 @@ export const UpdateCabinetForm = () => {
     });
   };
 
+  const handleCancel = () => {
+    setIsDialogOpen(false);
+  }
+
   // @ts-ignore
-  return (
-    <Card className='p-4 pt-0 md:pb-6'>
+  return (<AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <AlertDialogTrigger>
+      <Button>
+        <PencilIcon size={13}/>
+      </Button>
+    </AlertDialogTrigger>
+    <AlertDialogContent className="md:w-[700px] md:max-w-[850px] p-0">
+      <DialogFormTitle
+        title={'Mettre à jour votre cabinet'}
+      />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          <div className='flex items-center w-full'>
-            <CardTitle
-              title={'Mettre à jour votre cabinet'}
-              icon={<Hospital />}
-              className={'mb-0'}
-            />
-            <Button
-              type={'submit'}
-              disabled={isPending}
-              className='px-16 md:flex hidden gap-x-2'
-            >
-              Mettre à jour
-              {isPending && <LoadingSpinner size={14} />}
-            </Button>
-          </div>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className='px-4 py-2'>
             <FormField
               control={form.control}
               name="name"
@@ -170,16 +174,27 @@ export const UpdateCabinetForm = () => {
                 )}
               />
             </div>
+          </div>
+          <DialogFormActions>
             <Button
-              type={'submit'}
+              variant={'secondary'}
+              className="md:px-16 md:w-fit w-full gap-x-2"
+              onClick={handleCancel}
+              type={'button'}
+            >
+              Pas maintenant
+            </Button>
+            <Button
+              type="submit"
+              className="md:px-16 md:w-fit w-full gap-x-2"
               disabled={isPending}
-              className='w-full md:hidden gap-x-2'
             >
               Mettre à jour
-              {isPending && <LoadingSpinner size={14} />}
+              {isPending && <LoadingSpinner size={14}/>}
             </Button>
+          </DialogFormActions>
         </form>
       </Form>
-    </Card>
-);
+    </AlertDialogContent>
+  </AlertDialog>)
 };

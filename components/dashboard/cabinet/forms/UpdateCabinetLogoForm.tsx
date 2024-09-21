@@ -64,7 +64,7 @@ export const UpdateCabinetLogoForm:FC<UpdateCabinetLogoFormProps> = ({ logo }) =
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button className="rounded-full bg-primary h-7 w-7 p-0 absolute right-2 bottom-2 border-primary">
+        <Button className="rounded-full text-primary bg-white hover:bg-white h-6 w-6 p-0 absolute right-0 bottom-0 border-primary">
           <PencilIcon size={15} />
         </Button>
       </AlertDialogTrigger>

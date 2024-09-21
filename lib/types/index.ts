@@ -10,7 +10,7 @@ export type AccountStatus = 'ACTIF' | 'INACTIF' | 'BLOCKED' | 'DELETED';
 
 export type Gender = 'M' | 'F';
 
-type DayOpeningHours = {
+export type DayOpeningHours = {
   from?: string;
   to?: string;
   isClosed: boolean;

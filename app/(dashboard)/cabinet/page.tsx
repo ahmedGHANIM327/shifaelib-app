@@ -3,9 +3,12 @@
 import React, { useEffect } from 'react';
 import useCabinetStore from '@/stores/cabinet';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
-import { UpdateCabinetForm } from '@/components/dashboard/cabinet/forms/UpdateCabinetForm';
 import { Card } from '@/components/ui/card';
 import { FicheCabinetHeader } from '@/components/dashboard/cabinet/components/FicheCabinetHeader';
+import { FicheCabinetData } from '@/components/dashboard/cabinet/components/FicheCabinetData';
+import { FicheCabinetHoraire } from '@/components/dashboard/cabinet/components/FicheCabinetHoraire';
+import { DefaultOpeningHours } from '@/lib/constants';
+import { WeekOpeningHours } from '@/lib/types';
 
 const Page = () => {
   const currentCabinet = useCabinetStore((state) => state.currentCabinet);
@@ -22,11 +25,18 @@ const Page = () => {
     </div>;
   }
 
-  return <Card>
+  return <Card className='pb-4'>
     <FicheCabinetHeader
       logo={currentCabinet.logo}
     />
-    <UpdateCabinetForm />
+    <div className='grid grid-cols-2 gap-4 md:mx-4 mx-2 mt-6'>
+      <FicheCabinetData
+        cabinet={currentCabinet}
+      />
+      <FicheCabinetHoraire
+        openingHours={currentCabinet.openingHours as WeekOpeningHours || DefaultOpeningHours}
+      />
+    </div>
   </Card>;
 };
 
