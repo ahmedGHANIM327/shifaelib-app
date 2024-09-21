@@ -10,7 +10,7 @@ export type AccountStatus = 'ACTIF' | 'INACTIF' | 'BLOCKED' | 'DELETED';
 
 export type Gender = 'M' | 'F';
 
-type DayOpeningHours = {
+export type DayOpeningHours = {
   from?: string;
   to?: string;
   isClosed: boolean;
@@ -39,4 +39,9 @@ export interface NavItem {
   title: string
   href: string
   icon?: ReactElement<any, any>
+}
+
+export type selectOptionsType = {
+  label: string;
+  value: string;
 }

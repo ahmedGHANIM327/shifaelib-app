@@ -22,8 +22,10 @@ import { User } from '@/lib/types/users';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import { useRouter } from 'next/navigation';
 import LoginErrorComponent from '@/components/auth/components/LoginErrorComponent';
+import useUserStore from '@/stores/user';
 
 const LoginForm = () => {
+  const setCurrentUser = useUserStore((state) => state.setCurrentUser);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +44,7 @@ const LoginForm = () => {
       try {
         const response: ServerResponse<User> = await loginUser(data);
         if (response.ok) {
-          localStorage.setItem('currentUser', JSON.stringify(response.data));
+          setCurrentUser(response.data as User);
           router.push("/");
           router.refresh();
         } else {

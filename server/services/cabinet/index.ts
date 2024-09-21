@@ -76,6 +76,27 @@ export const getCabinet = async (): Promise<ServerResponse<Cabinet>> => {
   }
 };
 
+export const getCurrentCabinet = async (): Promise<ServerResponse<Cabinet>> => {
+  try {
+    await validateAuthSession();
+
+    const cabinet = (await prisma.cabinet.findFirst({
+      include: {
+        users: true,
+        services: true,
+      },
+    })) as Cabinet;
+
+    if (!cabinet) {
+      return { ok: false, error: 'NO_CABINET_FOUNDED' };
+    }
+
+    return { ok: true, data: cabinet };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
+  }
+};
+
 export const deleteCabinet = async (): Promise<ServerResponse<Cabinet>> => {
   try {
     const cabinet = (await prisma.cabinet.findFirst()) as Cabinet;
@@ -126,6 +147,33 @@ export const updateCabinet = async (
   }
 };
 
+export const updateCabinetLogo = async (
+  logo: string,
+): Promise<ServerResponse<Cabinet>> => {
+  try {
+    const session = await validateAuthSession();
+    const cabinetId = session.user.cabinetId;
+
+    // @ts-ignore
+    const updatedCabinet = (await prisma.cabinet.update({
+      where: {
+        id: cabinetId,
+      },
+      data: {
+        logo
+      },
+      include: {
+        services: true,
+        users: true,
+      },
+    })) as Cabinet;
+
+    return { ok: true, data: updatedCabinet };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
+  }
+};
+
 export const updateOpeningHoursCabinet = async (
   data: WeekOpeningHoursInput,
 ): Promise<ServerResponse<Cabinet>> => {
@@ -152,7 +200,7 @@ export const updateOpeningHoursCabinet = async (
       },
     })) as Cabinet;
 
-    return { ok: true, data: JSON.parse(JSON.stringify(updatedCabinet)) };
+    return { ok: true, data: updatedCabinet };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }

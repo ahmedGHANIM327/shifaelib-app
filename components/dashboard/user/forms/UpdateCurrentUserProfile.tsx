@@ -26,7 +26,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { CardTitle } from '@/components/shared/components/CardTitle';
 import {CircleUser} from "lucide-react";
-import { updateCurrentPasswordUser, updateCurrentUser } from '@/server/services/users';
+import { updateCurrentUser } from '@/server/services/users';
 import { toast } from 'react-toastify';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 
@@ -73,7 +73,7 @@ export const UpdateCurrentUserProfile = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
           <div className='flex items-center w-full'>
             <CardTitle
-              title={'Mettre à jour votre profil utilisateur'}
+              title={'Mettre à jour votre profil'}
               icon={<CircleUser />}
               className={'mb-0'}
             />

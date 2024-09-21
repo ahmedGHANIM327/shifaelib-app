@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { UpdatePasswordUserInput, User } from '@/lib/types/users';
+import { User } from '@/lib/types/users';
 import { getCurrentUser } from '@/server/services/users';
 import { signOut } from 'next-auth/react';
 

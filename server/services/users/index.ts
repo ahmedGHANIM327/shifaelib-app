@@ -22,7 +22,7 @@ import {
 import { prisma } from '@/lib/prisma';
 import { omit } from 'ramda';
 import { checkLoginStatus } from '@/server/services/users/helpers';
-import { signIn, signOut } from '@/auth';
+import { signIn } from '@/auth';
 import { ServerResponse } from '@/lib/types';
 import { validateAuthSession } from '@/server/services/common/helpers';
 import jwt from 'jsonwebtoken';
@@ -48,11 +48,7 @@ export const loginUser = async (data: LoginUserType) => {
         password: false,
       },
       include: {
-        cabinet: {
-          include: {
-            services: true,
-          },
-        },
+        cabinet: true
       },
     })) as User;
 
@@ -81,11 +77,7 @@ export const getUserByEmail = async (
         email,
       },
       include: {
-        cabinet: {
-          include: {
-            services: true,
-          },
-        },
+        cabinet: true
       },
     })) as User;
 
@@ -188,11 +180,7 @@ export const getCurrentUser = async (): Promise<ServerResponse<User>> => {
         id,
       },
       include: {
-        cabinet: {
-          include: {
-            services: true,
-          },
-        },
+        cabinet: true
       },
     })) as User;
 
@@ -364,11 +352,7 @@ export const updateCurrentUser = async (
       },
       data: validData,
       include: {
-        cabinet: {
-          include: {
-            services: true,
-          },
-        },
+        cabinet: true
       },
     })) as User;
 
@@ -434,8 +418,6 @@ export const updatePasswordUser = async (
       },
     })) as User;
 
-    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-
     return { ok: true };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
@@ -485,11 +467,7 @@ export const updateCurrentPasswordUser = async (
         isTemporaryPassword: false,
       },
       include: {
-        cabinet: {
-          include: {
-            services: true,
-          },
-        },
+        cabinet: true
       },
     })) as User;
 
