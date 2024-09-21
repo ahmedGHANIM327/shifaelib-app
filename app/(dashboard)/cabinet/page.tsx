@@ -29,7 +29,7 @@ const Page = () => {
     <FicheCabinetHeader
       logo={currentCabinet.logo}
     />
-    <div className='grid grid-cols-2 gap-4 md:mx-4 mx-2 mt-6'>
+    <div className='grid md:grid-cols-2 grid-cols-1 gap-4 md:mx-4 mx-2 mt-4'>
       <FicheCabinetData
         cabinet={currentCabinet}
       />

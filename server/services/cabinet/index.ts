@@ -200,7 +200,7 @@ export const updateOpeningHoursCabinet = async (
       },
     })) as Cabinet;
 
-    return { ok: true, data: JSON.parse(JSON.stringify(updatedCabinet)) };
+    return { ok: true, data: updatedCabinet };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }

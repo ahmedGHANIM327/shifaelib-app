@@ -5,6 +5,7 @@ import { Calendar } from 'lucide-react';
 import { UpdateCabinetForm } from '@/components/dashboard/cabinet/forms/UpdateCabinetForm';
 import { DayOpeningHoursComponent } from '@/components/dashboard/cabinet/components/DayOpeningHoursComponent';
 import { WeekOpeningHours } from '@/lib/types';
+import { UpdateCabinetHoraireForm } from '@/components/dashboard/cabinet/forms/UpdateCabinetHoraireForm';
 
 type FicheCabinetHoraireProps = {
   openingHours: WeekOpeningHours;
@@ -19,7 +20,7 @@ export const FicheCabinetHoraire:FC<FicheCabinetHoraireProps> = ({ openingHours 
           className={'mb-0'}
           h4_className={'md:text-xl'}
         />
-        <UpdateCabinetForm />
+        <UpdateCabinetHoraireForm openingHours={openingHours}/>
       </div>
       <div className='flex gap-y-3 flex-col mt-4'>
         <DayOpeningHoursComponent
