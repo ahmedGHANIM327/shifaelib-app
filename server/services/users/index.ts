@@ -48,11 +48,7 @@ export const loginUser = async (data: LoginUserType) => {
         password: false,
       },
       include: {
-        cabinet: {
-          include: {
-            services: true,
-          },
-        },
+        cabinet: true
       },
     })) as User;
 
@@ -81,11 +77,7 @@ export const getUserByEmail = async (
         email,
       },
       include: {
-        cabinet: {
-          include: {
-            services: true,
-          },
-        },
+        cabinet: true
       },
     })) as User;
 
@@ -188,11 +180,7 @@ export const getCurrentUser = async (): Promise<ServerResponse<User>> => {
         id,
       },
       include: {
-        cabinet: {
-          include: {
-            services: true,
-          },
-        },
+        cabinet: true
       },
     })) as User;
 
@@ -433,8 +421,6 @@ export const updatePasswordUser = async (
         },
       },
     })) as User;
-
-    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
 
     return { ok: true };
   } catch (error: any) {

@@ -76,6 +76,27 @@ export const getCabinet = async (): Promise<ServerResponse<Cabinet>> => {
   }
 };
 
+export const getCurrentCabinet = async (): Promise<ServerResponse<Cabinet>> => {
+  try {
+    await validateAuthSession();
+
+    const cabinet = (await prisma.cabinet.findFirst({
+      include: {
+        users: true,
+        services: true,
+      },
+    })) as Cabinet;
+
+    if (!cabinet) {
+      return { ok: false, error: 'NO_CABINET_FOUNDED' };
+    }
+
+    return { ok: true, data: cabinet };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
+  }
+};
+
 export const deleteCabinet = async (): Promise<ServerResponse<Cabinet>> => {
   try {
     const cabinet = (await prisma.cabinet.findFirst()) as Cabinet;
