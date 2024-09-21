@@ -27,7 +27,7 @@ export const DashboardHeader = () => {
             <MobileNavbar />
           </div>
         </div>
-        <UpdatePasswordUserForm />
+        <UpdatePasswordUserForm type={'dialog'}/>
         <div className="flex items-stretch xl:gap-x-2 gap-x-0">
           <Button
             onClick={toggle}
