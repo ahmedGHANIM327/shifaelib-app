@@ -147,6 +147,33 @@ export const updateCabinet = async (
   }
 };
 
+export const updateCabinetLogo = async (
+  logo: string,
+): Promise<ServerResponse<Cabinet>> => {
+  try {
+    const session = await validateAuthSession();
+    const cabinetId = session.user.cabinetId;
+
+    // @ts-ignore
+    const updatedCabinet = (await prisma.cabinet.update({
+      where: {
+        id: cabinetId,
+      },
+      data: {
+        logo
+      },
+      include: {
+        services: true,
+        users: true,
+      },
+    })) as Cabinet;
+
+    return { ok: true, data: updatedCabinet };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
+  }
+};
+
 export const updateOpeningHoursCabinet = async (
   data: WeekOpeningHoursInput,
 ): Promise<ServerResponse<Cabinet>> => {

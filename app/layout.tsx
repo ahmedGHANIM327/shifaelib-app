@@ -4,6 +4,7 @@ import './globals.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React from 'react';
+import { EdgeStoreProvider } from '@/lib/edgestore';
 
 const work_sans = Work_Sans({ subsets: ['latin'] });
 
@@ -28,7 +29,9 @@ export default function RootLayout({
           pauseOnHover={false}
           pauseOnFocusLoss={false}
         />
-        {children}
+        <EdgeStoreProvider>
+          {children}
+        </EdgeStoreProvider>
       </body>
     </html>
   );

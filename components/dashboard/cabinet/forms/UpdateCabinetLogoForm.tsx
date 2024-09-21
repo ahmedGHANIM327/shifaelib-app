@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState, useTransition} from 'react';
+import React, { FC, useState, useTransition } from 'react';
 import {Button} from "@/components/ui/button";
 import {PencilIcon} from "lucide-react";
 import {SingleImageDropzone} from "@/components/shared/components/SingleImageDropzone";
@@ -8,9 +8,20 @@ import {LoadingSpinner} from "@/components/shared/components/LoadingSpinner";
 import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { DialogFormTitle } from '@/components/shared/components/DialogFormTitle';
 import { DialogFormActions } from '@/components/shared/components/DialogFormActions';
+import { toast } from 'react-toastify';
+import { useEdgeStore } from '@/lib/edgestore';
+import { updateCabinetLogo } from '@/server/services/cabinet';
+import useCabinetStore from '@/stores/cabinet';
+import { Cabinet } from '@/lib/types/cabinet';
 
-export const UpdateCabinetLogoForm = () => {
+type UpdateCabinetLogoFormProps = {
+  logo?: string;
+};
 
+export const UpdateCabinetLogoForm:FC<UpdateCabinetLogoFormProps> = ({ logo }) => {
+
+  const setCurrentCabinet = useCabinetStore((state) => state.setCurrentCabinet);
+  const { edgestore } = useEdgeStore();
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>();
   const [ isPending, startTransition ] = useTransition();
@@ -18,11 +29,36 @@ export const UpdateCabinetLogoForm = () => {
   const handleUpdate = () => {
     if(file){
       startTransition(async () => {
-        console.log('file', file);
-        setOpen(false);
-        setFile(null);
+        try {
+          const oldFileUrl = logo;
+          // @ts-ignore
+          const res = await edgestore.publicFiles.upload({
+            file,
+            options: oldFileUrl ? {
+              replaceTargetUrl: oldFileUrl,
+            }: {},
+          });
+          const url = res.url;
+          const response = await updateCabinetLogo(url);
+          if(response.ok) {
+            setCurrentCabinet(response.data as Cabinet);
+            setOpen(false);
+            setFile(null);
+          } else {
+            // @ts-ignore
+            toast.error('Une erreur est servenue. Veuillez réessayer.');
+          }
+        } catch (error: any) {
+          // @ts-ignore
+          toast.error('Une erreur est servenue. Veuillez réessayer.');
+        }
       });
     }
+  }
+
+  const handleCancel = () => {
+    setOpen(false);
+    setFile(null);
   }
 
   return (
@@ -47,7 +83,7 @@ export const UpdateCabinetLogoForm = () => {
           />
         </div>
         <DialogFormActions>
-          <Button variant={'secondary'} onClick={() => setOpen(false)}
+          <Button variant={'secondary'} onClick={handleCancel}
                   className='md:w-fit md:px-16 w-full border-0'>
             Annuler
           </Button>
