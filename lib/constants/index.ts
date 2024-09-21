@@ -35,3 +35,22 @@ export const DefaultOpeningHours: WeekOpeningHours = {
     isClosed: true,
   },
 };
+
+export const MedicalCabinetTypes: string[] = [
+  "Cabinet de médecine générale",
+  "Cabinet de pédiatrie",
+  "Cabinet de gynécologie",
+  "Cabinet de dermatologie",
+  "Cabinet de cardiologie",
+  "Cabinet de psychiatrie",
+  "Cabinet de rhumatologie",
+  "Cabinet d'ophtalmologie",
+  "Cabinet d'oto-rhino-laryngologie (ORL)",
+  "Cabinet de dentisterie",
+  "Cabinet de kinésithérapie",
+  "Cabinet d'orthopédie",
+  "Cabinet de neurologie",
+  "Cabinet de gastro-entérologie",
+  "Cabinet d'endocrinologie"
+];
+

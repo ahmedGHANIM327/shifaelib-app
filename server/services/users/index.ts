@@ -22,7 +22,7 @@ import {
 import { prisma } from '@/lib/prisma';
 import { omit } from 'ramda';
 import { checkLoginStatus } from '@/server/services/users/helpers';
-import { signIn, signOut } from '@/auth';
+import { signIn } from '@/auth';
 import { ServerResponse } from '@/lib/types';
 import { validateAuthSession } from '@/server/services/common/helpers';
 import jwt from 'jsonwebtoken';
@@ -352,11 +352,7 @@ export const updateCurrentUser = async (
       },
       data: validData,
       include: {
-        cabinet: {
-          include: {
-            services: true,
-          },
-        },
+        cabinet: true
       },
     })) as User;
 
@@ -471,11 +467,7 @@ export const updateCurrentPasswordUser = async (
         isTemporaryPassword: false,
       },
       include: {
-        cabinet: {
-          include: {
-            services: true,
-          },
-        },
+        cabinet: true
       },
     })) as User;
 

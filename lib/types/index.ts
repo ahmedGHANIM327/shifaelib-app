@@ -40,3 +40,8 @@ export interface NavItem {
   href: string
   icon?: ReactElement<any, any>
 }
+
+export type selectOptionsType = {
+  label: string;
+  value: string;
+}
