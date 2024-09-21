@@ -46,7 +46,7 @@ export const UpdateCurrentUserProfile = () => {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof updatePasswordUserSchema>) => {
+  const onSubmit = async (data: z.infer<typeof updateCurrentUserSchema>) => {
     startTransition(async () => {
       try {
         const response = await updateCurrentUser(data as UpdateCurrentUserInput);
