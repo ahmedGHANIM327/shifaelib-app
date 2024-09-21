@@ -6,18 +6,18 @@ import {
   createUserSchema,
   loginUserSchema,
   requestResetPasswordSchema,
-  resetPasswordUserSchema,
+  resetPasswordUserSchema, updateCurrentUserSchema,
   updatePasswordUserSchema,
-  updateUserSchema,
+  updateUserSchema
 } from '@/lib/schemas/users';
 import {
   CreateUserInput,
   LoginUserType,
   RequestResetPasswordUserInput,
-  ResetPasswordUserInput,
+  ResetPasswordUserInput, UpdateCurrentUserInput,
   UpdatePasswordUserInput,
   UpdateUserInput,
-  User,
+  User
 } from '@/lib/types/users';
 import { prisma } from '@/lib/prisma';
 import { omit } from 'ramda';
@@ -346,7 +346,7 @@ export const updateUser = async (
 };
 
 export const updateCurrentUser = async (
-  data: UpdateUserInput,
+  data: UpdateCurrentUserInput,
 ): Promise<ServerResponse<User>> => {
   try {
     const session = await validateAuthSession();
@@ -354,8 +354,8 @@ export const updateCurrentUser = async (
 
     const validData = (await zodValidationData(
       data,
-      updateUserSchema,
-    )) as UpdateUserInput;
+      updateCurrentUserSchema,
+    )) as UpdateCurrentUserInput;
 
     // @ts-ignore
     const updatedUser = (await prisma.user.update({
@@ -363,6 +363,13 @@ export const updateCurrentUser = async (
         id,
       },
       data: validData,
+      include: {
+        cabinet: {
+          include: {
+            services: true,
+          },
+        },
+      },
     })) as User;
 
     if (!updatedUser) {

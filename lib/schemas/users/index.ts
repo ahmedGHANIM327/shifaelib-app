@@ -71,6 +71,33 @@ export const loginUserSchema = z.object({
     .min(1, 'Le mot de passe est requis.'),
 });
 
+export const updateCurrentUserSchema = z.object({
+  firstName: z
+    .string({
+      required_error: 'Le prénom est requis',
+      invalid_type_error: 'Le type du prénom est invalid',
+    })
+    .min(1, 'Le prénom est requis'),
+  lastName: z
+    .string({
+      required_error: 'Le nom est requis',
+      invalid_type_error: 'Le type du nom est invalid',
+    })
+    .min(1, 'Le nom est requis'),
+  email: z
+    .string({
+      required_error: 'L adresse e-mail est requise',
+      invalid_type_error: 'Adresse e-mail invalide',
+    })
+    .email('Adresse e-mail invalide'),
+  phone: z.string().optional(),
+  gender: z.enum(['M', 'F'], {
+    required_error: 'Le genre est requis',
+    invalid_type_error: 'Le genre doit être M ou F',
+    message: 'Le genre doit être M ou F',
+  }),
+});
+
 export const updateUserSchema = z.object({
   firstName: z
     .string({

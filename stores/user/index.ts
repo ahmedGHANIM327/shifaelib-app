@@ -32,6 +32,7 @@ const useUserStore = create<UserState>((set) => ({
     set({ isCurrentUserLoading: false });
   },
   setCurrentUser: (newUser: User) => {
+    window.localStorage.setItem('currentUser', JSON.stringify(newUser));
     set({ currentUser: newUser });
   },
   currentUser: {} as User,

@@ -4,9 +4,9 @@ import { z } from 'zod';
 import {
   createUserSchema,
   requestResetPasswordSchema,
-  resetPasswordUserSchema,
+  resetPasswordUserSchema, updateCurrentUserSchema,
   updatePasswordUserSchema,
-  updateUserSchema,
+  updateUserSchema
 } from '@/lib/schemas/users';
 
 export type User = {
@@ -28,6 +28,7 @@ export type User = {
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
 export type UpdatePasswordUserInput = z.infer<typeof updatePasswordUserSchema>;
+export type UpdateCurrentUserInput = z.infer<typeof updateCurrentUserSchema>;
 
 export type LoginUserType = {
   email: string;
