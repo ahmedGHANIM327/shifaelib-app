@@ -13,11 +13,11 @@ export const FicheCabinetHeader:FC<FicheCabinetHeaderProps> = ({
                                                                }) => {
   return (
     <div className='relative h-[200px] mb-4'>
-      <div className='w-full h-[125px] rounded-t-md bg-cover bg-center'
-           style={{ backgroundImage: "url('/cabinetFicheCoverPhoto.png')" }}>
+      <div className='w-full h-[127px] rounded-t-md bg-cover bg-center'
+           style={{ backgroundImage: "url('/shifaelib-cabinet-cover.jpg')" }}>
       </div>
       <div
-        className='w-fit h-fit bg-white rounded-full border-2 border-primary absolute top-[50%] -translate-y-[25%] left-[25px]'>
+        className='w-fit h-fit bg-white rounded-full border-2 border-primary absolute top-[50%] -translate-y-[25%] left-[25px] p-1'>
         <Image src={logo || '/cabinetLogo.jpg'} alt='logo-dark' width={100} height={100} className='rounded-full' />
         <UpdateCabinetLogoForm />
       </div>

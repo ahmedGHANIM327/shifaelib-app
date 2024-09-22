@@ -26,6 +26,7 @@ import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '@/component
 import { DialogFormTitle } from '@/components/shared/components/DialogFormTitle';
 import { DialogFormActions } from '@/components/shared/components/DialogFormActions';
 import { PencilIcon } from 'lucide-react';
+import { DialogFormContainer } from '@/components/shared/components/DialogFormContainer';
 
 export const UpdateCabinetForm = () => {
 
@@ -84,12 +85,12 @@ export const UpdateCabinetForm = () => {
       />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className='px-4 py-2'>
+          <DialogFormContainer>
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="md:w-[49%] w-[100%] gap-y-0">
+                <FormItem className="md:w-[49%] w-[100%] gap-y-0 -mt-2">
                   <FormLabel>Nom du cabinet</FormLabel>
                   <FormControl>
                     <Input placeholder="Nom du cabinet" {...field} />
@@ -98,7 +99,7 @@ export const UpdateCabinetForm = () => {
                 </FormItem>
               )}
             />
-            <div className="flex flex-wrap md:gap-x-[2%] gap-y-4">
+            <div className="flex flex-wrap md:gap-x-[2%] gap-y-4 my-2">
               <FormField
                 control={form.control}
                 name="speciality"
@@ -161,7 +162,7 @@ export const UpdateCabinetForm = () => {
                 control={form.control}
                 name="description"
                 render={({ field }) => (
-                  <FormItem className="w-[100%] gap-y-0">
+                  <FormItem className="w-[100%] gap-y-0 -my-2">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
@@ -174,7 +175,7 @@ export const UpdateCabinetForm = () => {
                 )}
               />
             </div>
-          </div>
+          </DialogFormContainer>
           <DialogFormActions>
             <Button
               variant={'secondary'}

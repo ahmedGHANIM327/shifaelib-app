@@ -10,5 +10,5 @@ export const DialogFormContainer: FC<DialogFormContainerProps> = ({
   className,
   children,
 }) => {
-  return <div className={cn('p-4', className)}>{children}</div>;
+  return <div className={cn('p-4 h-fit max-h-[60vh] overflow-y-scroll', className)}>{children}</div>;
 };
