@@ -1,4 +1,4 @@
-import { AccountStatus, Gender } from '@/lib/types';
+import { Gender, UserStatus } from '@/lib/types';
 import { Cabinet } from '@/lib/types/cabinet';
 import { z } from 'zod';
 import {
@@ -13,7 +13,7 @@ export type User = {
   id: string;
   firstName: string;
   lastName: string;
-  status: AccountStatus;
+  status: UserStatus;
   email: string;
   password?: string;
   photo?: string;

@@ -1,4 +1,4 @@
-import { AccountStatus } from '@/lib/types';
+import { CabinetStatus } from '@/lib/types';
 import { User } from '@/lib/types/users';
 import { z } from 'zod';
 import {
@@ -11,7 +11,7 @@ export type Cabinet = {
   id: string;
   name: string;
   address: string;
-  status: AccountStatus;
+  status: CabinetStatus;
   subscriptionEndDate: Date;
   phone?: string;
   email?: string;
