@@ -67,7 +67,7 @@ export const HeaderProfileMenu = () => {
           <Avatar className="cursor-pointer">
             <AvatarImage src={currentUser.photo || ''} alt="profile-photo" />
             <AvatarFallback className="bg-primary text-white">
-              {getInitials(currentUser.firstName, currentUser.lastName)}
+              {getInitials(currentUser)}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>

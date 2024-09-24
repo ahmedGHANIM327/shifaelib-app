@@ -59,7 +59,9 @@ export const validatePassword = (
 export const getFullName = (entity: User) => {
   return `${entity.firstName} ${entity.lastName}`;
 };
-export const getInitials = (firstName: string, lastName: string): string => {
+export const getInitials = (entity: User): string => {
+  const firstName = entity.firstName;
+  const lastName = entity.lastName;
   const words: string[] = [firstName, lastName];
   return words
     .filter((w) => w !== undefined)
