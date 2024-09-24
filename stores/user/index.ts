@@ -50,7 +50,7 @@ const useUserStore = create<UserState>((set, get) => ({
       if (response.ok) {
         set({ cabinetUsers: response.data });
       } else {
-        set({ cabinetUsers: [] as User });
+        set({ cabinetUsers: [] as User[] });
         // @ts-ignore
         toast.error('Une erreur est servenue. Veuillez réessayer.');
       }
