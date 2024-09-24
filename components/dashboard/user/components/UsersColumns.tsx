@@ -7,9 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import React from 'react';
 import { UserAccountStatus } from '@/components/dashboard/user/components/UserAccountStatus';
 import { UserStatus } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { Eye, PencilIcon, TrashIcon } from 'lucide-react';
 import { DeleteUser } from '@/components/dashboard/user/components/DeleteUser';
 import { UpdateUserForm } from '@/components/dashboard/user/forms/UpdateUserForm';
 
@@ -60,7 +57,9 @@ export const UsersColumns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       if(!row.original.isOwner) {
         return (<div className="gap-x-2 flex justify-center ">
-          <UpdateUserForm />
+          <UpdateUserForm
+            user={row.original}
+          />
           <DeleteUser
             user={row.original}
           />

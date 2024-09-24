@@ -1,10 +1,11 @@
 import { Check } from 'lucide-react';
 import React, { FC, useEffect, useState } from 'react';
-import { validatePassword } from '@/lib/utils';
+import { cn, validatePassword } from '@/lib/utils';
 
-export const PasswordCheck: FC<{ password: string; email: string | null }> = ({
+export const PasswordCheck: FC<{ password: string; email: string | null; className?: string }> = ({
   password,
   email,
+                                                                                                    className
 }) => {
   const [validePassword, setValidePassword] = useState(
     validatePassword(password, email),
@@ -15,7 +16,7 @@ export const PasswordCheck: FC<{ password: string; email: string | null }> = ({
   }, [email, password]);
 
   return (
-    <div className="bg-accent border-primary py-2 px-4 border-1">
+    <div className={cn('bg-accent border-primary py-2 px-4 border-1', className)}>
       <p className="text-sm text-muted-foreground">
         Pour garantir la sécurité de votre compte, veuillez respecter les
         critères suivants lors du choix de votre mot de passe :

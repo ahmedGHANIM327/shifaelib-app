@@ -251,13 +251,13 @@ export const createUser = async (
       },
     });
     if (userExists) {
-      return { ok: false, error: 'USER_EMAIL_ALREADY_EXISTS' };
+      throw new Error('USER_EMAIL_ALREADY_EXISTS');
     }
 
     const hashedPassword = await bcrypt.hash(validData.password, 10);
 
     // @ts-ignore
-    const createdUser = await prisma.user.create({
+    const createdUser = (await prisma.user.create({
       data: {
         ...omit(['confirmPassword'], validData),
         password: hashedPassword,
@@ -267,9 +267,9 @@ export const createUser = async (
           },
         },
       },
-    });
+    })) as User;
 
-    return { ok: true, data: JSON.parse(JSON.stringify(createdUser)) };
+    return { ok: true, data: createdUser };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }

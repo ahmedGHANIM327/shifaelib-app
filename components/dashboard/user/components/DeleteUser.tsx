@@ -1,16 +1,42 @@
 'use client';
 
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useTransition } from 'react';
 import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { TrashIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { User } from '@/lib/types/users';
 import { DialogFormActions } from '@/components/shared/components/DialogFormActions';
 import { getFullName } from '@/lib/utils';
+import { deleteUser } from '@/server/services/users';
+import { toast } from 'react-toastify';
+import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
+import useUserStore from '@/stores/user';
 
 export const DeleteUser:FC<{ user:User }> = ({ user }) => {
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const deleteCabinetUser = useUserStore((state) => state.deleteCabinetUser);
+
+  const handleDelete = async () => {
+    startTransition(async () => {
+      try {
+        const response = await deleteUser(user.id);
+        if(response.ok) {
+          deleteCabinetUser(user.id);
+          setIsOpen(false);
+          // @ts-ignore
+          toast.success('Utilisateur supprimé avec succès');
+        } else {
+          // @ts-ignore
+          toast.error('Une erreur est servenue. Veuillez réessayer.');
+        }
+      } catch (error: any) {
+        // @ts-ignore
+        toast.error('Une erreur est servenue. Veuillez réessayer.');
+      }
+    });
+  }
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -35,11 +61,13 @@ export const DeleteUser:FC<{ user:User }> = ({ user }) => {
             Pas maintenant
           </Button>
           <Button
-            type="submit"
             variant={'destructive'}
             className="md:px-16 md:w-fit w-full gap-x-2"
+            onClick={handleDelete}
+            disabled={isPending}
           >
             Supprimer
+            {isPending && <LoadingSpinner size={14} />}
           </Button>
         </DialogFormActions>
       </AlertDialogContent>

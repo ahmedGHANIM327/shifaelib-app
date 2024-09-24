@@ -52,7 +52,6 @@ export const UpdateCurrentUserProfile = () => {
         const response = await updateCurrentUser(data as UpdateCurrentUserInput);
         if(response.ok) {
           setCurrentUser(response.data as User);
-          console.log('updatedUser', response.data);
           // @ts-ignore
           toast.success('Votre profile est mis à jour avec succès.');
         } else {

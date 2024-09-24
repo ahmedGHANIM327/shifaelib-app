@@ -40,7 +40,6 @@ const RequestResetPasswordForm = () => {
       try {
         const response: ServerResponse = await requestResetPassword(data);
         if (response.ok) {
-          console.log('email sent');
           setIsDialogOpen(true);
         } else {
           // @ts-ignore

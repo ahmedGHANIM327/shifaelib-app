@@ -10,6 +10,9 @@ interface UserState {
   setCurrentUser: (newUser: User) => void;
   cabinetUsers: User[];
   isCabinetUsersLoading: boolean;
+  addCabinetUser: (newUser: User) => void;
+  updateCabinetUser: (newUser: User) => void;
+  deleteCabinetUser: (id: string) => void;
   getCabinetUsers: () => Promise<void>;
 }
 
@@ -42,6 +45,17 @@ const useUserStore = create<UserState>((set, get) => ({
   isCurrentUserLoading: false,
   cabinetUsers: [] as User[],
   isCabinetUsersLoading: false,
+  addCabinetUser: (newUser: User) => {
+    set({ cabinetUsers: [...get().cabinetUsers, newUser] });
+  },
+  updateCabinetUser: (updatedUser: User) => {
+    const users = get().cabinetUsers.filter((user) => user.id !== updatedUser.id);
+    set({ cabinetUsers: [...users, updatedUser] });
+  },
+  deleteCabinetUser: (id: string) => {
+    const users = get().cabinetUsers.filter((user) => user.id !== id);
+    set({ cabinetUsers: users });
+  },
   getCabinetUsers: async () => {
     set({ isCabinetUsersLoading: true });
     const cabinetUsers = get().cabinetUsers as User[];
