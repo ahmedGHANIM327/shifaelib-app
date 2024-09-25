@@ -39,3 +39,7 @@ export type ResetPasswordUserInput = z.infer<typeof resetPasswordUserSchema>;
 export type RequestResetPasswordUserInput = z.infer<
   typeof requestResetPasswordSchema
 >;
+
+export type ResetPasswordJwtPayload = {
+  id: string;
+}

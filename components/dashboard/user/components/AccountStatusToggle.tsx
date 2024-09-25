@@ -33,7 +33,7 @@ export const AccountStatusToggle:FC<AccountStatusToggleProps> = ({value, onChang
           key={item.value}
           className={cn('rounded-none', selectedItem === item.value && selectedClassName)}
           variant={'outline'}
-          onClick={()=>setSelectedItem(item.value)}
+          onClick={()=>setSelectedItem(item.value as UserStatus)}
           type={'button'}
         >
           {item.label}
