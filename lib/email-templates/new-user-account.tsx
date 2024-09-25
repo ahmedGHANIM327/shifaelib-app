@@ -67,6 +67,7 @@ export const NewUserAccount: React.FC<Readonly<ResetPasswordProps>> = ({
             fontSize: '16px',
           }}
         >
+          {/* eslint-disable-next-line react/no-unescaped-entities */}
           Nous avons le plaisir de vous informer que votre compte pour vous y accèder à l'éspace {cabinet} a été
           bien crée.
         </p>
@@ -95,6 +96,7 @@ export const NewUserAccount: React.FC<Readonly<ResetPasswordProps>> = ({
                                          textDecoration: 'underline'
                                        }}
           >https://shifaelib.com</a></li>
+          {/* eslint-disable-next-line react/no-unescaped-entities */}
           <li>Nom d'utilisateur (login) : <span style={{
             fontWeight: 'bold'
           }}>{email}</span></li>
