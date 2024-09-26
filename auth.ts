@@ -36,6 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             id: user.id,
             email: user.email,
             cabinetId: user.cabinet?.id as string,
+            isOwner: user.isOwner,
           };
         } catch (error: any) {
           return null;
@@ -49,6 +50,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return {
           ...token,
           id: user.id,
+          isOwner: user.isOwner || false,
           cabinetId: user?.cabinetId || '',
         };
       }
@@ -61,6 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           ...session.user,
           id: (token?.id || '') as string,
           cabinetId: (token?.cabinetId || '') as string,
+          isOwner: (token?.isOwner || false) as boolean
         },
       };
     },

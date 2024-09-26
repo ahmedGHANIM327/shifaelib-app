@@ -40,6 +40,7 @@ export interface NavItem {
   title: string
   href: string
   icon?: ReactElement<any, any>
+  isOwnerItem: boolean
 }
 
 export type selectOptionsType = {
