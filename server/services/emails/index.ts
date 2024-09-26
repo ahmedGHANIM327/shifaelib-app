@@ -7,7 +7,7 @@ import { NewUserAccount } from '@/lib/email-templates/new-user-account';
 import { ServerResponse } from '@/lib/types';
 import { ResetPasswordJwtPayload } from '@/lib/types/users';
 
-export const sendRequestResetPasswordEmail = async (id:string, email: sting) => {
+export const sendRequestResetPasswordEmail = async (id:string, email: string) => {
   try {
     const secretKey = (process.env.JWT_SECRET_KEY || '') as string;
     const payload: ResetPasswordJwtPayload = {
