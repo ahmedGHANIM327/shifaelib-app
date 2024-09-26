@@ -37,7 +37,7 @@ export const loginUser = async (data: LoginUserType) => {
 
     const user: User = (await prisma.user.findUnique({
       where: {
-        email: email,
+        email: email
       },
       omit: {
         password: false,
