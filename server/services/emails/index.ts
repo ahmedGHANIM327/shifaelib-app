@@ -33,7 +33,7 @@ export const sendRequestResetPasswordEmail = async (id:string, email: string) =>
 
 export const sendNewUserAccountEmail = async (email: string, password: string, cabinet: string): Promise<ServerResponse> => {
   try {
-    const url = process.env.APP_URL;
+    const url = process.env.APP_URL || '';
     const resendKey = (process.env.RESEND_API || '') as string;
     const resend = new Resend(resendKey);
     // @ts-ignore
