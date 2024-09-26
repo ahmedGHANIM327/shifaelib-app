@@ -6,7 +6,8 @@ export type ServerResponse<T = any> = {
   data?: T;
 };
 
-export type AccountStatus = 'ACTIF' | 'INACTIF' | 'BLOCKED' | 'DELETED';
+export type UserStatus = 'ACTIF' | 'BLOCKED';
+export type CabinetStatus = 'ACTIF' | 'INACTIF' | 'BLOCKED' | 'DELETED';
 
 export type Gender = 'M' | 'F';
 

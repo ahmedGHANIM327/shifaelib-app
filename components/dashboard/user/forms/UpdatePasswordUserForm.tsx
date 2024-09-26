@@ -69,7 +69,6 @@ export const UpdatePasswordUserForm:FC<UpdatePasswordUserFormProps> = ({ type })
   };
 
   useEffect(() => {
-    console.log('current user', currentUser);
     if(currentUser.isTemporaryPassword) {
       setIsDialogOpen(true);
     }

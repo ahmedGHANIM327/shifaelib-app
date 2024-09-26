@@ -2,7 +2,8 @@ import { NavItem } from '@/lib/types';
 import {
   CircleUser,
   HospitalIcon,
-  LayoutDashboard
+  LayoutDashboard,
+  Users
 } from 'lucide-react';
 import React from 'react';
 
@@ -16,6 +17,11 @@ export const navItems: NavItem[] = [
     title: 'Cabinet',
     href: '/cabinet',
     icon: <HospitalIcon />,
+  },
+  {
+    title: 'Utilisateurs',
+    href: '/cabinet/users',
+    icon: <Users />,
   },
   {
     title: 'Profile',

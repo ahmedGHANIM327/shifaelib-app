@@ -48,7 +48,6 @@ export const UpdateCabinetForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof updateCabinetSchema>) => {
-    console.log('heeree');
     startTransition(async () => {
       try {
         const response = await updateCabinet(data as UpdateCabinetInput);

@@ -15,10 +15,10 @@ datasource db {
 }
 
 model Cabinet {
-  id                  String   @id @default(uuid())
+  id                  String        @id @default(uuid())
   name                String
   address             String
-  status              Status   @default(ACTIF)
+  status              CabinetStatus @default(ACTIF)
   subscriptionEndDate DateTime
   phone               String?
   email               String?
@@ -48,17 +48,17 @@ model Service {
 }
 
 model User {
-  id                  String  @id @default(uuid())
+  id                  String     @id @default(uuid())
   firstName           String
   lastName            String
-  status              Status  @default(ACTIF)
-  email               String  @unique
+  status              UserStatus @default(ACTIF)
+  email               String     @unique
   password            String
   photo               String?
   gender              Gender
   phone               String?
-  isTemporaryPassword Boolean @default(true)
-  isOwner             Boolean @default(false)
+  isTemporaryPassword Boolean    @default(true)
+  isOwner             Boolean    @default(false)
 
   patientsCreated        Patient[]        @relation("CreatedPatients")
   patientsUpdated        Patient[]        @relation("UpdatedPatients")
@@ -182,7 +182,12 @@ model PatientComment {
   updatedAt     DateTime? @updatedAt
 }
 
-enum Status {
+enum UserStatus {
+  ACTIF
+  BLOCKED
+}
+
+enum CabinetStatus {
   ACTIF
   INACTIF
   BLOCKED

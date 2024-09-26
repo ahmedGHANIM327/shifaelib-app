@@ -13,7 +13,7 @@ import {
 import {
   CreateUserInput,
   LoginUserType,
-  RequestResetPasswordUserInput,
+  RequestResetPasswordUserInput, ResetPasswordJwtPayload,
   ResetPasswordUserInput, UpdateCurrentUserInput,
   UpdatePasswordUserInput,
   UpdateUserInput,
@@ -26,12 +26,7 @@ import { signIn } from '@/auth';
 import { ServerResponse } from '@/lib/types';
 import { validateAuthSession } from '@/server/services/common/helpers';
 import jwt from 'jsonwebtoken';
-import { Resend } from 'resend';
-import { ResetPassword } from '@/lib/email-templates/reset-password';
-
-type ResetPasswordJwtPayload = {
-  id: string;
-}
+import { sendNewUserAccountEmail, sendRequestResetPasswordEmail } from '@/server/services/emails';
 
 export const loginUser = async (data: LoginUserType) => {
   try {
@@ -42,7 +37,7 @@ export const loginUser = async (data: LoginUserType) => {
 
     const user: User = (await prisma.user.findUnique({
       where: {
-        email: email,
+        email: email
       },
       omit: {
         password: false,
@@ -106,24 +101,7 @@ export const requestResetPassword = async (
 
     if (!user) return { ok: true };
 
-    const resendKey = (process.env.RESEND_API || '') as string;
-    const secretKey = (process.env.JWT_SECRET_KEY || '') as string;
-    const payload: ResetPasswordJwtPayload = {
-      id: user.id,
-    };
-
-    const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
-    const resetLink = `${process.env.APP_URL}/reset-password?token=${token}&email=${email}`;
-    const resend = new Resend(resendKey);
-    await resend.emails.send({
-      from: 'Acme <onboarding@resend.dev>',
-      to: [email],
-      subject:
-        'Demande de réinitialisation de votre mot de passe sur Medical SaaS',
-      html: `<a href="${resetLink}">Réinitialiser votre mot de passe sur Medical SaaS</a>`,
-      react: ResetPassword({ email, url: resetLink }),
-    });
-
+    await sendRequestResetPasswordEmail(user.id, email);
     return { ok: true };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
@@ -251,13 +229,13 @@ export const createUser = async (
       },
     });
     if (userExists) {
-      return { ok: false, error: 'USER_EMAIL_ALREADY_EXISTS' };
+      throw new Error('USER_EMAIL_ALREADY_EXISTS');
     }
 
     const hashedPassword = await bcrypt.hash(validData.password, 10);
 
     // @ts-ignore
-    const createdUser = await prisma.user.create({
+    const createdUser = (await prisma.user.create({
       data: {
         ...omit(['confirmPassword'], validData),
         password: hashedPassword,
@@ -267,9 +245,11 @@ export const createUser = async (
           },
         },
       },
-    });
+    })) as User;
 
-    return { ok: true, data: JSON.parse(JSON.stringify(createdUser)) };
+    await sendNewUserAccountEmail(validData.email, validData.password, createdUser?.cabinet?.name as string);
+
+    return { ok: true, data: createdUser };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }
