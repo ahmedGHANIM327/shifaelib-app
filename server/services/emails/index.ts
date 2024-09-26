@@ -26,7 +26,7 @@ export const sendRequestResetPasswordEmail = async (id:string, email: string) =>
       html: `<a href="${resetLink}">Réinitialiser votre mot de passe sur Medical SaaS</a>`,
       react: ResetPassword({ email, url: resetLink }),
     });
-  } catch (error) {
+  } catch (error: any) {
     return { ok: false, error: error.message as string };
   }
 }
@@ -45,7 +45,7 @@ export const sendNewUserAccountEmail = async (email: string, password: string, c
       react: NewUserAccount({ cabinet, email, password, url }),
     });
     return { ok: true };
-  } catch (error) {
+  } catch (error: any) {
     return { ok: false, error: error.message as string };
   }
 }
