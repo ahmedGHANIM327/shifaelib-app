@@ -1,5 +1,6 @@
 import { NavItem } from '@/lib/types';
 import {
+  Activity,
   CircleUser,
   HospitalIcon,
   LayoutDashboard,
@@ -11,21 +12,26 @@ export const navItems: NavItem[] = [
   {
     title: 'Tableau de bord',
     href: '/',
-    icon: <LayoutDashboard />,
+    icon: <LayoutDashboard size={20}/>,
   },
   {
     title: 'Cabinet',
     href: '/cabinet',
-    icon: <HospitalIcon />,
+    icon: <HospitalIcon size={20}/>,
   },
   {
     title: 'Utilisateurs',
     href: '/cabinet/users',
-    icon: <Users />,
+    icon: <Users size={20}/>,
+  },
+  {
+    title: 'Services',
+    href: '/cabinet/services',
+    icon: <Activity size={20}/>,
   },
   {
     title: 'Profile',
     href: '/profile',
-    icon: <CircleUser />,
+    icon: <CircleUser size={20}/>,
   }
 ];
