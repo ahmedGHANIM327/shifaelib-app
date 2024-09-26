@@ -2,11 +2,11 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { User } from '@/lib/types/users';
-import { getFullName, getInitials } from '@/lib/utils';
+import { convertGender, getFullName, getInitials } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import React from 'react';
 import { UserAccountStatus } from '@/components/dashboard/user/components/UserAccountStatus';
-import { UserStatus } from '@/lib/types';
+import { Gender, UserStatus } from '@/lib/types';
 import { DeleteUser } from '@/components/dashboard/user/components/DeleteUser';
 import { UpdateUserForm } from '@/components/dashboard/user/forms/UpdateUserForm';
 
@@ -33,7 +33,7 @@ export const UsersColumns: ColumnDef<User>[] = [
     accessorKey: "gender",
     header: "Genre",
     cell: ({ row }) => {
-      return row?.original.gender === 'M' ? 'Homme' : 'Femme';
+      return convertGender(row?.original.gender as Gender);
     },
   },
   {

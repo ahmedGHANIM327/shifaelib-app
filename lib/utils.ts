@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { createCabinetSchema } from '@/lib/schemas/cabinet';
 import { z } from 'zod';
-import { PasswordValidationResult, selectOptionsType } from '@/lib/types';
+import { Gender, PasswordValidationResult, selectOptionsType } from '@/lib/types';
 import { User } from '@/lib/types/users';
 
 export function cn(...inputs: ClassValue[]) {
@@ -74,4 +74,8 @@ export const transformArrayToTypeOptions = (array: string[]): selectOptionsType[
     label: type,
     value: type
   }));
+}
+
+export const convertGender = (gender: Gender) => {
+  return gender === 'M' ? 'Homme' : 'Femme';
 }

@@ -13,7 +13,7 @@ export const NavItemLink: FC<{ item: NavItem; type: 'full' | 'icon' }> = ({
   const pathname = usePathname();
   const { href, icon, title } = item;
   const css_class = cn(
-    'flex gap-x-2 w-full text-accent items-center text-[18px] font-medium p-2 hover:bg-background hover:text-primary rounded-sm mb-2',
+    'flex gap-x-2 w-full text-accent items-center text-[18px] font-medium p-2 hover:bg-background hover:text-primary rounded-sm mb-1',
     {
       'justify-center': type === 'icon',
       'bg-background text-primary':
