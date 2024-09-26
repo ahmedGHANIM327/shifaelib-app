@@ -5,10 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { User } from '@/lib/types/users';
 import { convertGender, getFullName, getInitials } from '@/lib/utils';
+import { UpdateUserForm } from '@/components/dashboard/user/forms/UpdateUserForm';
+import { DeleteUser } from '@/components/dashboard/user/components/DeleteUser';
 
 export const PhoneCardUser:FC<{user: User}> = ({ user }) => {
   return (
-    <Card className='w-full rounded-md p-2'>
+    <Card className='w-full rounded-md p-2 relative'>
       <div className='flex flex-col items-center gap-x-3 mt-2'>
         <Avatar className="cursor-pointer">
           <AvatarImage src={''} alt="profile-photo" />
@@ -33,13 +35,13 @@ export const PhoneCardUser:FC<{user: User}> = ({ user }) => {
           <p>{user.phone || '-'}</p>
         </div>
       </div>
-      {!user.isOwner && <div className='flex justify-end'>
-        <Button variant={'link'} className='text-destructive underline'>
-          Supprimer
-        </Button>
-        <Button variant={'link'} className='underline'>
-          Modifier
-        </Button>
+      {!user.isOwner && <div className="gap-x-2 flex justify-center flex-col absolute top-2 right-2">
+        <UpdateUserForm
+          user={user}
+        />
+        <DeleteUser
+          user={user}
+        />
       </div>}
     </Card>
   );

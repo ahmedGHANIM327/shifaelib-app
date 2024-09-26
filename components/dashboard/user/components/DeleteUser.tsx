@@ -41,7 +41,7 @@ export const DeleteUser:FC<{ user:User }> = ({ user }) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger>
-        <Button className="rounded-full h-5 w-5 p-0 text-destructive" variant={'ghost'}>
+        <Button className="rounded-full h-5 w-5 p-0 text-destructive hover:text-destructive" variant={'ghost'}>
           <TrashIcon size={15} />
         </Button>
       </AlertDialogTrigger>
