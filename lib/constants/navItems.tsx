@@ -13,25 +13,30 @@ export const navItems: NavItem[] = [
     title: 'Tableau de bord',
     href: '/',
     icon: <LayoutDashboard size={20}/>,
+    isOwnerItem: false,
   },
   {
     title: 'Cabinet',
     href: '/cabinet',
     icon: <HospitalIcon size={20}/>,
+    isOwnerItem: true,
   },
   {
     title: 'Utilisateurs',
     href: '/cabinet/users',
     icon: <Users size={20}/>,
+    isOwnerItem: true,
   },
   {
     title: 'Services',
     href: '/cabinet/services',
     icon: <Activity size={20}/>,
+    isOwnerItem: true,
   },
   {
     title: 'Profile',
     href: '/profile',
     icon: <CircleUser size={20}/>,
+    isOwnerItem: false,
   }
 ];

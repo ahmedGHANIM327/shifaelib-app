@@ -24,9 +24,9 @@ import { omit } from 'ramda';
 import { checkLoginStatus } from '@/server/services/users/helpers';
 import { signIn } from '@/auth';
 import { ServerResponse } from '@/lib/types';
-import { validateAuthSession } from '@/server/services/common/helpers';
 import jwt from 'jsonwebtoken';
 import { sendNewUserAccountEmail, sendRequestResetPasswordEmail } from '@/server/services/emails';
+import { isAuth, isOwner } from '@/server/services/common/middelwares';
 
 export const loginUser = async (data: LoginUserType) => {
   try {
@@ -151,7 +151,7 @@ export const resetPasswordUser = async (
 
 export const getCurrentUser = async (): Promise<ServerResponse<User>> => {
   try {
-    const session = await validateAuthSession();
+    const session = await isAuth();
     const id = session?.user.id!;
     const user = (await prisma.user.findUnique({
       where: {
@@ -172,7 +172,7 @@ export const getCurrentUser = async (): Promise<ServerResponse<User>> => {
 
 export const getCabinetUsers = async (): Promise<ServerResponse<User[]>> => {
   try {
-    await validateAuthSession();
+    await isAuth();
 
     const users = (await prisma.user.findMany()) as User[];
 
@@ -188,7 +188,7 @@ export const getUserById = async (
   try {
     isValidUUIDv4(id);
 
-    await validateAuthSession();
+    await isAuth();
 
     const user = (await prisma.user.findUnique({
       where: {
@@ -215,7 +215,7 @@ export const createUser = async (
   data: CreateUserInput,
 ): Promise<ServerResponse<User>> => {
   try {
-    const session = await validateAuthSession();
+    const session = await isOwner();
     const cabinetId = session.user.cabinetId;
 
     const validData = (await zodValidationData(
@@ -258,7 +258,7 @@ export const createUser = async (
 export const deleteUser = async (id: string): Promise<ServerResponse<User>> => {
   try {
     isValidUUIDv4(id);
-    await validateAuthSession();
+    await isOwner();
 
     const user = (await prisma.user.findUnique({
       where: {
@@ -288,7 +288,7 @@ export const updateUser = async (
 ): Promise<ServerResponse<User>> => {
   try {
     isValidUUIDv4(id);
-    await validateAuthSession();
+    await isOwner();
 
     const validData = (await zodValidationData(
       data,
@@ -317,7 +317,7 @@ export const updateCurrentUser = async (
   data: UpdateCurrentUserInput,
 ): Promise<ServerResponse<User>> => {
   try {
-    const session = await validateAuthSession();
+    const session = await isAuth();
     const id = session.user.id;
 
     const validData = (await zodValidationData(
@@ -351,7 +351,7 @@ export const updatePasswordUser = async (
   data: UpdatePasswordUserInput,
 ): Promise<ServerResponse<User>> => {
   try {
-    await validateAuthSession();
+    await isOwner();
     isValidUUIDv4(id);
 
     const validData = (await zodValidationData(
@@ -408,7 +408,7 @@ export const updateCurrentPasswordUser = async (
   data: UpdatePasswordUserInput,
 ): Promise<ServerResponse<User>> => {
   try {
-    const session = await validateAuthSession();
+    const session = await isAuth();
     const id = session.user.id;
 
     const validData = (await zodValidationData(

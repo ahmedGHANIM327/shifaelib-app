@@ -16,7 +16,7 @@ import {
   UpdateCabinetInput,
   WeekOpeningHoursInput,
 } from '@/lib/types/cabinet';
-import { validateAuthSession } from '../common/helpers';
+import { isAuth, isOwner } from '@/server/services/common/middelwares';
 
 export const createCabinet = async (
   data: CreateCabinetInput,
@@ -78,7 +78,7 @@ export const getCabinet = async (): Promise<ServerResponse<Cabinet>> => {
 
 export const getCurrentCabinet = async (): Promise<ServerResponse<Cabinet>> => {
   try {
-    await validateAuthSession();
+    await isAuth();
 
     const cabinet = (await prisma.cabinet.findFirst({
       include: {
@@ -121,7 +121,7 @@ export const updateCabinet = async (
   data: UpdateCabinetInput,
 ): Promise<ServerResponse<Cabinet>> => {
   try {
-    const session = await validateAuthSession();
+    const session = await isOwner();
     const cabinetId = session.user.cabinetId;
 
     const validData = (await zodValidationData(
@@ -151,7 +151,7 @@ export const updateCabinetLogo = async (
   logo: string,
 ): Promise<ServerResponse<Cabinet>> => {
   try {
-    const session = await validateAuthSession();
+    const session = await isOwner();
     const cabinetId = session.user.cabinetId;
 
     // @ts-ignore
@@ -178,7 +178,7 @@ export const updateOpeningHoursCabinet = async (
   data: WeekOpeningHoursInput,
 ): Promise<ServerResponse<Cabinet>> => {
   try {
-    const session = await validateAuthSession();
+    const session = await isOwner();
     const cabinetId = session.user.cabinetId;
 
     const validData = (await zodValidationData(
