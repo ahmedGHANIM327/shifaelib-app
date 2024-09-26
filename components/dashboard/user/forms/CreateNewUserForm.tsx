@@ -198,7 +198,7 @@ export const CreateNewUserForm = () => {
               onClick={handleCancel}
               type={'button'}
             >
-              Pas maintenant
+              Annuler
             </Button>
             <Button
               type="submit"

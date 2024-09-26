@@ -58,7 +58,7 @@ export const DeleteUser:FC<{ user:User }> = ({ user }) => {
             className="md:px-16 md:w-fit w-full gap-x-2"
             onClick={()=>setIsOpen(false)}
           >
-            Pas maintenant
+            Annuler
           </Button>
           <Button
             variant={'destructive'}

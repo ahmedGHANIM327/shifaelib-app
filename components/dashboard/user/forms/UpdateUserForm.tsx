@@ -179,7 +179,7 @@ export const UpdateUserForm:FC<{ user:User }> = ({ user }) => {
               onClick={handleCancel}
               type={'button'}
             >
-              Pas maintenant
+              Annuler
             </Button>
             <Button
               type="submit"

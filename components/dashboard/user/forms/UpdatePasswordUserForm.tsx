@@ -178,7 +178,7 @@ export const UpdatePasswordUserForm:FC<UpdatePasswordUserFormProps> = ({ type })
               {isPending && <LoadingSpinner size={14}/>}
             </Button>
           </div>
-          <div className='px-4 py-2'>
+          <div className='py-2'>
             <div className="flex flex-wrap md:gap-x-[2%] gap-y-4 mb-2">
               <div className="w-full">
                 <FormField

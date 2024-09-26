@@ -182,7 +182,7 @@ export const UpdateCabinetForm = () => {
               onClick={handleCancel}
               type={'button'}
             >
-              Pas maintenant
+              Annuler
             </Button>
             <Button
               type="submit"
