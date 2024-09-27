@@ -91,91 +91,127 @@ export const translateDays = {
   'sunday': 'Dimanche'
 }
 
+export const colortest = 'bg-lime-600';
+
 export const COLORS = [
   {
     color: 'green',
-    level: 600,
-    lightLevel: 50
+    bgColor: 'bg-green-600',
+    bgLightColor: 'bg-green-50',
+    textColor: 'text-green-600',
+    textLightColor: 'text-green-50'
   },
   {
     color: 'lime',
-    level: 600,
-    lightLevel: 50
+    bgColor: 'bg-lime-600',
+    bgLightColor: 'bg-lime-50',
+    textColor: 'text-lime-600',
+    textLightColor: 'text-lime-50'
   },
   {
     color: 'teal',
-    level: 600,
-    lightLevel: 50
+    bgColor: 'bg-teal-600',
+    bgLightColor: 'bg-teal-50',
+    textColor: 'text-teal-600',
+    textLightColor: 'text-teal-50'
   },
   {
     color: 'red',
-    level: 600,
-    lightLevel: 50
+    bgColor: 'bg-red-600',
+    bgLightColor: 'bg-red-50',
+    textColor: 'text-red-600',
+    textLightColor: 'text-red-50'
   },
   {
     color: 'pink',
-    level: 700,
-    lightLevel: 100
+    bgColor: 'bg-pink-700',
+    bgLightColor: 'bg-pink-100',
+    textColor: 'text-pink-700',
+    textLightColor: 'text-pink-100'
   },
   {
     color: 'blue',
-    level: 500,
-    lightLevel: 50
+    bgColor: 'bg-blue-500',
+    bgLightColor: 'bg-blue-50',
+    textColor: 'text-blue-500',
+    textLightColor: 'text-blue-50'
   },
   {
     color: 'sky',
-    level: 700,
-    lightLevel: 50
+    bgColor: 'bg-sky-700',
+    bgLightColor: 'bg-sky-50',
+    textColor: 'text-sky-700',
+    textLightColor: 'text-sky-50'
   },
   {
     color: 'cyan',
-    level: 600,
-    lightLevel: 50
+    bgColor: 'bg-cyan-600',
+    bgLightColor: 'bg-cyan-50',
+    textColor: 'text-cyan-600',
+    textLightColor: 'text-cyan-50'
   },
   {
     color: 'indigo',
-    level: 700,
-    lightLevel: 50
+    bgColor: 'bg-indigo-700',
+    bgLightColor: 'bg-indigo-50',
+    textColor: 'text-indigo-700',
+    textLightColor: 'text-indigo-50'
   },
   {
     color: 'violet',
-    level: 500,
-    lightLevel: 50
+    bgColor: 'bg-violet-500',
+    bgLightColor: 'bg-violet-50',
+    textColor: 'text-violet-500',
+    textLightColor: 'text-violet-50'
   },
   {
     color: 'purple',
-    level: 700,
-    lightLevel: 50
+    bgColor: 'bg-purple-700',
+    bgLightColor: 'bg-purple-50',
+    textColor: 'text-purple-700',
+    textLightColor: 'text-purple-50'
   },
   {
     color: 'fuchsia',
-    level: 600,
-    lightLevel: 50
+    bgColor: 'bg-fuchsia-600',
+    bgLightColor: 'bg-fuchsia-50',
+    textColor: 'text-fuchsia-600',
+    textLightColor: 'text-fuchsia-50'
   },
   {
     color: 'stone',
-    level: 500,
-    lightLevel: 50
+    bgColor: 'bg-stone-500',
+    bgLightColor: 'bg-stone-50',
+    textColor: 'text-stone-500',
+    textLightColor: 'text-stone-50'
   },
   {
     color: 'slate',
-    level: 500,
-    lightLevel: 50
+    bgColor: 'bg-slate-500',
+    bgLightColor: 'bg-slate-50',
+    textColor: 'text-slate-500',
+    textLightColor: 'text-slate-50'
   },
   {
     color: 'orange',
-    level: 500,
-    lightLevel: 50
+    bgColor: 'bg-orange-500',
+    bgLightColor: 'bg-orange-50',
+    textColor: 'text-orange-500',
+    textLightColor: 'text-orange-50'
   },
   {
     color: 'amber',
-    level: 700,
-    lightLevel: 50
+    bgColor: 'bg-amber-700',
+    bgLightColor: 'bg-amber-50',
+    textColor: 'text-amber-700',
+    textLightColor: 'text-amber-50'
   },
   {
     color: 'yellow',
-    level: 500,
-    lightLevel: 50
+    bgColor: 'bg-yellow-500',
+    bgLightColor: 'bg-yellow-50',
+    textColor: 'text-yellow-500',
+    textLightColor: 'text-yellow-50'
   }
 ];
 
