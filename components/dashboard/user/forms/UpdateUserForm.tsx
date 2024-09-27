@@ -13,12 +13,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { DialogFormContainer } from '@/components/shared/components/DialogFormContainer';
 import { DialogFormActions } from '@/components/shared/components/DialogFormActions';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
-import { CreateUserInput, UpdateUserInput, User } from '@/lib/types/users';
+import { UpdateUserInput, User } from '@/lib/types/users';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { AccountStatusToggle } from '@/components/dashboard/user/components/AccountStatusToggle';
 import useUserStore from '@/stores/user';
-import { createUser, updateUser } from '@/server/services/users';
+import { updateUser } from '@/server/services/users';
 
 export const UpdateUserForm:FC<{ user:User }> = ({ user }) => {
   const [isPending, startTransition] = useTransition();

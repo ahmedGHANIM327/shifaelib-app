@@ -91,3 +91,91 @@ export const translateDays = {
   'sunday': 'Dimanche'
 }
 
+export const COLORS = [
+  {
+    color: 'green',
+    level: 600,
+    lightLevel: 50
+  },
+  {
+    color: 'lime',
+    level: 600,
+    lightLevel: 50
+  },
+  {
+    color: 'teal',
+    level: 600,
+    lightLevel: 50
+  },
+  {
+    color: 'red',
+    level: 600,
+    lightLevel: 50
+  },
+  {
+    color: 'pink',
+    level: 700,
+    lightLevel: 100
+  },
+  {
+    color: 'blue',
+    level: 500,
+    lightLevel: 50
+  },
+  {
+    color: 'sky',
+    level: 700,
+    lightLevel: 50
+  },
+  {
+    color: 'cyan',
+    level: 600,
+    lightLevel: 50
+  },
+  {
+    color: 'indigo',
+    level: 700,
+    lightLevel: 50
+  },
+  {
+    color: 'violet',
+    level: 500,
+    lightLevel: 50
+  },
+  {
+    color: 'purple',
+    level: 700,
+    lightLevel: 50
+  },
+  {
+    color: 'fuchsia',
+    level: 600,
+    lightLevel: 50
+  },
+  {
+    color: 'stone',
+    level: 500,
+    lightLevel: 50
+  },
+  {
+    color: 'slate',
+    level: 500,
+    lightLevel: 50
+  },
+  {
+    color: 'orange',
+    level: 500,
+    lightLevel: 50
+  },
+  {
+    color: 'amber',
+    level: 700,
+    lightLevel: 50
+  },
+  {
+    color: 'yellow',
+    level: 500,
+    lightLevel: 50
+  }
+];
+
