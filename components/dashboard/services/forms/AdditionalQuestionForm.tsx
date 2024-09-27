@@ -43,8 +43,7 @@ export const AdditionalQuestionForm:FC<AdditionalQuestionFormProps> = ({
       type: selectedAdditionalQuestion?.type
     } : {
       label: '',
-      options: [],
-      type: ''
+      options: []
     }
   });
 
