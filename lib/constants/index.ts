@@ -91,8 +91,6 @@ export const translateDays = {
   'sunday': 'Dimanche'
 }
 
-export const colortest = 'bg-lime-600';
-
 export const COLORS = [
   {
     color: 'green',
