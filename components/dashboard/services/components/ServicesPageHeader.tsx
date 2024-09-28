@@ -1,7 +1,5 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { CreateServiceForm } from '@/components/dashboard/services/forms/CreateServiceForm';
+import { CreateOrUpdateServiceForm } from '@/components/dashboard/services/forms/CreateOrUpdateServiceForm';
 
 export const ServicesPageHeader = () => {
   return (
@@ -17,7 +15,7 @@ export const ServicesPageHeader = () => {
           vos services.</p>
       </div>
       <div className='h-full flex gap-x-1 items-center w-full'>
-        <CreateServiceForm />
+        <CreateOrUpdateServiceForm type={'create'} />
       </div>
     </div>
   );
