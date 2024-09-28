@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserAccountStatus } from '@/components/dashboard/user/components/UserAccountStatus';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { User } from '@/lib/types/users';
 import { convertGender, getFullName, getInitials } from '@/lib/utils';

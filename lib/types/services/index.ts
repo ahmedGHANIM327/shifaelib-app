@@ -8,6 +8,8 @@ export type Service = {
   color: string;
   tarif: string;
   config?: object;
+  createdAt: Date;
+  updatedAt?: Date;
   //Relations
   cabinet?: Cabinet;
 };
@@ -22,4 +24,4 @@ export type AdditionalQuestionType = {
   order: number;
 }
 
-export type CreateServiceInput = z.infer<typeof createServiceSchema>;
+export type CreateOrUpdateServiceInput = z.infer<typeof createServiceSchema>;

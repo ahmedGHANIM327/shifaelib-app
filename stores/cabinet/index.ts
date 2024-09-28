@@ -31,7 +31,7 @@ const useCabinetStore = create<cabinetState>((set, get) => ({
     set({ currentCabinet: newCabinetData });
   },
   currentCabinet: {} as Cabinet,
-  isCurrentCabinetLoading: false,
+  isCurrentCabinetLoading: false
 }));
 
 export default useCabinetStore;

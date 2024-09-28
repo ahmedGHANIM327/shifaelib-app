@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { FC, useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,26 +11,40 @@ import { ColorsInput } from '@/components/shared/inputs/ColorInput';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import { DialogFormActions } from '@/components/shared/components/DialogFormActions';
-import { AdditionalQuestionType, CreateServiceInput } from '@/lib/types/services';
+import { AdditionalQuestionType, CreateOrUpdateServiceInput, Service } from '@/lib/types/services';
 import { AdditionalQuestionForm } from '@/components/dashboard/services/forms/AdditionalQuestionForm';
 import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Plus } from 'lucide-react';
+import { PencilIcon, Plus } from 'lucide-react';
 import { DialogFormTitle } from '@/components/shared/components/DialogFormTitle';
 import { DialogFormContainer } from '@/components/shared/components/DialogFormContainer';
 import { AdditionalQuestionBlock } from '@/components/dashboard/services/components/AdditionalQuestionBlock';
 import { DeleteAdditionalQuestion } from '@/components/dashboard/services/components/DeleteAdditionalQuestion';
-import { createService } from '@/server/services/services';
+import { createService, updateService as updateServiceAction } from '@/server/services/services';
 import { toast } from 'react-toastify';
+import useServiceStore from '@/stores/service';
+import { cn } from '@/lib/utils';
 
-export const CreateServiceForm = () => {
+type CreateServiceFormProps = {
+  type: 'create' | 'update';
+  service?: Service;
+};
+
+export const CreateOrUpdateServiceForm:FC<CreateServiceFormProps> = ({ type = 'create', service }) => {
 
   const [isPending, startTransition] = useTransition();
-  const [additionalQuestions, setAdditionalQuestions] = useState<AdditionalQuestionType[]>([]);
+  const [additionalQuestions, setAdditionalQuestions] = useState<AdditionalQuestionType[]>((service?.config as AdditionalQuestionType[] ) || []);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const addService = useServiceStore((state) => state.addService);
+  const updateService = useServiceStore((state) => state.updateService);
 
+  // @ts-ignore
   const form = useForm<z.infer<typeof createServiceSchema>>({
     resolver: zodResolver(createServiceSchema),
-    defaultValues: {
+    defaultValues: type === 'update' ? {
+      name: service?.name || '',
+      tarif: service?.tarif || '0',
+      color: service?.color || '',
+    } : {
       name: '',
       tarif: '',
       color: '',
@@ -40,24 +54,49 @@ export const CreateServiceForm = () => {
   const onSubmit = async (data: z.infer<typeof createServiceSchema>) => {
     startTransition(async () => {
       try {
-        const service = {
-          ...data,
-          config: additionalQuestions
-        } as CreateServiceInput;
+        if(type === 'create') {
+          const service = {
+            ...data,
+            config: additionalQuestions
+          } as CreateOrUpdateServiceInput;
 
-        const response = await createService(service);
-        if(response.ok) {
-          form.reset();
-          setIsDialogOpen(false);
-          // @ts-ignore
-          toast.success('Service crée avec succès');
-        } else {
-          if (response.error === 'SERVICE_COLOR_ALREADY_EXISTS') {
+          const response = await createService(service);
+          if(response.ok) {
+            addService(response.data as Service);
+            form.reset();
+            setIsDialogOpen(false);
             // @ts-ignore
-            toast.error('Un service avec la même couleur exist déjà. Veuillez réessayer.');
+            toast.success('Service crée avec succès');
           } else {
+            if (response.error === 'SERVICE_COLOR_ALREADY_EXISTS') {
+              // @ts-ignore
+              toast.error('Un service avec la même couleur exist déjà. Veuillez réessayer.');
+            } else {
+              // @ts-ignore
+              toast.error('Une erreur est servenue. Veuillez réessayer.');
+            }
+          }
+        } else {
+          const updatedServiceData = {
+            ...data,
+            config: additionalQuestions
+          } as CreateOrUpdateServiceInput;
+
+          const response = await updateServiceAction(service?.id as string, updatedServiceData);
+          if(response.ok) {
+            updateService(response.data as Service);
+            form.reset();
+            setIsDialogOpen(false);
             // @ts-ignore
-            toast.error('Une erreur est servenue. Veuillez réessayer.');
+            toast.success('Service mis à jour avec succès');
+          } else {
+            if (response.error === 'SERVICE_COLOR_ALREADY_EXISTS') {
+              // @ts-ignore
+              toast.error('Un service avec la même couleur exist déjà. Veuillez réessayer.');
+            } else {
+              // @ts-ignore
+              toast.error('Une erreur est servenue. Veuillez réessayer.');
+            }
           }
         }
       } catch (error: any) {
@@ -68,23 +107,31 @@ export const CreateServiceForm = () => {
   };
 
   const handleCancel = () => {
-    form.reset();
+    if(type === 'create') {
+      form.reset();
+    }
     setIsDialogOpen(false);
-    setAdditionalQuestions([]);
+  }
+
+  const TriggerComponent = () => {
+    if(type === 'create') {
+      return (<Button className='gap-x-2 w-full'>
+        <Plus />
+        Créer un service
+      </Button>);
+    }
+    return (<PencilIcon size={15} className={'text-primary'}/>)
   }
 
   // @ts-ignore
   return (
     <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <AlertDialogTrigger className={'w-full'}>
-        <Button className='gap-x-2 w-full'>
-          <Plus />
-          Créer un service
-        </Button>
+      <AlertDialogTrigger className={'w-full px-0'}>
+        <TriggerComponent />
       </AlertDialogTrigger>
       <AlertDialogContent className="md:w-[700px] md:max-w-[850px] p-0">
         <DialogFormTitle
-          title={'Créer un nouveau utilisateur'}
+          title={type === 'create'? 'Créer un nouveau service' : 'Mettre à jour votre service'}
         />
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -178,7 +225,7 @@ export const CreateServiceForm = () => {
               className="md:px-16 md:w-fit w-full gap-x-2"
               disabled={isPending}
             >
-              Créer
+              {type === 'create' ? 'Créer' : 'Mettre à jour'}
               {isPending && <LoadingSpinner size={14} />}
             </Button>
           </DialogFormActions>

@@ -93,3 +93,36 @@ export const convertTypeQuestion = (type: string) => {
       return 'Options à choix unique avec réponse complementaire'
   }
 }
+
+export const stringifyDateFormat = (date: Date, format: string) => {
+  switch (format) {
+    case 'hh:mm':
+      return `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`
+    case 'frenchLocalDate':
+      return date.toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long',
+      });
+    case 'frenchLocalDateTime':
+      return date && date.toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    case 'frenchLocalNumericDateTime':
+      return date.toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    default :
+      return `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`
+  }
+}
