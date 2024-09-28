@@ -27,9 +27,10 @@ import { cn } from '@/lib/utils';
 type CreateServiceFormProps = {
   type: 'create' | 'update';
   service?: Service;
+  iconeClassName?: string;
 };
 
-export const CreateOrUpdateServiceForm:FC<CreateServiceFormProps> = ({ type = 'create', service }) => {
+export const CreateOrUpdateServiceForm:FC<CreateServiceFormProps> = ({ type = 'create', service, iconeClassName }) => {
 
   const [isPending, startTransition] = useTransition();
   const [additionalQuestions, setAdditionalQuestions] = useState<AdditionalQuestionType[]>((service?.config as AdditionalQuestionType[] ) || []);
@@ -120,7 +121,7 @@ export const CreateOrUpdateServiceForm:FC<CreateServiceFormProps> = ({ type = 'c
         Créer un service
       </Button>);
     }
-    return (<PencilIcon size={15} className={'text-primary'}/>)
+    return (<PencilIcon size={15} className={cn('text-primary', iconeClassName)}/>)
   }
 
   // @ts-ignore

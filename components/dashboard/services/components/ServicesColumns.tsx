@@ -43,7 +43,7 @@ export const ServicesColumns: ColumnDef<Service>[] = [
     accessorKey: "createdAt",
     header: "Date de création",
     cell: ({ row }) => {
-      return row.original.updatedAt ? stringifyDateFormat(row.original.createdAt as Date, 'frenchLocalDateTime') : '-';
+      return row.original.createdAt ? stringifyDateFormat(row.original.createdAt as Date, 'frenchLocalDateTime') : '-';
     }
   },
   {

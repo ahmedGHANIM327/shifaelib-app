@@ -10,8 +10,9 @@ import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import { Service } from '@/lib/types/services';
 import useServiceStore from '@/stores/service';
 import { deleteService as deleteServiceAction} from '@/server/services/services';
+import { cn } from '@/lib/utils';
 
-export const DeleteService:FC<{ service:Service }> = ({ service }) => {
+export const DeleteService:FC<{ service:Service; iconeClassName?: string; }> = ({ service, iconeClassName }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -40,9 +41,7 @@ export const DeleteService:FC<{ service:Service }> = ({ service }) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger>
-        <Button className="rounded-full h-5 w-5 p-0 text-destructive hover:text-destructive" variant={'ghost'}>
-          <TrashIcon size={15} />
-        </Button>
+        <TrashIcon size={15} className={cn('text-destructive', iconeClassName)}/>
       </AlertDialogTrigger>
       <AlertDialogContent className="md:w-[700px] md:max-w-[850px] px-6">
         <h2 className='text-2xl font-semibold text-primary'>Supprimer - {service.name}</h2>
