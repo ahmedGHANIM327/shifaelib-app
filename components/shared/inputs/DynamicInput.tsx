@@ -98,7 +98,7 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false 
         <RadioGroup
           className={'flex gap-x-4'}
           onValueChange={(value:string)=>console.log('value', value)}
-          defaultValue={question.value as string || ''}
+          defaultValue={(question.value as string[]).join('') || ''}
         >
           {(question.options || []).map((option, index) => {
             return (<div key={index} className="flex items-center space-x-2">
@@ -118,7 +118,7 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false 
         <RadioGroup
           className={'flex gap-x-4'}
           onValueChange={(value:string)=>console.log('value', value)}
-          defaultValue={question.value as string || ''}
+          defaultValue={(question.value as string[]).join('') || ''}
         >
           {(question.options || []).map((option, index) => {
             return (<div key={index} className="flex items-center space-x-2">
