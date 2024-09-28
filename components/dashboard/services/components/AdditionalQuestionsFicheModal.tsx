@@ -30,7 +30,7 @@ export const AdditionalQuestionsFicheModal:FC<AdditionalQuestionsFicheModalProps
           titleClassName={textColor}
         />
         <DialogFormContainer className='flex flex-col gap-y-6 pt-0 overflow-hidden'>
-          {(service.config || []).map((question: AdditionalQuestionType) => <DynamicInput key={question.id} question={question} disabled={true}/>)}
+          {(service.config as AdditionalQuestionType[] || []).map((question: AdditionalQuestionType) => <DynamicInput key={question.id} question={question} disabled={true}/>)}
         </DialogFormContainer>
       </DialogContent>
     </Dialog>
