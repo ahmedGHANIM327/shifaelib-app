@@ -19,16 +19,9 @@ import { PhoneCardUser } from '@/components/dashboard/user/components/PhoneCardU
 const Page = () => {
 
   const cabinetUsers = useUserStore((state) => state.cabinetUsers);
-  const isCabinetUsersLoading = useUserStore(
-    (state) => state.isCabinetUsersLoading,
-  );
-  const getCabinetUsers = useUserStore((state) => state.getCabinetUsers);
+  const isCurrentUserLoading = useUserStore((state) => state.isCurrentUserLoading);
 
-  useEffect(() => {
-    getCabinetUsers();
-  }, []);
-
-  if(isCabinetUsersLoading || cabinetUsers.length === 0) {
+  if(isCurrentUserLoading) {
     return <div className='w-full h-full flex justify-center items-center'>
       <LoadingSpinner size={55} className='text-primary'/>
     </div>;

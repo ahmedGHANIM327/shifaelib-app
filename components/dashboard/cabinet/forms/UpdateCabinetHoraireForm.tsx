@@ -8,12 +8,11 @@ import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '@/component
 import { DialogFormTitle } from '@/components/shared/components/DialogFormTitle';
 import { DialogFormActions } from '@/components/shared/components/DialogFormActions';
 import { toast } from 'react-toastify';
-import useCabinetStore from '@/stores/cabinet';
 import { DayOpeningHours, WeekOpeningHours } from '@/lib/types';
-import { DefaultOpeningHours } from '@/lib/constants';
 import { HoursSelectInput } from '@/components/shared/inputs/HoursSelectInput';
 import { updateOpeningHoursCabinet } from '@/server/services/cabinet';
 import { Cabinet } from '@/lib/types/cabinet';
+import useUserStore from '@/stores/user';
 
 type UpdateCabinetHoraireFormProps = {
   openingHours: WeekOpeningHours;
@@ -21,7 +20,7 @@ type UpdateCabinetHoraireFormProps = {
 
 export const UpdateCabinetHoraireForm:FC<UpdateCabinetHoraireFormProps> = ({ openingHours }) => {
 
-  const setCurrentCabinet = useCabinetStore((state) => state.setCurrentCabinet);
+  const setCurrentCabinet = useUserStore((state) => state.setCurrentCabinet);
   const [open, setOpen] = useState(false);
   const [ isPending, startTransition ] = useTransition();
   const [horaire, setHoraire] = useState<WeekOpeningHours>(openingHours);

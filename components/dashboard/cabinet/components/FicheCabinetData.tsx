@@ -19,7 +19,9 @@ export const FicheCabinetData:FC<FicheCabinetDataProps> = ({ cabinet}) => {
           className={'mb-0'}
           h4_className={'md:text-xl'}
         />
-        <UpdateCabinetForm />
+        <UpdateCabinetForm
+          currentCabinet={cabinet}
+        />
       </div>
       <div className='mt-4 flex flex-col items-center'>
         <h2 className='text-2xl font-semibold text-center'>

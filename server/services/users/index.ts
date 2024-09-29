@@ -43,7 +43,12 @@ export const loginUser = async (data: LoginUserType) => {
         password: false,
       },
       include: {
-        cabinet: true
+        cabinet: {
+          include: {
+            users: true,
+            services: true
+          }
+        }
       },
     })) as User;
 
@@ -158,7 +163,12 @@ export const getCurrentUser = async (): Promise<ServerResponse<User>> => {
         id,
       },
       include: {
-        cabinet: true
+        cabinet: {
+          include: {
+            users: true,
+            services: true
+          }
+        }
       },
     })) as User;
 

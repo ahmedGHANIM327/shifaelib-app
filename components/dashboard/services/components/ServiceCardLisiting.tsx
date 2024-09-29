@@ -32,10 +32,10 @@ export const ServiceCardLisiting:FC<{ service: Service }> = ( {service}) => {
           <AdditionalQuestionsFicheModal service={service}/>
         </div>
       </div>
-      <div className='flex-col flex items-end p-2'>
-        <p className='text-xs'>Crée le {stringifyDateFormat(service.createdAt as Date, 'frenchLocalDateTime')}</p>
-        <p className='text-xs'>Mis à jour le {stringifyDateFormat(service.updatedAt as Date, 'frenchLocalDateTime')}</p>
-      </div>
+      {/*<div className='flex-col flex items-end p-2'>
+        <p className='text-xs'>Crée le {service.createdAt && stringifyDateFormat(service.createdAt as Date, 'frenchLocalDateTime')}</p>
+        <p className='text-xs'>Mis à jour le {service.updatedAt && stringifyDateFormat(service.updatedAt as Date, 'frenchLocalDateTime')}</p>
+      </div>*/}
     </Card>
   );
 };

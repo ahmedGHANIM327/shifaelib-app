@@ -134,14 +134,10 @@ export const updateCabinet = async (
       where: {
         id: cabinetId,
       },
-      data: validData,
-      include: {
-        services: true,
-        users: true,
-      },
+      data: validData
     })) as Cabinet;
 
-    return { ok: true, data: JSON.parse(JSON.stringify(updatedCabinet)) };
+    return { ok: true, data: updatedCabinet };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }
@@ -193,11 +189,7 @@ export const updateOpeningHoursCabinet = async (
       },
       data: {
         openingHours: validData,
-      },
-      include: {
-        services: true,
-        users: true,
-      },
+      }
     })) as Cabinet;
 
     return { ok: true, data: updatedCabinet };
