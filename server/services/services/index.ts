@@ -1,13 +1,11 @@
 'use server';
 
 import { ServerResponse } from '@/lib/types';
-import { isAuth, isOwner } from '@/server/services/common/middelwares';
+import { isOwner } from '@/server/services/common/middelwares';
 import { isValidUUIDv4, zodValidationData } from '@/lib/utils';
 import { prisma } from '@/lib/prisma';
 import { CreateOrUpdateServiceInput, Service } from '@/lib/types/services';
 import { createServiceSchema } from '@/lib/schemas/services';
-import { UpdateUserInput, User } from '@/lib/types/users';
-import { updateUserSchema } from '@/lib/schemas/users';
 
 export const createService = async (
   data: CreateOrUpdateServiceInput,
@@ -44,18 +42,6 @@ export const createService = async (
     })) as Service;
 
     return { ok: true, data: createdService };
-  } catch (error: any) {
-    return { ok: false, error: error.message as string };
-  }
-};
-
-export const getCabinetServices = async (): Promise<ServerResponse<Service[]>> => {
-  try {
-    await isAuth();
-
-    const services = (await prisma.service.findMany()) as Service[];
-
-    return { ok: true, data: services };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }

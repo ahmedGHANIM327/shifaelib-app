@@ -16,7 +16,7 @@ import {
   UpdateCabinetInput,
   WeekOpeningHoursInput,
 } from '@/lib/types/cabinet';
-import { isAuth, isOwner } from '@/server/services/common/middelwares';
+import { isOwner } from '@/server/services/common/middelwares';
 
 export const createCabinet = async (
   data: CreateCabinetInput,
@@ -71,27 +71,6 @@ export const getCabinet = async (): Promise<ServerResponse<Cabinet>> => {
     }
 
     return { ok: true, data: JSON.parse(JSON.stringify(cabinet)) };
-  } catch (error: any) {
-    return { ok: false, error: error.message as string };
-  }
-};
-
-export const getCurrentCabinet = async (): Promise<ServerResponse<Cabinet>> => {
-  try {
-    await isAuth();
-
-    const cabinet = (await prisma.cabinet.findFirst({
-      include: {
-        users: true,
-        services: true,
-      },
-    })) as Cabinet;
-
-    if (!cabinet) {
-      return { ok: false, error: 'NO_CABINET_FOUNDED' };
-    }
-
-    return { ok: true, data: cabinet };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }
