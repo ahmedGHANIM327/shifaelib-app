@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import useCabinetStore from '@/stores/cabinet';
+import React from 'react';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import { Card } from '@/components/ui/card';
 import { FicheCabinetHeader } from '@/components/dashboard/cabinet/components/FicheCabinetHeader';
@@ -9,17 +8,14 @@ import { FicheCabinetData } from '@/components/dashboard/cabinet/components/Fich
 import { FicheCabinetHoraire } from '@/components/dashboard/cabinet/components/FicheCabinetHoraire';
 import { DefaultOpeningHours } from '@/lib/constants';
 import { WeekOpeningHours } from '@/lib/types';
+import useUserStore from '@/stores/user';
 
 const Page = () => {
-  const currentCabinet = useCabinetStore((state) => state.currentCabinet);
-  const getCurrentCabinet = useCabinetStore((state) => state.getCurrentCabinet);
-  const isCurrentCabinetLoading = useCabinetStore((state) => state.isCurrentCabinetLoading);
 
-  useEffect(() => {
-    getCurrentCabinet();
-  }, []);
+  const currentCabinet = useUserStore((state) => state.currentCabinet);
+  const isCurrentUserLoading = useUserStore((state) => state.isCurrentUserLoading);
 
-  if(isCurrentCabinetLoading || !currentCabinet.id) {
+  if(isCurrentUserLoading) {
     return <div className='w-full h-full flex justify-center items-center'>
       <LoadingSpinner size={55} className='text-primary'/>
     </div>;

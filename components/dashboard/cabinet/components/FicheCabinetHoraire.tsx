@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { Card } from '@/components/ui/card';
 import { CardTitle } from '@/components/shared/components/CardTitle';
 import { Calendar } from 'lucide-react';
-import { UpdateCabinetForm } from '@/components/dashboard/cabinet/forms/UpdateCabinetForm';
 import { DayOpeningHoursComponent } from '@/components/dashboard/cabinet/components/DayOpeningHoursComponent';
 import { WeekOpeningHours } from '@/lib/types';
 import { UpdateCabinetHoraireForm } from '@/components/dashboard/cabinet/forms/UpdateCabinetHoraireForm';

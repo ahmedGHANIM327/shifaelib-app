@@ -6,6 +6,7 @@ import {
   updateCabinetSchema,
   weekOpeningHoursSchema,
 } from '@/lib/schemas/cabinet';
+import { Service } from '@/lib/types/services';
 
 export type Cabinet = {
   id: string;
@@ -21,6 +22,7 @@ export type Cabinet = {
   logo?: string;
   //Relations
   users?: User[];
+  services?: Service[];
 };
 
 export type CreateCabinetInput = z.infer<typeof createCabinetSchema>;

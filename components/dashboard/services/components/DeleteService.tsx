@@ -8,15 +8,15 @@ import { DialogFormActions } from '@/components/shared/components/DialogFormActi
 import { toast } from 'react-toastify';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import { Service } from '@/lib/types/services';
-import useServiceStore from '@/stores/service';
 import { deleteService as deleteServiceAction} from '@/server/services/services';
 import { cn } from '@/lib/utils';
+import useUserStore from '@/stores/user';
 
 export const DeleteService:FC<{ service:Service; iconeClassName?: string; }> = ({ service, iconeClassName }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const deleteService = useServiceStore((state) => state.deleteService);
+  const deleteService = useUserStore((state) => state.deleteCabinetUser);
 
   const handleDelete = async () => {
     startTransition(async () => {

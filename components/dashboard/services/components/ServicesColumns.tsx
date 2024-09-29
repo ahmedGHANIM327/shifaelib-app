@@ -43,14 +43,14 @@ export const ServicesColumns: ColumnDef<Service>[] = [
     accessorKey: "createdAt",
     header: "Date de création",
     cell: ({ row }) => {
-      return row.original.createdAt ? stringifyDateFormat(row.original.createdAt as Date, 'frenchLocalDateTime') : '-';
+      return row.original.createdAt ? stringifyDateFormat(new Date(row.original.createdAt), 'frenchLocalDateTime') : '-';
     }
   },
   {
     accessorKey: "updatedAt",
     header: "Date de dernière modification",
     cell: ({ row }) => {
-      return row.original.updatedAt ? stringifyDateFormat(row.original.updatedAt as Date, 'frenchLocalDateTime') : '-';
+      return row.original.updatedAt ? stringifyDateFormat(new Date(row.original.updatedAt), 'frenchLocalDateTime') : '-';
     }
   },
   {

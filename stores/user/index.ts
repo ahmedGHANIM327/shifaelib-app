@@ -2,74 +2,153 @@ import { create } from 'zustand';
 import { User } from '@/lib/types/users';
 import { getCabinetUsers, getCurrentUser } from '@/server/services/users';
 import { signOut } from 'next-auth/react';
+import { transformCurrentUser } from '@/lib/helpers/users';
+import { Cabinet } from '@/lib/types/cabinet';
+import { Service } from '@/lib/types/services';
 
 interface UserState {
   currentUser: User;
   isCurrentUserLoading: boolean;
   getCurrentUser: () => Promise<void>;
   setCurrentUser: (newUser: User) => void;
+  // cabinet users
   cabinetUsers: User[];
-  isCabinetUsersLoading: boolean;
+  setCabinetUsers: (users: User[]) => void;
   addCabinetUser: (newUser: User) => void;
   updateCabinetUser: (newUser: User) => void;
   deleteCabinetUser: (id: string) => void;
-  getCabinetUsers: () => Promise<void>;
+  // Cabinet
+  currentCabinet: Cabinet;
+  setCurrentCabinet: (cabinet: Cabinet) => void;
+  // services
+  cabinetServices: Service[];
+  setCabinetServices: (services: Service[]) => void;
+  addCabinetService: (newService: Service) => void;
+  updateCabinetService: (updatedService: Service) => void;
+  deleteCabinetService: (id: string) => void;
 }
 
 const useUserStore = create<UserState>((set, get) => ({
   getCurrentUser: async () => {
-    set({ isCurrentUserLoading: true });
-    const currentUser = window.localStorage.getItem('currentUser');
-    if (!currentUser) {
+    const currentUserData = window.localStorage.getItem('currentUser');
+    if (!currentUserData) {
       const response = await getCurrentUser();
       if (response.ok) {
+        const {
+          user,
+          cabinet,
+          services,
+          users
+        } = transformCurrentUser(response.data as User);
         window.localStorage.setItem(
           'currentUser',
-          JSON.stringify(response.data),
+          JSON.stringify({
+            user,
+            cabinet,
+            services,
+            users
+          }),
         );
-        set({ currentUser: response.data });
+        set({ currentUser: user });
+        set({ cabinetUsers: users });
+        set({ currentCabinet: cabinet });
+        set({ cabinetServices: services });
       } else {
         await signOut();
-        set({ currentUser: {} as User });
       }
     } else {
-      set({ currentUser: JSON.parse(currentUser) });
+      const {
+        user,
+        cabinet,
+        services,
+        users
+      } = JSON.parse(currentUserData);
+      set({ currentUser: user });
+      set({ cabinetUsers: users });
+      set({ currentCabinet: cabinet });
+      set({ cabinetServices: services });
     }
     set({ isCurrentUserLoading: false });
   },
   setCurrentUser: (newUser: User) => {
-    window.localStorage.setItem('currentUser', JSON.stringify(newUser));
+    window.localStorage.setItem(
+      'currentUser',
+      JSON.stringify({
+        user: newUser,
+        cabinet: get().currentCabinet,
+        services: get().cabinetServices,
+        users: get().cabinetUsers
+      }),
+    );
     set({ currentUser: newUser });
   },
   currentUser: {} as User,
-  isCurrentUserLoading: false,
+  isCurrentUserLoading: true,
+  // cabinet users
   cabinetUsers: [] as User[],
-  isCabinetUsersLoading: false,
+  setCabinetUsers: (users: User[]) => {
+    window.localStorage.setItem(
+      'currentUser',
+      JSON.stringify({
+        user: get().currentUser,
+        cabinet: get().currentCabinet,
+        services: get().cabinetServices,
+        users
+      }),
+    );
+    set({ cabinetUsers: users });
+  },
   addCabinetUser: (newUser: User) => {
-    set({ cabinetUsers: [...get().cabinetUsers, newUser] });
+    const users: User[] = [...get().cabinetUsers, newUser];
+    get().setCabinetUsers(users);
   },
   updateCabinetUser: (updatedUser: User) => {
     const users = get().cabinetUsers.filter((user) => user.id !== updatedUser.id);
-    set({ cabinetUsers: [...users, updatedUser] });
+    get().setCabinetUsers([...users, updatedUser]);
   },
   deleteCabinetUser: (id: string) => {
     const users = get().cabinetUsers.filter((user) => user.id !== id);
-    set({ cabinetUsers: users });
+    get().setCabinetUsers(users);
   },
-  getCabinetUsers: async () => {
-    set({ isCabinetUsersLoading: true });
-    const cabinetUsers = get().cabinetUsers as User[];
-    if (cabinetUsers.length === 0) {
-      const response = await getCabinetUsers();
-      if (response.ok) {
-        set({ cabinetUsers: response.data });
-      } else {
-        set({ cabinetUsers: [] as User[] });
-        // @ts-ignore
-        toast.error('Une erreur est servenue. Veuillez réessayer.');
-      }
-    }
-    set({ isCabinetUsersLoading: false });
+  // Cabinet
+  currentCabinet: {} as Cabinet,
+  setCurrentCabinet: (cabinet: Cabinet) => {
+    window.localStorage.setItem(
+      'currentUser',
+      JSON.stringify({
+        user: get().currentUser,
+        cabinet: cabinet,
+        services: get().cabinetServices,
+        users: get().cabinetUsers
+      }),
+    );
+    set({ currentCabinet: cabinet });
+  },
+  // services
+  cabinetServices: [] as Service[],
+  setCabinetServices: (services: Service[]) => {
+    window.localStorage.setItem(
+      'currentUser',
+      JSON.stringify({
+        user: get().currentUser,
+        cabinet: get().currentCabinet,
+        services: services,
+        users: get().cabinetUsers
+      }),
+    );
+    set({ cabinetServices: services });
+  },
+  addCabinetService: (newService: Service) => {
+    const services: Service[] = [...get().cabinetServices, newService];
+    get().setCabinetServices(services);
+  },
+  updateCabinetService: (updatedService: Service) => {
+    const services = get().cabinetServices.filter((service) => service.id !== updatedService.id);
+    get().setCabinetServices([...services, updatedService]);
+  },
+  deleteCabinetService: (id: string) => {
+    const services = get().cabinetServices.filter((service) => service.id !== id);
+    get().setCabinetServices(services);
   },
 }));
 

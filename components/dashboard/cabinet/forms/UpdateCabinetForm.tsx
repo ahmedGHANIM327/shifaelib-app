@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
-import useCabinetStore from '@/stores/cabinet';
+import React, { FC, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,11 +26,13 @@ import { DialogFormTitle } from '@/components/shared/components/DialogFormTitle'
 import { DialogFormActions } from '@/components/shared/components/DialogFormActions';
 import { PencilIcon } from 'lucide-react';
 import { DialogFormContainer } from '@/components/shared/components/DialogFormContainer';
+import useUserStore from '@/stores/user';
 
-export const UpdateCabinetForm = () => {
+export const UpdateCabinetForm:FC<{currentCabinet: Cabinet}> = ({
+  currentCabinet
+                                                                }) => {
 
-  const currentCabinet = useCabinetStore((state) => state.currentCabinet);
-  const setCurrentCabinet = useCabinetStore((state) => state.setCurrentCabinet);
+  const setCurrentCabinet = useUserStore((state) => state.setCurrentCabinet);
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 

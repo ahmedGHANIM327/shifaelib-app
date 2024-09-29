@@ -11,8 +11,8 @@ import { DialogFormActions } from '@/components/shared/components/DialogFormActi
 import { toast } from 'react-toastify';
 import { useEdgeStore } from '@/lib/edgestore';
 import { updateCabinetLogo } from '@/server/services/cabinet';
-import useCabinetStore from '@/stores/cabinet';
 import { Cabinet } from '@/lib/types/cabinet';
+import useUserStore from '@/stores/user';
 
 type UpdateCabinetLogoFormProps = {
   logo?: string;
@@ -20,7 +20,7 @@ type UpdateCabinetLogoFormProps = {
 
 export const UpdateCabinetLogoForm:FC<UpdateCabinetLogoFormProps> = ({ logo }) => {
 
-  const setCurrentCabinet = useCabinetStore((state) => state.setCurrentCabinet);
+  const setCurrentCabinet = useUserStore((state) => state.setCurrentCabinet);
   const { edgestore } = useEdgeStore();
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>();

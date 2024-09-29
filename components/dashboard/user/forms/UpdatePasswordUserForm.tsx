@@ -52,7 +52,6 @@ export const UpdatePasswordUserForm:FC<UpdatePasswordUserFormProps> = ({ type })
       try {
         const response = await updateCurrentPasswordUser(data as UpdatePasswordUserInput);
         if(response.ok) {
-          setCurrentUser(response.data as User);
           // @ts-ignore
           toast.success('Votre mot de passe est mis à jour avec succès.');
         } else {
