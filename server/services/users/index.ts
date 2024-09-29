@@ -445,10 +445,7 @@ export const updateCurrentPasswordUser = async (
       data: {
         password: hashedPassword,
         isTemporaryPassword: false,
-      },
-      include: {
-        cabinet: true
-      },
+      }
     })) as User;
 
     return { ok: true, data: updatedUser };
