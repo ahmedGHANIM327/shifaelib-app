@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ServicesPageHeader } from '@/components/dashboard/services/components/ServicesPageHeader';
 import { Card } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';

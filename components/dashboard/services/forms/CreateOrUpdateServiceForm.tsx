@@ -21,8 +21,8 @@ import { AdditionalQuestionBlock } from '@/components/dashboard/services/compone
 import { DeleteAdditionalQuestion } from '@/components/dashboard/services/components/DeleteAdditionalQuestion';
 import { createService, updateService as updateServiceAction } from '@/server/services/services';
 import { toast } from 'react-toastify';
-import useServiceStore from '@/stores/service';
 import { cn } from '@/lib/utils';
+import useUserStore from '@/stores/user';
 
 type CreateServiceFormProps = {
   type: 'create' | 'update';
@@ -35,8 +35,10 @@ export const CreateOrUpdateServiceForm:FC<CreateServiceFormProps> = ({ type = 'c
   const [isPending, startTransition] = useTransition();
   const [additionalQuestions, setAdditionalQuestions] = useState<AdditionalQuestionType[]>((service?.config as AdditionalQuestionType[] ) || []);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const addService = useServiceStore((state) => state.addService);
-  const updateService = useServiceStore((state) => state.updateService);
+
+  const addService = useUserStore((state) => state.addCabinetService);
+  const updateService = useUserStore((state) => state.updateCabinetService);
+
 
   // @ts-ignore
   const form = useForm<z.infer<typeof createServiceSchema>>({
