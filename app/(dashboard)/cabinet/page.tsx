@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import useCabinetStore from '@/stores/cabinet';
+import React from 'react';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import { Card } from '@/components/ui/card';
 import { FicheCabinetHeader } from '@/components/dashboard/cabinet/components/FicheCabinetHeader';
