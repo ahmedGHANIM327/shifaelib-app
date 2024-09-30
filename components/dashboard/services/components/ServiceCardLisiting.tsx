@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Service } from '@/lib/types/services';
+import { AdditionalQuestionType, Service } from '@/lib/types/services';
 import { Card } from '@/components/ui/card';
 import { COLORS } from '@/lib/constants';
 import { cn, convertDurationToLabel, convertGender, stringifyDateFormat } from '@/lib/utils';
@@ -33,7 +33,7 @@ export const ServiceCardLisiting:FC<{ service: Service }> = ( {service}) => {
         </div>
         <div className="flex gap-x-4">
           <p className="font-semibold">Questions supplémentaires</p>
-          {(service.config || []).length > 0 ? <AdditionalQuestionsFicheModal service={service} /> : '-'}
+          {(service.config as AdditionalQuestionType[]).length > 0 ? <AdditionalQuestionsFicheModal service={service} /> : '-'}
         </div>
       </div>
       {<div className="flex-col flex items-end p-2">

@@ -41,7 +41,7 @@ export const ServicesColumns: ColumnDef<Service>[] = [
     accessorKey: "config",
     header: "Questions supplémentaires",
     cell: ({ row }) => {
-      return (row.original.config || []).length > 0 ? <AdditionalQuestionsFicheModal service={row.original}/> : '-';
+      return (row.original.config as AdditionalQuestionType[]).length > 0 ? <AdditionalQuestionsFicheModal service={row.original}/> : '-';
     },
   },
   {
