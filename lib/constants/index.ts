@@ -213,3 +213,38 @@ export const COLORS = [
   }
 ];
 
+export const SessionDurations: any[] = [
+  {
+    label:"15 minutes",
+    value: "15"
+  },
+  {
+    label:"30 minutes",
+    value: "30"
+  },
+  {
+    label:"45 minutes",
+    value: "45"
+  },
+  {
+    label:"1 heure",
+    value: "60"
+  },
+  {
+    label:"1 heure 15 minutes",
+    value: "75"
+  },
+  {
+    label:"1 heure 30 minutes",
+    value: "90"
+  },
+  {
+    label:"1 heure 45 minutes",
+    value: "105"
+  },
+  {
+    label:"2 heures",
+    value: "120"
+  }
+];
+

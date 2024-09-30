@@ -7,6 +7,7 @@ export type Service = {
   name: string;
   color: string;
   tarif: string;
+  duration: string;
   config?: object;
   createdAt: Date;
   updatedAt?: Date;

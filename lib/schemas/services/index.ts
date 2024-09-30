@@ -13,6 +13,12 @@ export const createServiceSchema = z.object({
       invalid_type_error: 'Le type du tarif est invalid',
     })
     .min(1, { message: 'Le tarif est requis' }),
+  duration: z
+    .string({
+      required_error: 'La durée est requis',
+      invalid_type_error: 'Le type de la durée est invalid',
+    })
+    .min(1, { message: 'La durée est requise' }),
   color: z
     .string({
       required_error: 'Le color est requis',

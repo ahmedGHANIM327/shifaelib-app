@@ -23,6 +23,8 @@ import { createService, updateService as updateServiceAction } from '@/server/se
 import { toast } from 'react-toastify';
 import { cn } from '@/lib/utils';
 import useUserStore from '@/stores/user';
+import { SessionDurations } from '@/lib/constants';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type CreateServiceFormProps = {
   type: 'create' | 'update';
@@ -46,10 +48,12 @@ export const CreateOrUpdateServiceForm:FC<CreateServiceFormProps> = ({ type = 'c
     defaultValues: type === 'update' ? {
       name: service?.name || '',
       tarif: service?.tarif || '0',
+      duration: service?.duration || '30',
       color: service?.color || '',
     } : {
       name: '',
-      tarif: '',
+      tarif: '0',
+      duration: '30',
       color: '',
     }
   });
@@ -144,7 +148,7 @@ export const CreateOrUpdateServiceForm:FC<CreateServiceFormProps> = ({ type = 'c
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="md:w-[49%] w-[100%] gap-y-0">
+                <FormItem className="w-[100%] gap-y-0">
                   <FormLabel>Nom du service</FormLabel>
                   <FormControl>
                     <Input placeholder="Nom du service" {...field} />
@@ -162,6 +166,27 @@ export const CreateOrUpdateServiceForm:FC<CreateServiceFormProps> = ({ type = 'c
                   <FormControl>
                     <Input placeholder="Tarif de séance" {...field} type={'number'} min={0} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="duration"
+              render={({ field }) => (
+                <FormItem className="md:w-[49%] w-[100%] gap-y-0">
+                  <FormLabel>Durée de la séance</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value || '30'}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Durée moyenne de la séance" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {SessionDurations.map((duration) => <SelectItem value={duration.value}
+                                                                         key={duration.value}>{duration.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
