@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { AdditionalQuestionType, Service } from '@/lib/types/services';
 import { COLORS } from '@/lib/constants';
-import { cn, stringifyDateFormat } from '@/lib/utils';
+import { cn, convertDurationToLabel, stringifyDateFormat } from '@/lib/utils';
 import React from 'react';
 import { DeleteService } from '@/components/dashboard/services/components/DeleteService';
 import { CreateOrUpdateServiceForm } from '@/components/dashboard/services/forms/CreateOrUpdateServiceForm';
@@ -31,12 +31,17 @@ export const ServicesColumns: ColumnDef<Service>[] = [
     header: "Tarif de la séance"
   },
   {
+    accessorKey: "duration",
+    header: "Durée moyenne de la séance",
+    cell: ({ row }) => {
+      return convertDurationToLabel(row.original.duration);
+    },
+  },
+  {
     accessorKey: "config",
     header: "Questions supplémentaires",
     cell: ({ row }) => {
-      return (
-        <AdditionalQuestionsFicheModal service={row.original}/>
-      );
+      return (row.original.config as AdditionalQuestionType[]).length > 0 ? <AdditionalQuestionsFicheModal service={row.original}/> : '-';
     },
   },
   {

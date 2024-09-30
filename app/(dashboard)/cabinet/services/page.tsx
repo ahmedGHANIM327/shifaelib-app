@@ -15,7 +15,7 @@ const Page = () => {
   const cabinetServices = useUserStore((state) => state.cabinetServices);
   const isCurrentUserLoading = useUserStore((state) => state.isCurrentUserLoading);
 
-  if(isCurrentUserLoading || cabinetServices.length === 0) {
+  if(isCurrentUserLoading) {
     return <div className='w-full h-full flex justify-center items-center'>
       <LoadingSpinner size={55} className='text-primary'/>
     </div>;

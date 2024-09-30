@@ -16,7 +16,7 @@ export const DeleteService:FC<{ service:Service; iconeClassName?: string; }> = (
 
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const deleteService = useUserStore((state) => state.deleteCabinetUser);
+  const deleteService = useUserStore((state) => state.deleteCabinetService);
 
   const handleDelete = async () => {
     startTransition(async () => {

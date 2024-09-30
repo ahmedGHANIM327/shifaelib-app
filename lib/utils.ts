@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { z } from 'zod';
 import { Gender, PasswordValidationResult, selectOptionsType } from '@/lib/types';
 import { User } from '@/lib/types/users';
+import { SessionDurations } from '@/lib/constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -125,4 +126,8 @@ export const stringifyDateFormat = (date: Date, format: string) => {
     default :
       return `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`
   }
+}
+
+export const convertDurationToLabel = (value: string) => {
+  return SessionDurations.find(d => d.value === value).label || '';
 }

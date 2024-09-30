@@ -32,11 +32,12 @@ model Cabinet {
 }
 
 model Service {
-  id     String @id @default(uuid())
-  name   String
-  tarif  String
-  color  String @unique
-  config Json?
+  id       String @id @default(uuid())
+  name     String
+  tarif    String
+  duration String
+  color    String @unique
+  config   Json?
 
   treatments Treatment[]
 
