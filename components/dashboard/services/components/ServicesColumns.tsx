@@ -10,6 +10,8 @@ import { CreateOrUpdateServiceForm } from '@/components/dashboard/services/forms
 import {
   AdditionalQuestionsFicheModal
 } from '@/components/dashboard/services/components/AdditionalQuestionsFicheModal';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 export const ServicesColumns: ColumnDef<Service>[] = [
   {
@@ -48,14 +50,14 @@ export const ServicesColumns: ColumnDef<Service>[] = [
     accessorKey: "createdAt",
     header: "Date de création",
     cell: ({ row }) => {
-      return row.original.createdAt ? stringifyDateFormat(new Date(row.original.createdAt), 'frenchLocalDateTime') : '-';
+      return row.original.createdAt ? format(new Date(row.original.createdAt), "dd LLL y - HH:mm", { locale: fr }) : '-';
     }
   },
   {
     accessorKey: "updatedAt",
     header: "Date de dernière modification",
     cell: ({ row }) => {
-      return row.original.updatedAt ? stringifyDateFormat(new Date(row.original.updatedAt), 'frenchLocalDateTime') : '-';
+      return row.original.updatedAt ? format(new Date(row.original.updatedAt), "dd LLL y - HH:mm", { locale: fr }) : '-';
     }
   },
   {

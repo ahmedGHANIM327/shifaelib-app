@@ -8,6 +8,8 @@ import {
 } from '@/components/dashboard/services/components/AdditionalQuestionsFicheModal';
 import { CreateOrUpdateServiceForm } from '@/components/dashboard/services/forms/CreateOrUpdateServiceForm';
 import { DeleteService } from '@/components/dashboard/services/components/DeleteService';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 export const ServiceCardLisiting:FC<{ service: Service }> = ( {service}) => {
   const color = service.color;
@@ -37,8 +39,8 @@ export const ServiceCardLisiting:FC<{ service: Service }> = ( {service}) => {
         </div>
       </div>
       {<div className="flex-col flex items-end p-2">
-        <p className="text-xs">Crée le {service.createdAt && stringifyDateFormat(new Date(service.createdAt) as Date, 'frenchLocalDateTime')}</p>
-        <p className='text-xs'>Mis à jour le {service.updatedAt && stringifyDateFormat(new Date(service.updatedAt) as Date, 'frenchLocalDateTime')}</p>
+        <p className="text-xs">Crée le {service.createdAt && format(new Date(service.createdAt), "dd LLL y", { locale: fr })}</p>
+        <p className='text-xs'>Mis à jour le {service.updatedAt && format(new Date(service.updatedAt), "dd LLL y", { locale: fr })}</p>
       </div>}
     </Card>
   );

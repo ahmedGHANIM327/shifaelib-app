@@ -3,7 +3,7 @@ import {
   Activity,
   CircleUser,
   HospitalIcon,
-  LayoutDashboard,
+  LayoutDashboard, Stethoscope,
   Users
 } from 'lucide-react';
 import React from 'react';
@@ -38,5 +38,11 @@ export const navItems: NavItem[] = [
     href: '/profile',
     icon: <CircleUser size={20}/>,
     isOwnerItem: false,
+  },
+  {
+    title: 'Patients',
+    href:'/patients',
+    icon: <Stethoscope />,
+    isOwnerItem: false
   }
 ];
