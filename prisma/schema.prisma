@@ -104,6 +104,8 @@ model Patient {
   updatedBy     String    @default("xxxx-xxxx-xxxx-xxxx")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
+
+  @@index([id, firstName, lastName])
 }
 
 model Treatment {

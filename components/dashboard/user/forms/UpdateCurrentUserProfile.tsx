@@ -51,7 +51,7 @@ export const UpdateCurrentUserProfile = () => {
       try {
         const response = await updateCurrentUser(data as UpdateCurrentUserInput);
         if(response.ok) {
-          setCurrentUser(response.data as User);
+          setCurrentUser(response.data as User, false);
           // @ts-ignore
           toast.success('Votre profile est mis à jour avec succès.');
         } else {

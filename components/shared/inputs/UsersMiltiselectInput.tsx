@@ -9,9 +9,10 @@ import { User } from '@/lib/types/users';
 
 type UsersMultiselectInputProps = {
   handleChange: (users: User[]) => void;
+  reset?: boolean;
 };
 
-export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleChange }) => {
+export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset }) => {
 
   const [open, setOpen] = useState(false);
   const users = useUserStore((state) => state.cabinetUsers);
@@ -42,6 +43,11 @@ export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleCha
   useEffect(() => {
     handleChange(selectedUsers);
   }, [selectedUsers]);
+
+  useEffect(() => {
+    console.log('i am here')
+    setSelectedUsers([]);
+  }, [reset]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

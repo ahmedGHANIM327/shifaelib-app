@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Gender, PasswordValidationResult, selectOptionsType } from '@/lib/types';
 import { User } from '@/lib/types/users';
 import { SessionDurations } from '@/lib/constants';
+import { Patient } from '@/lib/types/patients';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -56,7 +57,11 @@ export const validatePassword = (
   };
 };
 
-export const getFullName = (entity: User) => {
+export const getFullName = (entity: User | Patient, withGender = false) => {
+  if(withGender) {
+    const gender = entity.gender === 'M' ? 'Mr.' : 'Mm.'
+    return `${gender} ${entity.firstName} ${entity.lastName}`
+  }
   return `${entity.firstName} ${entity.lastName}`;
 };
 export const getInitials = (entity: User): string => {

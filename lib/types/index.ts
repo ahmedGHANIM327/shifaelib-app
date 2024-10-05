@@ -6,6 +6,11 @@ export type ServerResponse<T = any> = {
   data?: T;
 };
 
+export type PaginatedServerData<T = any> = {
+  data: T;
+  nbPages: number;
+};
+
 export type UserStatus = 'ACTIF' | 'BLOCKED';
 export type CabinetStatus = 'ACTIF' | 'INACTIF' | 'BLOCKED' | 'DELETED';
 

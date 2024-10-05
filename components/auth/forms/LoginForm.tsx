@@ -44,7 +44,7 @@ const LoginForm = () => {
       try {
         const response: ServerResponse<User> = await loginUser(data);
         if (response.ok) {
-          setCurrentUser(response.data as User);
+          setCurrentUser(response.data as User, true);
           router.push("/");
           router.refresh();
         } else {

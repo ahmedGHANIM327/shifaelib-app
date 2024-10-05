@@ -10,7 +10,7 @@ interface UserState {
   currentUser: User;
   isCurrentUserLoading: boolean;
   getCurrentUser: () => Promise<void>;
-  setCurrentUser: (newUser: User) => void;
+  setCurrentUser: (newUser: User, withMetaData: boolean) => void;
   // cabinet users
   cabinetUsers: User[];
   setCabinetUsers: (users: User[]) => void;
@@ -70,17 +70,40 @@ const useUserStore = create<UserState>((set, get) => ({
     }
     set({ isCurrentUserLoading: false });
   },
-  setCurrentUser: (newUser: User) => {
-    window.localStorage.setItem(
-      'currentUser',
-      JSON.stringify({
-        user: newUser,
-        cabinet: get().currentCabinet,
-        services: get().cabinetServices,
-        users: get().cabinetUsers
-      }),
-    );
-    set({ currentUser: newUser });
+  setCurrentUser: (newUser: User, withMetaData: boolean) => {
+    if(withMetaData) {
+      const {
+        user,
+        cabinet,
+        services,
+        users
+      } = transformCurrentUser(newUser);
+      window.localStorage.setItem(
+        'currentUser',
+        JSON.stringify({
+          user,
+          cabinet,
+          services,
+          users
+        }),
+      );
+      set({ currentUser: user });
+      set({ cabinetUsers: users });
+      set({ currentCabinet: cabinet });
+      set({ cabinetServices: services });
+    } else {
+      window.localStorage.setItem(
+        'currentUser',
+        JSON.stringify({
+          user: newUser,
+          cabinet: get().currentCabinet,
+          services: get().cabinetServices,
+          users: get().cabinetUsers
+        }),
+      );
+      set({ currentUser: newUser });
+    }
+
   },
   currentUser: {} as User,
   isCurrentUserLoading: true,

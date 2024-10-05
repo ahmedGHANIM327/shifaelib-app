@@ -161,3 +161,7 @@
 .pie-chart .recharts-surface {
   @apply !w-fit;
 }
+
+.button_primary {
+  @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-primary text-white;
+}
