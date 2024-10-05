@@ -12,8 +12,6 @@ import {
 } from '@/lib/types/patients';
 import { createOrUpdatePatientSchema } from '@/lib/schemas/patients';
 import { transformListingFilters } from '@/server/services/patients/helpers';
-import { Prisma } from 'prisma-client-33c268013484259e55fad60c3dd69ff556d1b3d4555da689e1659dffbc685232';
-import PatientWhereInput = Prisma.PatientWhereInput;
 
 export const createPatient = async (
   data: CreateOrUpdatePatientInput,
@@ -128,9 +126,11 @@ export const getFilteredPatients = async (
     } = transformListingFilters(filters);
     const skip = (pagination.page - 1) * pagination.nbItemPerPage;
     const take = pagination.nbItemPerPage;
+    // @ts-ignore
     const patients = (await prisma.patient.findMany({
       take,
       skip,
+      where,
       orderBy,
       include: {
         createdByUser: true,
@@ -138,7 +138,9 @@ export const getFilteredPatients = async (
       }
     })) as Patient[];
 
-    const count = await prisma.patient.count();
+    const count = await prisma.patient.count({
+      where
+    });
     const nbPages = Math.ceil(count / pagination.nbItemPerPage);
 
     const response = {
