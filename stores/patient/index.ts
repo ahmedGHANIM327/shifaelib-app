@@ -4,7 +4,6 @@ import { PatientListingFilters } from '@/lib/types/patients';
 interface PatientState {
   reloadListingPatients: boolean;
   setReloadPatients: (e: boolean)=>void;
-  ///////////
   listingFilters; PatientListingFilters;
   setListingFilters: (filters: PatientListingFilters) => void;
   resetFilters: boolean;
@@ -21,7 +20,7 @@ const usePatientStore = create<PatientState>((set, get) => ({
     sort: 'creation_date_desc',
     gender: 'ALL',
     createdBy: []
-  },
+  } as PatientListingFilters,
   setListingFilters: (newFilters: PatientListingFilters) => {
     set({ listingFilters: newFilters });
   },
