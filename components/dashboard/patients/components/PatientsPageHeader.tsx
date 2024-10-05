@@ -1,6 +1,7 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { CreateOrUpdatePatientForm } from '@/components/dashboard/patients/forms/CreateOrUpdatePatientForm';
 
 export const PatientsPageHeader = () => {
   return (
@@ -16,10 +17,7 @@ export const PatientsPageHeader = () => {
           vos services.</p>
       </div>
       <div className='h-full flex gap-x-1 items-center w-full'>
-        <Button className='gap-x-2 w-full'>
-          <Plus />
-          Créer un patient
-        </Button>
+        <CreateOrUpdatePatientForm />
       </div>
     </div>
   );

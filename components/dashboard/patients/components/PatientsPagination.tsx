@@ -17,7 +17,7 @@ type PatientsPaginationProps = {
   nbPages: number;
 }
 
-export const PatientsPagination:FC<PatientsPaginationProps> = ({ pagination, nbPages, setPagination }) => {
+export const PatientsPagination:FC<PatientsPaginationProps> = ({ pagination, setPagination, nbPages }) => {
 
   const handleNbItemsPerPage = (value:string) => {
     setPagination({
@@ -27,27 +27,31 @@ export const PatientsPagination:FC<PatientsPaginationProps> = ({ pagination, nbP
   }
 
   const handlePage = (value:number) => {
-    setPagination({
-      ...pagination,
-      page: value
-    })
+    if(value !== pagination.page) {
+      setPagination({
+        ...pagination,
+        page: value
+      })
+    }
   }
 
   return (
-    <div className='mt-4 flex justify-between'>
-      <p className='w-fit whitespace-nowrap'>Page {pagination.page} sur {nbPages}</p>
+    <div className='mt-4 flex justify-between items-center'>
+      <p className='w-fit whitespace-nowrap md:flex hidden'>Page {pagination.page} sur {nbPages}</p>
+      <p className='w-fit whitespace-nowrap md:hidden'>{pagination.page} / {nbPages}</p>
       <PaginationComponent
         nbPages={nbPages}
         page={pagination.page}
         handleChangePage={handlePage}
       />
-      <Select onValueChange={handleNbItemsPerPage} defaultValue={''+pagination.nbItemPerPage}>
+      <Select onValueChange={handleNbItemsPerPage} defaultValue={'' + pagination.nbItemPerPage}>
         <SelectTrigger className='w-[100px]'>
           <SelectValue placeholder="Nombre de patients par page" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Nombre de patients par page</SelectLabel>
+            <SelectItem value="1">1</SelectItem>
             <SelectItem value="5">5</SelectItem>
             <SelectItem value="10">10</SelectItem>
             <SelectItem value="15">15</SelectItem>

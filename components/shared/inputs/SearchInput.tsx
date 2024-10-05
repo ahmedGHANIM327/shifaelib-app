@@ -7,7 +7,7 @@ import debounce from 'debounce';
 
 export const SearchInput:FC<{className?:string;handleSearch: (search: string) => void;containerClassName?:string}> = ({className,containerClassName,handleSearch}) => {
 
-  const debouncedHandleSearch = debounce(handleSearch, 300);
+  const debouncedHandleSearch = debounce(handleSearch, 500);
 
   return (
     <div className={cn("relative", containerClassName)}>

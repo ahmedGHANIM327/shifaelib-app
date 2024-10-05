@@ -101,11 +101,11 @@ export const transformPages = (pages:number, currentPage:number, maxToShow: numb
 type ListingPaginationProps = {
   page:number;
   nbPages:number;
-  handleChangePage:(page:number)=>void
+  handleChangePage:(page:number)=>void;
+  maxToShow?: number;
 }
 
-export const PaginationComponent:FC<ListingPaginationProps> = ({page, nbPages, handleChangePage}) => {
-  const maxToShow = 3;
+export const PaginationComponent:FC<ListingPaginationProps> = ({page, nbPages, handleChangePage, maxToShow = 3}) => {
 
   const handleNext = () => {
     if(page === nbPages) return;
@@ -119,6 +119,7 @@ export const PaginationComponent:FC<ListingPaginationProps> = ({page, nbPages, h
     handleChangePage(previousPage);
   }
 
+  // @ts-ignore
   return (
     <Pagination>
       <PaginationContent>
