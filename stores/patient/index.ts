@@ -4,7 +4,7 @@ import { PatientListingFilters } from '@/lib/types/patients';
 interface PatientState {
   reloadListingPatients: boolean;
   setReloadPatients: (e: boolean)=>void;
-  listingFilters; PatientListingFilters;
+  listingFilters: PatientListingFilters;
   setListingFilters: (filters: PatientListingFilters) => void;
   resetFilters: boolean;
   setResetFilters: () => void;
