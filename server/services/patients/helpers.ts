@@ -1,7 +1,16 @@
 import { PatientListingFilters } from '@/lib/types/patients';
 
+interface WhereFilter {
+  OR?: Array<{
+    firstName?: { contains: string; mode: string };
+    lastName?: { contains: string; mode: string };
+  }>;
+  gender?: string;
+  createdBy?: { in: string[] };
+}
+
 export const transformListingFilters = (filters: PatientListingFilters) => {
-  const where = {
+  const where: Partial<WhereFilter> = {
     ...((filters.search !== '') && {
       OR: [
         {
