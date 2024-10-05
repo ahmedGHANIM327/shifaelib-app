@@ -35,9 +35,9 @@ const Page = () => {
       startTransition(async () => {
         try {
           const response = await getFilteredPatients(filters, pagination);
-          if(response.ok) {
-            setPatients((response?.data.data || []) as Patient[]);
-            setNbPages((response?.data.nbPages || 1) as number);
+          if(response.ok && response?.data) {
+            setPatients(response.data.data);
+            setNbPages(response.data.nbPages);
           } else {
             // @ts-ignore
             toast.error('Une erreur est servenue. Veuillez réessayer.');
