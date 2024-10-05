@@ -122,6 +122,7 @@ export const getFilteredPatients = async (
   try {
     await isAuth();
     const {
+      where,
       orderBy
     } = transformListingFilters(filters);
     const skip = (pagination.page - 1) * pagination.nbItemPerPage;
@@ -138,6 +139,7 @@ export const getFilteredPatients = async (
       }
     })) as Patient[];
 
+    // @ts-ignore
     const count = await prisma.patient.count({
       where
     });
