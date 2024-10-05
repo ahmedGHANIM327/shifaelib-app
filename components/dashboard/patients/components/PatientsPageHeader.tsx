@@ -17,7 +17,9 @@ export const PatientsPageHeader = () => {
           vos services.</p>
       </div>
       <div className='h-full flex gap-x-1 items-center w-full'>
-        <CreateOrUpdatePatientForm />
+        <CreateOrUpdatePatientForm
+          type={'create'}
+        />
       </div>
     </div>
   );
