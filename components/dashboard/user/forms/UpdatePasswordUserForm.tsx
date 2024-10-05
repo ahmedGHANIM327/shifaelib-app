@@ -33,7 +33,6 @@ type UpdatePasswordUserFormProps = {
 
 export const UpdatePasswordUserForm:FC<UpdatePasswordUserFormProps> = ({ type }) => {
   const currentUser = useUserStore((state) => state.currentUser);
-  const setCurrentUser = useUserStore((state) => state.setCurrentUser);
   const [isPending, startTransition] = useTransition();
   const [email, setEmail] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
