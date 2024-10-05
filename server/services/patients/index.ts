@@ -155,3 +155,28 @@ export const getFilteredPatients = async (
     return { ok: false, error: error.message as string };
   }
 }
+
+export const getPatientById = async (id: string): Promise<ServerResponse<Patient>> => {
+  try {
+    await isAuth();
+    isValidUUIDv4(id);
+
+    const patient = (await prisma.patient.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        createdByUser: true,
+        updatedByUser: true,
+      }
+    })) as Patient;
+
+    if (!patient) {
+      throw new Error('PATIENT_NOT_FOUND');
+    }
+
+    return { ok: true, data: patient };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
+  }
+};

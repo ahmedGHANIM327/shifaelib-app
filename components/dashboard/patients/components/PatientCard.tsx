@@ -8,12 +8,13 @@ import { CreateOrUpdatePatientForm } from '@/components/dashboard/patients/forms
 import { DeletePatient } from '@/components/dashboard/patients/components/DeletePatient';
 import { User } from '@/lib/types/users';
 import { UserHoverCard } from '@/components/dashboard/user/components/UserHoverCard';
+import Link from 'next/link';
 
 export const PatientCard:FC<{patient:Patient}> = ({patient}) => {
   return (
     <Card>
       <div className={'text-center py-2 rounded-t-md relative bg-primary text-white'}>
-        {getFullName(patient, true)}
+        <Link href={`/patients/${patient.id}`} className={'underline'}>{getFullName(patient, true)}</Link>
         <div className={'flex w-fit gap-x-2 absolute top-[50%] right-2 -translate-y-[50%]'}>
           <CreateOrUpdatePatientForm type={'update'} patient={patient} iconeClassName={'text-white'}/>
           <DeletePatient patient={patient} iconeClassName={'text-white'}/>

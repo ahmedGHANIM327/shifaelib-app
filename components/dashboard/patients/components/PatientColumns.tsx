@@ -10,6 +10,8 @@ import { User } from '@/lib/types/users';
 import { UserHoverCard } from '@/components/dashboard/user/components/UserHoverCard';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import Link from 'next/link';
+import { EyeIcon } from 'lucide-react';
 
 export const PatientColumns: ColumnDef<Patient>[] = [
   {
@@ -75,6 +77,9 @@ export const PatientColumns: ColumnDef<Patient>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       return (<div className="gap-x-2 flex justify-end items-center">
+        <Link href={`/patients/${row.original.id}`}>
+          <EyeIcon size={15}/>
+        </Link>
         <CreateOrUpdatePatientForm type={'update'} patient={row.original}/>
         <DeletePatient patient={row.original}/>
       </div>)
