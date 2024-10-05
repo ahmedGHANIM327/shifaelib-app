@@ -30,11 +30,11 @@ export const transformListingFilters = (filters: PatientListingFilters) => {
   };
 
   if (filters.gender !== 'ALL') {
-    where['gender'] = filters.gender;
+    where.gender = filters.gender;
   };
 
   if (filters.createdBy.length > 0) {
-    where['createdBy'] = {in: filters.createdBy};
+    where.createdBy = {in: filters.createdBy};
   };
 
   let orderBy;
