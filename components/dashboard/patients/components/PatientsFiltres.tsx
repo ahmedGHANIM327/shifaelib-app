@@ -64,7 +64,7 @@ export const PatientsFiltres = () => {
             handleSearch={handleSearch}
           />
         </div>
-        <div className='md:flex grid grid-cols-2 md:w-fit w-full gap-2'>
+        <div className='md:flex grid grid-cols-3 md:w-fit w-full gap-2'>
           <Button onClick={setResetFilters} type={'reset'} variant='link' className='px-0 underline'>
             <RotateCcw size={15}/>
             Réinitialiser

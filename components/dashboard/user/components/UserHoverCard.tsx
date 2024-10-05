@@ -6,15 +6,15 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
-import { convertGender, getFullName, getInitials } from '@/lib/utils';
+import { cn, convertGender, getFullName, getInitials } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserAccountStatus } from '@/components/dashboard/user/components/UserAccountStatus';
 
-export const UserHoverCard:FC<{ user: User }> = ({ user }) => {
+export const UserHoverCard:FC<{ user: User; triggerClassName?: string }> = ({ user, triggerClassName }) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Button variant="link" className='px-0 w-fit underline text-foreground'>{getFullName(user)}</Button>
+        <Button variant="link" className={cn('px-0 w-fit underline text-foreground', triggerClassName)}>{getFullName(user)}</Button>
       </HoverCardTrigger>
       <HoverCardContent className="w-80">
         <div className='flex flex-col items-center gap-x-3 mt-2'>

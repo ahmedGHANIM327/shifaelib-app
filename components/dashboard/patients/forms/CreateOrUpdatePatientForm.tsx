@@ -108,7 +108,7 @@ export const CreateOrUpdatePatientForm:FC<CreateOrUpdatePatientProps> = (props) 
         Créer un patient
       </Button>);
     }
-    return (<Button className={'p-0'} variant={'ghost'}>
+    return (<Button className={'p-0 hover:bg-transparent'} variant={'ghost'}>
       <PencilIcon size={15} className={cn('text-primary', iconeClassName)}/>
     </Button>)
   }
