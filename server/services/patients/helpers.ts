@@ -29,7 +29,7 @@ export const transformListingFilters = (filters: PatientListingFilters) => {
     where.createdBy = {in: filters.createdBy};
   };
 
-  let orderBy;
+  let orderBy: Prisma.PatientOrderByWithRelationInput;
   if (filters.sort === 'creation_date_desc') {
     orderBy = {
       createdAt: 'desc',
