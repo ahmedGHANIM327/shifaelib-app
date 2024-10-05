@@ -1,16 +1,8 @@
 import { PatientListingFilters } from '@/lib/types/patients';
-
-interface WhereFilter {
-  OR?: Array<{
-    firstName?: { contains: string; mode: string };
-    lastName?: { contains: string; mode: string };
-  }>;
-  gender?: string;
-  createdBy?: { in: string[] };
-}
+import { Prisma } from '@prisma/client';
 
 export const transformListingFilters = (filters: PatientListingFilters) => {
-  const where: Partial<WhereFilter> = {
+  const where: Prisma.PatientWhereInput = {
     ...((filters.search !== '') && {
       OR: [
         {
