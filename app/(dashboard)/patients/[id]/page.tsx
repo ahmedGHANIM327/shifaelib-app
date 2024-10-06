@@ -34,7 +34,7 @@ const Page = () => {
   }
 
   return (
-    <FichePatient patient={selectedPatient} />
+    <FichePatient />
   );
 };
 

@@ -1,12 +1,15 @@
-import React, { FC } from 'react';
-import { Patient } from '@/lib/types/patients';
+import React from 'react';
 import { InfoBlock } from '@/components/shared/components/InfoBlock';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { UserHoverCard } from '@/components/dashboard/user/components/UserHoverCard';
 import { User } from '@/lib/types/users';
+import usePatientStore from '@/stores/patient';
 
-export const FichePatientProfile:FC<{patient: Patient}> = ({ patient }) => {
+export const FichePatientProfile = () => {
+
+  const patient = usePatientStore((state) => state.selectedPatient);
+
   return (
     <div >
       <div className='flex flex-wrap gap-x-2 justify-between border p-3'>
@@ -30,12 +33,12 @@ export const FichePatientProfile:FC<{patient: Patient}> = ({ patient }) => {
       <div className="flex-col flex items-end gap-y-2 mt-2">
         <p className="text-xs">
           Crée
-          le {patient.createdAt && format(new Date(patient.createdAt), "dd LLL y", { locale: fr })} par <UserHoverCard
+          le {patient.createdAt && format(new Date(patient.createdAt), "dd LLL y - HH:mm", { locale: fr })} par <UserHoverCard
           user={patient.createdByUser as User} triggerClassName={'py-0 text-xs my-0 h-fit'} />
         </p>
         <p className='text-xs'>
           Mis à jour
-          le {patient.updatedAt && format(new Date(patient.updatedAt), "dd LLL y", { locale: fr })} par <UserHoverCard
+          le {patient.updatedAt && format(new Date(patient.updatedAt), "dd LLL y - HH:mm", { locale: fr })} par <UserHoverCard
           user={patient.updatedByUser as User} triggerClassName={'py-0 text-xs my-0 h-fit'} />
         </p>
       </div>

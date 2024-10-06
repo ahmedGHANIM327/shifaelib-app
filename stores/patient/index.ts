@@ -5,6 +5,7 @@ import { transformCurrentUser } from '@/lib/helpers/users';
 import { getCurrentUser } from '@/server/services/users';
 import { signOut } from 'next-auth/react';
 import { getPatientById } from '@/server/services/patients';
+import { updatePatientProfile } from '@/stores/patient/helpers';
 
 interface PatientState {
   reloadListingPatients: boolean;
@@ -19,6 +20,7 @@ interface PatientState {
   getSelectedPatientError: string;
   getSelectedPatient: (id: string) => Promise<void>;
   setSelectedPatient: (newPatient: Patient) => void;
+  updatePatientProfile: (patient: Patient) => void;
 }
 
 const usePatientStore = create<PatientState>((set, get) => ({
@@ -67,6 +69,11 @@ const usePatientStore = create<PatientState>((set, get) => ({
     }
     set({ isSelectedPatientLoading: false });
   },
+  updatePatientProfile: (updatedPatient: Patient) => {
+    const currentPatient = get().selectedPatient as Patient;
+    const updatedSelectedPatient = updatePatientProfile(currentPatient, updatedPatient);
+    set({ selectedPatient: updatedSelectedPatient});
+  }
 }));
 
 export default usePatientStore;
