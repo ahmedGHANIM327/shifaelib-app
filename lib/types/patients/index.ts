@@ -13,7 +13,7 @@ export type Patient = {
   email?: string;
   address?: string;
   createdAt: Date;
-  createdBy: string;
+  createdBy?: string;
   updatedAt?: Date;
   updatedBy?: string;
   // Relations

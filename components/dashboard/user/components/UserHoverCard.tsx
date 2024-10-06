@@ -10,7 +10,11 @@ import { cn, convertGender, getFullName, getInitials } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserAccountStatus } from '@/components/dashboard/user/components/UserAccountStatus';
 
-export const UserHoverCard:FC<{ user: User; triggerClassName?: string }> = ({ user, triggerClassName }) => {
+export const UserHoverCard:FC<{ user: User|null; triggerClassName?: string }> = ({ user, triggerClassName }) => {
+
+  if(!user) {
+    return '-';
+  }
   return (
     <HoverCard>
       <HoverCardTrigger asChild>

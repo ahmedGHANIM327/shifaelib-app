@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowDownWideNarrow, ArrowUpWideNarrow, RotateCcw, SlidersHorizontal } from 'lucide-react';
-import { UsersMultiselectInput } from '@/components/shared/inputs/UsersMiltiselectInput';
+import { UsersMultiselectInput } from '@/components/shared/inputs/UsersMultiselectInput';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';

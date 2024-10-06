@@ -49,7 +49,6 @@ export const createPatient = async (
 
     return { ok: true, data: createdPatient };
   } catch (error: any) {
-    console.log('error', error);
     return { ok: false, error: error.message as string };
   }
 };

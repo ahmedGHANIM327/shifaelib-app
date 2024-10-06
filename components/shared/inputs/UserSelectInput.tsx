@@ -1,3 +1,5 @@
+'use client';
+
 import React, { FC, useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
@@ -8,30 +10,24 @@ import useUserStore from '@/stores/user';
 import { User } from '@/lib/types/users';
 
 type UsersMultiselectInputProps = {
-  handleChange: (users: User[]) => void;
+  handleChange: (users: User) => void;
   reset?: boolean;
 };
 
-export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset }) => {
+export const UsersSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset }) => {
 
   const [open, setOpen] = useState(false);
   const users = useUserStore((state) => state.cabinetUsers);
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User>({} as User);
 
   const checkUserSelected = (item: User) => {
-    for (let index in selectedUsers) {
-      if(selectedUsers[index].id === item.id) return true;
-    }
-    return false;
+    return selectedUser.id === item.id;
   }
 
   const SelectedTypesLabel = () => {
-    if(selectedUsers && selectedUsers.length !== 0) {
+    if(selectedUser.id) {
       return (<p className='flex items-center gap-x-2'>
-        {selectedUsers.length > 0 && <div className='flex gap-x-1'>
-          <span className="bg-primary text-white rounded-md py-0 p-2 flex justify-center items-center">{getFullName(selectedUsers[0])}</span>
-          {selectedUsers.length > 1 && <span className="bg-primary text-white rounded-md py-0 p-2 flex justify-center items-center">+{selectedUsers.length-1}</span>}
-        </div>}
+        {getFullName(selectedUser)}
       </p>)
     } else {
       return (<p className='flex items-center font-light'>
@@ -41,12 +37,11 @@ export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleCha
   }
 
   useEffect(() => {
-    handleChange(selectedUsers);
-  }, [selectedUsers]);
+    handleChange(selectedUser);
+  }, [selectedUser]);
 
   useEffect(() => {
-    console.log('i am here')
-    setSelectedUsers([]);
+    setSelectedUser({} as User);
   }, [reset]);
 
   return (
@@ -71,11 +66,8 @@ export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleCha
               key={item.id}
               value={JSON.stringify(item)}
               onSelect={() => {
-                if(checkUserSelected(item)) {
-                  const newValues = selectedUsers.filter((user) => user.id != item.id);
-                  setSelectedUsers(newValues);
-                } else {
-                  setSelectedUsers([...selectedUsers, item]);
+                if(!checkUserSelected(item)) {
+                  setSelectedUser(item);
                 }
               }}
             >
@@ -93,7 +85,7 @@ export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleCha
           </CommandList>
         </Command>
         <div className="flex justify-end">
-          <Button variant='link' onClick={()=>setSelectedUsers([])}>Effacer</Button>
+          <Button variant='link' onClick={()=>setSelectedUser({} as User)}>Effacer</Button>
         </div>
       </PopoverContent>
     </Popover>

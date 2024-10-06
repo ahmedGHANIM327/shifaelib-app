@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import debounce from 'debounce';
 
-export const SearchInput:FC<{className?:string;handleSearch: (search: string) => void;containerClassName?:string}> = ({className,containerClassName,handleSearch}) => {
+export const SearchInput:FC<{className?:string;handleSearch: (search: string) => void;containerClassName?:string;disabled?:boolean}> = ({className,containerClassName,handleSearch, disabled = false}) => {
 
   const debouncedHandleSearch = debounce(handleSearch, 500);
 
@@ -16,6 +16,8 @@ export const SearchInput:FC<{className?:string;handleSearch: (search: string) =>
           "flex h-10 w-full rounded-md bg-background px-3 pl-8 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
+        type={'search'}
+        disabled={disabled}
         placeholder="rechercher..."
         onChange={(e)=>debouncedHandleSearch(e.target.value)}
       />

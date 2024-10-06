@@ -69,7 +69,7 @@ export const PatientColumns: ColumnDef<Patient>[] = [
   {
     header: "Mis à jour par",
     cell: ({ row }) => {
-      return row.original.updatedByUser && <UserHoverCard user={row.original.updatedByUser as User}/>;
+      return <UserHoverCard user={row.original.updatedByUser as User}/>;
     },
   },
   {

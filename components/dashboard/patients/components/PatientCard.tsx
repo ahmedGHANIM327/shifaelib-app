@@ -38,14 +38,14 @@ export const PatientCard:FC<{patient:Patient}> = ({patient}) => {
           <p>{patient.phone || '-'}</p>
         </div>
       </div>
-      <div className="flex-col flex items-end p-2 gap-y-2">
+      {<div className="flex-col flex items-end p-2 gap-y-2">
         <p className="text-xs">
           Crée le {patient.createdAt && format(new Date(patient.createdAt), "dd LLL y", { locale: fr })} par <UserHoverCard user={patient.createdByUser as User} triggerClassName={'py-0 text-xs my-0 h-fit'}/>
         </p>
         <p className='text-xs'>
           Mis à jour le {patient.updatedAt && format(new Date(patient.updatedAt), "dd LLL y", { locale: fr })} par <UserHoverCard user={patient.updatedByUser as User} triggerClassName={'py-0 text-xs my-0 h-fit'}/>
         </p>
-      </div>
+      </div>}
     </Card>
   );
 };

@@ -6,6 +6,7 @@ import { Maximize, Minimize } from 'lucide-react';
 import { MobileNavbar } from '@/components/shared/components/MobileNavbar';
 import { HeaderProfileMenu } from '@/components/shared/components/HeaderProfileMenu';
 import { UpdatePasswordUserForm } from '@/components/dashboard/user/forms/UpdatePasswordUserForm';
+import { SearchPatientComonent } from '@/components/dashboard/patients/components/SearchPatientComonent';
 
 export const DashboardHeader = () => {
   const [fullScreen, setFullScreen] = React.useState(false);
@@ -25,6 +26,9 @@ export const DashboardHeader = () => {
         <div className="flex items-center">
           <div className="xl:hidden">
             <MobileNavbar />
+          </div>
+          <div className='hidden md:flex'>
+            <SearchPatientComonent />
           </div>
         </div>
         <UpdatePasswordUserForm type={'dialog'} />
