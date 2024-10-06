@@ -20,7 +20,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { createPatient, updatePatient } from '@/server/services/patients';
 import { toast } from 'react-toastify';
 import usePatientStore from '@/stores/patient';
-import Router from "next/router";
 
 type CreateOrUpdatePatientProps = {
   type: 'create' | 'update';
@@ -34,8 +33,9 @@ export const CreateOrUpdatePatientForm:FC<CreateOrUpdatePatientProps> = (props) 
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const reload = usePatientStore((state) => state.setReloadPatients);
+  const reloadPatients = usePatientStore((state) => state.setReloadPatients);
   const setResetFilters = usePatientStore((state) => state.setResetFilters);
+  const updatePatientProfile = usePatientStore((state) => state.updatePatientProfile);
 
   // @ts-ignore
   const form = useForm<z.infer<typeof createOrUpdatePatientSchema>>({
@@ -58,36 +58,45 @@ export const CreateOrUpdatePatientForm:FC<CreateOrUpdatePatientProps> = (props) 
     }
   });
 
+  const updatePatientHandler = async (data: CreateOrUpdatePatientInput) => {
+    const response = await updatePatient(patient?.id as string,data as CreateOrUpdatePatientInput);
+    if(response.ok) {
+      // Fiche Patient
+      updatePatientProfile(response.data as Patient);
+      // Reload Listing Patient
+      reloadPatients(true);
+      setIsDialogOpen(false);
+      // @ts-ignore
+      toast.success('Patient mis à jour avec succès');
+    } else {
+      // @ts-ignore
+      toast.error('Une erreur est servenue. Veuillez réessayer.');
+    }
+  }
+
+  const createPatientHandler = async (data: CreateOrUpdatePatientInput) => {
+    const response = await createPatient(data as CreateOrUpdatePatientInput);
+    if(response.ok) {
+      setResetFilters();
+      form.reset();
+      setIsDialogOpen(false);
+      // @ts-ignore
+      toast.success('Patient crée avec succès');
+    } else {
+      // @ts-ignore
+      toast.error('Une erreur est servenue. Veuillez réessayer.');
+    }
+  }
+
   const onSubmit = async (data: z.infer<typeof createOrUpdatePatientSchema>) => {
     startTransition(async () => {
       try {
         if(type === 'create') {
-          const response = await createPatient(data as CreateOrUpdatePatientInput);
-          if(response.ok) {
-            setResetFilters();
-            form.reset();
-            setIsDialogOpen(false);
-            // @ts-ignore
-            toast.success('Patient crée avec succès');
-          } else {
-            // @ts-ignore
-            toast.error('Une erreur est servenue. Veuillez réessayer.');
-          }
+          await createPatientHandler(data as CreateOrUpdatePatientInput);
         } else {
-          const response = await updatePatient(patient?.id as string,data as CreateOrUpdatePatientInput);
-          if(response.ok) {
-            reload(true);
-            form.reset();
-            setIsDialogOpen(false);
-            // @ts-ignore
-            toast.success('Patient mis à jour avec succès');
-          } else {
-            // @ts-ignore
-            toast.error('Une erreur est servenue. Veuillez réessayer.');
-          }
+          await updatePatientHandler(data as CreateOrUpdatePatientInput);
         }
       } catch (error: any) {
-        console.log('here error', error);
         // @ts-ignore
         toast.error('Une erreur est servenue. Veuillez réessayer.');
       }

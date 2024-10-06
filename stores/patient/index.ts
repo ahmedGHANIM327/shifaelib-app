@@ -1,5 +1,11 @@
 import { create } from 'zustand';
-import { PatientListingFilters } from '@/lib/types/patients';
+import { Patient, PatientListingFilters } from '@/lib/types/patients';
+import { User } from '@/lib/types/users';
+import { transformCurrentUser } from '@/lib/helpers/users';
+import { getCurrentUser } from '@/server/services/users';
+import { signOut } from 'next-auth/react';
+import { getPatientById } from '@/server/services/patients';
+import { updatePatientProfile } from '@/stores/patient/helpers';
 
 interface PatientState {
   reloadListingPatients: boolean;
@@ -8,6 +14,13 @@ interface PatientState {
   setListingFilters: (filters: PatientListingFilters) => void;
   resetFilters: boolean;
   setResetFilters: () => void;
+  // Fiche patient
+  selectedPatient: Patient;
+  isSelectedPatientLoading: boolean;
+  getSelectedPatientError: string;
+  getSelectedPatient: (id: string) => Promise<void>;
+  setSelectedPatient: (newPatient: Patient) => void;
+  updatePatientProfile: (patient: Patient) => void;
 }
 
 const usePatientStore = create<PatientState>((set, get) => ({
@@ -34,6 +47,32 @@ const usePatientStore = create<PatientState>((set, get) => ({
         gender: 'ALL',
         createdBy: []
       }});
+  },
+  // Fiche patient
+  selectedPatient: {} as Patient,
+  isSelectedPatientLoading: true,
+  getSelectedPatientError: '',
+  setSelectedPatient: (newPatient: Patient) => {
+    set({ selectedPatient: newPatient });
+  },
+  getSelectedPatient: async (id: string) => {
+    const selectedPatient = get().selectedPatient as Patient;
+    if(selectedPatient.id !== id) {
+      set({ isSelectedPatientLoading: true });
+      set({ getSelectedPatientError: '' });
+      const response = await getPatientById(id);
+      if (response.ok) {
+        set({ selectedPatient: response.data as Patient });
+      } else {
+        set({ getSelectedPatientError: response.error });
+      }
+    }
+    set({ isSelectedPatientLoading: false });
+  },
+  updatePatientProfile: (updatedPatient: Patient) => {
+    const currentPatient = get().selectedPatient as Patient;
+    const updatedSelectedPatient = updatePatientProfile(currentPatient, updatedPatient);
+    set({ selectedPatient: updatedSelectedPatient});
   }
 }));
 
