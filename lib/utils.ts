@@ -58,20 +58,26 @@ export const validatePassword = (
 };
 
 export const getFullName = (entity: User | Patient, withGender = false) => {
-  if(withGender) {
-    const gender = entity.gender === 'M' ? 'Mr.' : 'Mm.'
-    return `${gender} ${entity.firstName} ${entity.lastName}`
+  if(entity) {
+    if(withGender) {
+      const gender = entity.gender === 'M' ? 'Mr.' : 'Mm.'
+      return `${gender} ${entity.firstName} ${entity.lastName}`
+    }
+    return `${entity.firstName} ${entity.lastName}`;
   }
-  return `${entity.firstName} ${entity.lastName}`;
+  return '';
 };
 export const getInitials = (entity: User): string => {
-  const firstName = entity.firstName;
-  const lastName = entity.lastName;
-  const words: string[] = [firstName, lastName];
-  return words
-    .filter((w) => w !== undefined)
-    .map((word) => word.charAt(0))
-    .join('');
+  if(entity) {
+    const firstName = entity.firstName;
+    const lastName = entity.lastName;
+    const words: string[] = [firstName, lastName];
+    return words
+      .filter((w) => w !== undefined)
+      .map((word) => word.charAt(0))
+      .join('');
+  }
+  return '';
 };
 
 export const transformArrayToTypeOptions = (array: string[]): selectOptionsType[] => {

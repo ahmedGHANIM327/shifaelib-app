@@ -288,6 +288,7 @@ export const deleteUser = async (id: string): Promise<ServerResponse<User>> => {
 
     return { ok: true, data: JSON.parse(JSON.stringify(user)) };
   } catch (error: any) {
+    console.log('error', error);
     return { ok: false, error: error.message as string };
   }
 };
