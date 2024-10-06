@@ -64,8 +64,6 @@ const Page = () => {
     })
   }, [filters]);
 
-  console.log('patients', patients);
-
   return <div>
     <PatientsPageHeader />
     <Card className='p-4 min-h-[500px]'>
