@@ -1,12 +1,16 @@
 'use client';
 
 import React from 'react';
-import { SearchPatientComonent } from '@/components/dashboard/patients/components/SearchPatientComonent';
+import {
+  CreateOrUpdateTreatmentForm
+} from '@/components/dashboard/patients/treatments/forms/CreateOrUpdateTreatmentForm';
+import { ServicesSelectInput } from '@/components/shared/inputs/ServicesSelectInput';
 
 const Page = () => {
   return (
     <div className='max-w-[550px]'>
-      <SearchPatientComonent />
+      <CreateOrUpdateTreatmentForm />
+      <ServicesSelectInput handleChange={()=>console.log('hh')} />
     </div>
   );
 };
