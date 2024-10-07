@@ -1,5 +1,45 @@
 import { z } from 'zod';
 
+export const UserSchema = z.object({
+  id: z
+  .string({
+    required_error: 'L Id est requis',
+    invalid_type_error: 'Le type de l Id est invalid',
+  })
+  .min(1, 'L Id est requis'),
+  firstName: z
+    .string({
+      required_error: 'Le prénom est requis',
+      invalid_type_error: 'Le type du prénom est invalid',
+    })
+    .min(1, 'Le prénom est requis'),
+  lastName: z
+    .string({
+      required_error: 'Le nom est requis',
+      invalid_type_error: 'Le type du nom est invalid',
+    })
+    .min(1, 'Le nom est requis'),
+  email: z
+    .string({
+      required_error: 'L adresse e-mail est requise',
+      invalid_type_error: 'Adresse e-mail invalide',
+    })
+    .email('Adresse e-mail invalide'),
+  phone: z.string().optional(),
+  status: z.enum(['ACTIF', 'BLOCKED'], {
+    required_error: 'Le status est requis',
+    invalid_type_error: 'Le status doit être ACTIF ou BLOCKED',
+    message: 'Le status doit être ACTIF ou ACTIF',
+  }),
+  gender: z.enum(['M', 'F'], {
+    required_error: 'Le genre est requis',
+    invalid_type_error: 'Le genre doit être M ou F',
+    message: 'Le genre doit être M ou F',
+  }),
+  isOwner: z.boolean().optional(),
+  isTemporaryPassword: z.boolean().optional(),
+});
+
 export const createUserSchema = z
   .object({
     firstName: z

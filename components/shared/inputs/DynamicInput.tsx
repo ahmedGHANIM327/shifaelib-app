@@ -4,16 +4,31 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from '@/components/ui/label';
+import debounce from 'debounce';
 
 type DynamicInputProps = {
   question: AdditionalQuestionType;
   disabled: boolean;
+  handleChange:(id: string, newData: AdditionalQuestionType) => void;
 };
-export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false }) => {
+export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false, handleChange }) => {
 
-  const handleChange = (id: string, newData: AdditionalQuestionType) => {
-    console.log('id', newData)
+  const handleChangeAdditionalValue = (value: string) => {
+    handleChange(question.id, {
+      ...question,
+      additionalValue: value || '',
+    })
   }
+
+  const handleChangeValue = (value: string) => {
+    handleChange(question.id, {
+      ...question,
+      value: [value],
+    })
+  }
+
+  const debouncedHandleAdditionalValue = debounce(handleChangeAdditionalValue, 300);
+  const debouncedHandleValue = debounce(handleChangeValue, 300);
 
   if(question.type === 'text') {
     return (<div className='w-full flex items-center gap-x-2 flex-wrap gap-y-2'>
@@ -21,7 +36,7 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false 
       <Textarea
         placeholder={question.label}
         defaultValue={question.value.join('')}
-        onChange={(e) => console.log(e.target.value)}
+        onChange={(e)=>debouncedHandleValue(e.target.value)}
         disabled={disabled}
         className={'disabled:opacity-100 disabled:cursor-text'}
       />
@@ -84,7 +99,7 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false 
       <Textarea
         placeholder={'Completer votre réponse'}
         defaultValue={question?.additionalValue}
-        onChange={(e) => console.log(e.target.value)}
+        onChange={(e)=>debouncedHandleAdditionalValue(e.target.value)}
         disabled={disabled}
         className={'mt-2 w-full disabled:opacity-100 disabled:cursor-text'}
       />
@@ -97,7 +112,7 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false 
       <div className='flex flex-wrap gap-x-4 gap-y-2'>
         <RadioGroup
           className={'flex gap-x-4'}
-          onValueChange={(value:string)=>console.log('value', value)}
+          onValueChange={(value:string)=>handleChange(question.id, {...question, value: [value]})}
           defaultValue={(question.value as string[]).join('') || ''}
         >
           {(question.options || []).map((option, index) => {
@@ -117,7 +132,7 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false 
       <div className='flex flex-wrap gap-x-4 gap-y-2'>
         <RadioGroup
           className={'flex gap-x-4'}
-          onValueChange={(value:string)=>console.log('value', value)}
+          onValueChange={(value:string)=>handleChange(question.id, {...question, value: [value]})}
           defaultValue={(question.value as string[]).join('') || ''}
         >
           {(question.options || []).map((option, index) => {
@@ -130,7 +145,7 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false 
       </div>
       <Textarea
         placeholder={'Completer votre réponse'}
-        onChange={(e) => console.log(e.target.value)}
+        onChange={(e)=>debouncedHandleAdditionalValue(e.target.value)}
         disabled={disabled}
         className={'mt-2 w-full disabled:opacity-100 disabled:cursor-text'}
       />
