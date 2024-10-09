@@ -10,15 +10,15 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex h-screen w-screen overflow-hidden">
-      <div className="w-full fixed top-0 left-0 flex h-full">
-        <div className="hidden xl:flex">
-          <ScrollArea className="w-[230px] h-full bg-primary px-2">
+      <div className="w-full fixed top-0 left-0 grid grid-cols-7 h-full">
+        <div className="hidden xl:flex xl:col-span-1">
+          <ScrollArea className="w-full h-full bg-primary px-2">
             <FullSidebar />
           </ScrollArea>
         </div>
-        <div className="w-full h-full bg-accent flex flex-col">
+        <div className="h-full max-w-full bg-accent flex flex-col xl:col-span-6 col-span-7">
           <DashboardHeader />
-          <div className="p-4 xl:pr-6 pb-16 overflow-y-scroll h-full">
+          <div className="p-4 xl:pr-6 pb-16 overflow-y-scroll h-full max-w-full">
             {children}
           </div>
         </div>

@@ -21,11 +21,14 @@ import { AdditionalQuestionType } from '@/lib/types/services';
 import { DynamicInput } from '@/components/shared/inputs/DynamicInput';
 import { createTreatment } from '@/server/services/patients/treatments';
 import { CreateOrUpdateTreatmentInput } from '@/lib/types/patients/treatments';
+import useTreatmentStore from '@/stores/patient/treatment';
 
 export const CreateOrUpdateTreatmentForm = () => {
 
   const type = 'create';
   const iconeClassName = '';
+
+  const setResetFilters = useTreatmentStore((state) => state.setResetFilters);
 
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -46,6 +49,7 @@ export const CreateOrUpdateTreatmentForm = () => {
         const response = await createTreatment(treatmentData);
         if(response.ok) {
           form.reset();
+          setResetFilters();
           setIsDialogOpen(false);
           // @ts-ignore
           toast.success('Traitement crée avec succès');

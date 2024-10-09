@@ -9,10 +9,10 @@ import {
   PatientListingPagination
 } from '@/lib/types/patients';
 import { PatientsData } from '@/components/dashboard/patients/components/PatientsData';
-import { PatientsPagination } from '@/components/dashboard/patients/components/PatientsPagination';
 import { getFilteredPatients } from '@/server/services/patients';
 import { toast } from 'react-toastify';
 import usePatientStore from '@/stores/patient';
+import { ListingPaginationComponent } from '@/components/shared/components/ListingPagination';
 
 const Page = () => {
 
@@ -72,7 +72,7 @@ const Page = () => {
         patients={patients}
         isLoading={isLoading}
       />
-      <PatientsPagination
+      <ListingPaginationComponent
         pagination={pagination}
         setPagination={setPagination}
         nbPages={nbPages}
