@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useTransition } from 'react';
+import React, { FC, useEffect, useState, useTransition } from 'react';
 import { createOrUpdateTreatmentSchema } from '@/lib/schemas/patients/treatments';
 import { z } from 'zod';
 import { DialogFormTitle } from '@/components/shared/components/DialogFormTitle';
@@ -20,13 +20,21 @@ import { PatientsSelectInput } from '@/components/shared/inputs/PatientsSelectIn
 import { AdditionalQuestionType } from '@/lib/types/services';
 import { DynamicInput } from '@/components/shared/inputs/DynamicInput';
 import { createTreatment } from '@/server/services/patients/treatments';
-import { CreateOrUpdateTreatmentInput } from '@/lib/types/patients/treatments';
+import { CreateOrUpdateTreatmentInput, Treatment } from '@/lib/types/patients/treatments';
 import useTreatmentStore from '@/stores/patient/treatment';
+import { Patient } from '@/lib/types/patients';
 
-export const CreateOrUpdateTreatmentForm = () => {
+type CreateOrUpdateTreatmentProps = {
+  type: 'create' | 'update';
+  treatmment?: Treatment;
+  iconeClassName?: string;
+};
 
-  const type = 'create';
-  const iconeClassName = '';
+export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
+  type = 'create',
+  treatmment,
+  iconeClassName
+                                                                             }) => {
 
   const setResetFilters = useTreatmentStore((state) => state.setResetFilters);
 

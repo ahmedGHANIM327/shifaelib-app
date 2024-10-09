@@ -2,8 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import React from 'react';
-import { CreateOrUpdatePatientForm } from '@/components/dashboard/patients/forms/CreateOrUpdatePatientForm';
-import { DeletePatient } from '@/components/dashboard/patients/components/DeletePatient';
 import { User } from '@/lib/types/users';
 import { UserHoverCard } from '@/components/dashboard/user/components/UserHoverCard';
 import { format } from 'date-fns';
@@ -11,16 +9,15 @@ import { fr } from 'date-fns/locale';
 import Link from 'next/link';
 import { EyeIcon } from 'lucide-react';
 import { Treatment } from '@/lib/types/patients/treatments';
-import { getFullName } from '@/lib/utils';
 import { PatientHoverCard } from '@/components/dashboard/patients/components/PatientHoverCard';
 import { Patient } from '@/lib/types/patients';
 import { TreatmentStatusComponent } from '@/components/dashboard/patients/treatments/components/TreatmentStatus';
 import { ServiceHoverCard } from '@/components/dashboard/services/components/ServiceHoverCard';
 import { AdditionalQuestionType, Service } from '@/lib/types/services';
-import {
-  AdditionalQuestionsFicheModal
-} from '@/components/dashboard/services/components/AdditionalQuestionsFicheModal';
 import { TreatmentAdditionalData } from '@/components/dashboard/patients/treatments/components/TreatmentAdditionalData';
+import {
+  CreateOrUpdateTreatmentForm
+} from '@/components/dashboard/patients/treatments/forms/CreateOrUpdateTreatmentForm';
 
 export const TreatmentColumns: ColumnDef<Treatment>[] = [
   {
@@ -95,8 +92,7 @@ export const TreatmentColumns: ColumnDef<Treatment>[] = [
         <Link href={`/patients/${row.original.id}`}>
           <EyeIcon size={15}/>
         </Link>
-        <CreateOrUpdatePatientForm type={'update'} patient={row.original}/>
-        <DeletePatient patient={row.original}/>
+        <CreateOrUpdateTreatmentForm type={'update'} treatmment={row.original}/>
       </div>)
     },
   },
