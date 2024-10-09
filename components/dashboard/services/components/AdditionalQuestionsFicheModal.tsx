@@ -15,6 +15,10 @@ type AdditionalQuestionsFicheModalProps = {
 export const AdditionalQuestionsFicheModal:FC<AdditionalQuestionsFicheModalProps> = ({ service }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  if(!service || (service && (service.config as AdditionalQuestionType[]).length === 0)) {
+    return '-'
+  }
+
   const color = service.color;
   const bgColor = COLORS.find(c => c.color === color)?.bgColor!;
   const textColor = COLORS.find(c => c.color === color)?.textLightColor!;

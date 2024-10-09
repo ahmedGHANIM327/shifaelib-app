@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import debounce from 'debounce';
 
-export const SearchInput:FC<{className?:string;handleSearch: (search: string) => void;containerClassName?:string;disabled?:boolean}> = ({className,containerClassName,handleSearch, disabled = false}) => {
+export const SearchInput:FC<{className?:string;handleSearch: (search: string) => void;containerClassName?:string;disabled?:boolean;label?:string}> = ({className,containerClassName,handleSearch, disabled = false, label}) => {
 
   const debouncedHandleSearch = debounce(handleSearch, 500);
 
@@ -18,7 +18,7 @@ export const SearchInput:FC<{className?:string;handleSearch: (search: string) =>
         )}
         type={'search'}
         disabled={disabled}
-        placeholder="rechercher..."
+        placeholder={label || "rechercher..."}
         onChange={(e)=>debouncedHandleSearch(e.target.value)}
       />
       <Search

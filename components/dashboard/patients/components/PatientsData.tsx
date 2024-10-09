@@ -17,7 +17,7 @@ export const PatientsData:FC<{patients: Patient[];isLoading: boolean}> = ({patie
     >
       <div className='hidden md:flex'>
         <DataTable columns={PatientColumns as ColumnDef<RowData>[]} data={patients || []}
-                   noDataText={`Pas de patients`} />
+                   noDataText={`Pas de patients`} className={'min-w-[1400px]'}/>
       </div>
       <div className='md:hidden flex flex-col gap-4'>
         {patients.map((patient, index) => (<PatientCard patient={patient} key={index} />))}

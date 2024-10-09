@@ -10,6 +10,7 @@ type LoadingCardProps = {
   className?: string;
   loadingClassName?: string;
   withCard?: boolean;
+  childrenClassName?: string;
 };
 
 export const LoadingSection: FC<LoadingCardProps> = ({
@@ -18,6 +19,7 @@ export const LoadingSection: FC<LoadingCardProps> = ({
   loadingClassName,
   loading,
   withCard = false,
+                                                       childrenClassName
 }) => {
   if (loading) {
     if (withCard) {
@@ -30,5 +32,5 @@ export const LoadingSection: FC<LoadingCardProps> = ({
     return <Skeleton className={loadingClassName} />;
   }
 
-  return <>{children}</>;
+  return <div className={childrenClassName}>{children}</div>;
 };

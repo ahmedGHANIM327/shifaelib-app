@@ -52,3 +52,9 @@ export type selectOptionsType = {
   label: string;
   value: string;
 }
+
+export type ListingPagination = {
+  page: number;
+  nbItemPerPage: number;
+  changed: boolean;
+}

@@ -5,6 +5,7 @@ import { Gender, PasswordValidationResult, selectOptionsType } from '@/lib/types
 import { User } from '@/lib/types/users';
 import { SessionDurations } from '@/lib/constants';
 import { Patient } from '@/lib/types/patients';
+import { TreatmentStatus } from '@/lib/types/patients/treatments';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -141,4 +142,27 @@ export const stringifyDateFormat = (date: Date, format: string) => {
 
 export const convertDurationToLabel = (value: string) => {
   return SessionDurations.find(d => d.value === value).label || '';
+}
+
+export const generateCode = (length: number = 6): string => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters[randomIndex];
+  }
+  return result;
+}
+
+export const convertTreatmentStatus = (status: TreatmentStatus) => {
+  switch (status) {
+    case 'IN_PROGRESS':
+      return 'En cours'
+    case 'ON_HOLD':
+      return 'En suspens'
+    case "CANCELLED":
+      return 'Annulé'
+    case "COMPLETED":
+      return 'Terminé'
+  }
 }

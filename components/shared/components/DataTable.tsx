@@ -17,8 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from '@/lib/utils';
 
-const DataTable:React.FC<{data: RowData[], columns: ColumnDef<RowData>[], noDataText?: string}> = ({data, columns, noDataText = 'Pas de résultats'}) => {
+const DataTable:React.FC<{data: RowData[], columns: ColumnDef<RowData>[], noDataText?: string, className?: string}> = ({data, columns, noDataText = 'Pas de résultats', className}) => {
 
   const table = useReactTable({
     data,
@@ -27,8 +28,8 @@ const DataTable:React.FC<{data: RowData[], columns: ColumnDef<RowData>[], noData
   })
 
   return (
-    <div className="rounded-md border w-full">
-      <Table>
+    <div className={cn("rounded-md border w-full overflow-x-auto")}>
+      <Table className={cn(className)}>
         <TableHeader className="bg-accent">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
