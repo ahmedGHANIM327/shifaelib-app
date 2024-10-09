@@ -20,7 +20,9 @@ export const TreatmentsPageHeader = () => {
           vos traitements.</p>
       </div>
       <div className='h-full flex gap-x-1 items-center w-full'>
-        <CreateOrUpdateTreatmentForm />
+        <CreateOrUpdateTreatmentForm
+          type={'create'}
+        />
       </div>
     </div>
   );
