@@ -13,7 +13,7 @@ export type Treatment = {
   createdAt: Date;
   updatedAt?: Date;
   // relations
-  patient: Patient;
+  patient?: Patient;
   responsible?: User;
   service?: Service;
   createdByUser?: User;
