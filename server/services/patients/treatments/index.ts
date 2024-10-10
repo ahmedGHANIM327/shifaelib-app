@@ -7,8 +7,6 @@ import { prisma } from '@/lib/prisma';
 import { CreateOrUpdateTreatmentInput, Treatment, TreatmentListingFilters } from '@/lib/types/patients/treatments';
 import { createOrUpdateTreatmentSchema } from '@/lib/schemas/patients/treatments';
 import { transformTreatmentListingFilters } from '@/server/services/patients/treatments/helpers';
-import { CreateOrUpdatePatientInput, Patient } from '@/lib/types/patients';
-import { createOrUpdatePatientSchema } from '@/lib/schemas/patients';
 
 export const createTreatment = async (
   data: CreateOrUpdateTreatmentInput,
@@ -123,6 +121,27 @@ export const updateTreatment = async (
     return { ok: true, data: updatedTreatment };
   } catch (error: any) {
     console.log('error', error);
+    return { ok: false, error: error.message as string };
+  }
+};
+
+export const deleteTreatment = async (id: string): Promise<ServerResponse<Treatment>> => {
+  try {
+    isValidUUIDv4(id);
+    await isAuth();
+
+    const treatment = (await prisma.treatment.delete({
+      where: {
+        id,
+      },
+    })) as Treatment;
+
+    if (!treatment) {
+      throw new Error('TREATMENT_NOT_FOUND');
+    }
+
+    return { ok: true, data: treatment };
+  } catch (error: any) {
     return { ok: false, error: error.message as string };
   }
 };

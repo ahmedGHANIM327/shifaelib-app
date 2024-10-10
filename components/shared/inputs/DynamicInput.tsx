@@ -122,7 +122,7 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false,
         >
           {(question.options || []).map((option, index) => {
             return (<div key={index} className="flex items-center space-x-2">
-              <RadioGroupItem value={option} id={option}/>
+              <RadioGroupItem value={option} id={option} disabled={disabled} className={'disabled:opacity-100 disabled:cursor-text'}/>
               <Label htmlFor={option}>{option}</Label>
             </div>)
           })}
@@ -142,7 +142,7 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false,
         >
           {(question.options || []).map((option, index) => {
             return (<div key={index} className="flex items-center space-x-2">
-              <RadioGroupItem value={option} id={option}/>
+              <RadioGroupItem value={option} id={option} disabled={disabled} className={'disabled:opacity-100 disabled:cursor-text'}/>
               <Label htmlFor={option}>{option}</Label>
             </div>)
           })}

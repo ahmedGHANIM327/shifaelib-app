@@ -18,6 +18,8 @@ import { TreatmentAdditionalData } from '@/components/dashboard/patients/treatme
 import {
   CreateOrUpdateTreatmentForm
 } from '@/components/dashboard/patients/treatments/forms/CreateOrUpdateTreatmentForm';
+import { DeletePatient } from '@/components/dashboard/patients/components/DeletePatient';
+import { DeleteTreatment } from '@/components/dashboard/patients/treatments/components/DeleteTreatment';
 
 export const TreatmentColumns: ColumnDef<Treatment>[] = [
   {
@@ -93,6 +95,7 @@ export const TreatmentColumns: ColumnDef<Treatment>[] = [
           <EyeIcon size={15}/>
         </Link>
         <CreateOrUpdateTreatmentForm type={'update'} treatmment={row.original}/>
+        <DeleteTreatment treatment={row.original}/>
       </div>)
     },
   },
