@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { AdditionalQuestionType } from '@/lib/types/services';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from '@/components/ui/label';
 import debounce from 'debounce';
+import { CheckedState } from '@radix-ui/react-checkbox';
 
 type DynamicInputProps = {
   question: AdditionalQuestionType;
@@ -25,6 +26,15 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false,
       ...question,
       value: [value],
     })
+  }
+
+  const handleChangeCheck = (checked: CheckedState, option: string) => {
+    return checked
+      ? handleChange(question.id, {...question, value: (question?.value || []).concat(option) || [],})
+      : handleChange(question.id, {...question, value: (question?.value as string[]).filter(
+          (value) => value !== option
+        ) || [],}
+      )
   }
 
   const debouncedHandleAdditionalValue = debounce(handleChangeAdditionalValue, 300);
@@ -50,14 +60,9 @@ export const DynamicInput:FC<DynamicInputProps> = ({ question, disabled = false,
         {(question.options || []).map((option, index) => {
           return (<div key={index} className='flex items-center gap-x-2 flex-nowrap'>
             <Checkbox id="terms" onCheckedChange={(checked) => {
-              return checked
-                ? handleChange(question.id, {...question, value: (question?.value || []).concat(option) || [],})
-                : handleChange(question.id, {...question, value: (question?.value as string[]).filter(
-                    (value) => value !== option
-                  ) || [],}
-                )
+              return handleChangeCheck(checked, option);
             }}
-                      checked={(question?.value || []).includes(option)}
+                      checked={question.value.includes(option)}
             />
             <label
               htmlFor="terms"

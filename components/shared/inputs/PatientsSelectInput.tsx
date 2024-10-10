@@ -4,28 +4,29 @@ import React, { FC, useEffect, useState, useTransition } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { cn, getFullName } from '@/lib/utils';
-import useUserStore from '@/stores/user';
-import { User } from '@/lib/types/users';
+import { Command, CommandEmpty, CommandItem, CommandList } from '@/components/ui/command';
+import { cn, getFullName, removeDuplicationById } from '@/lib/utils';
 import { Patient } from '@/lib/types/patients';
 import { SearchInput } from '@/components/shared/inputs/SearchInput';
 import { getFilteredPatients } from '@/server/services/patients';
 import { toast } from 'react-toastify';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
+import { User } from '@/lib/types/users';
 
 type UsersMultiselectInputProps = {
   handleChange: (patient: Patient) => void;
+  value?: Patient;
   reset?: boolean;
 };
 
-export const PatientsSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset }) => {
+export const PatientsSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset, value }) => {
 
   const [open, setOpen] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState<Patient>({} as Patient);
+  const [selectedPatient, setSelectedPatient] = useState<Patient>((value || {}) as Patient);
   const [searchInput, setSearchInput] = useState<string>('');
   const [isLoading, startTransition] = useTransition();
   const [patients, setPatients] = useState<Patient[]>([] as Patient[]);
+  const [firstRender, setFirstRender] = useState<boolean>(true);
 
   const checkUserSelected = (item: Patient) => {
     return selectedPatient.id === item.id;
@@ -48,7 +49,11 @@ export const PatientsSelectInput:FC<UsersMultiselectInputProps> = ({ handleChang
   }, [selectedPatient]);
 
   useEffect(() => {
-    setSelectedPatient({} as Patient);
+    if(firstRender) {
+      setFirstRender(false);
+    } else {
+      setSelectedPatient({} as Patient);
+    }
   }, [reset]);
 
   useEffect(() => {
@@ -65,7 +70,12 @@ export const PatientsSelectInput:FC<UsersMultiselectInputProps> = ({ handleChang
           nbItemPerPage: 5
         });
         if(response.ok && response?.data) {
-          setPatients(response.data.data);
+          if(value && searchInput === '') {
+            setPatients(removeDuplicationById([value, ...response.data.data]));
+          }
+          else {
+            setPatients(response.data.data);
+          }
         } else {
           // @ts-ignore
           toast.error('Une erreur est servenue. Veuillez réessayer.');
