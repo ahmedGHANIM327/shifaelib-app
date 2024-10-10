@@ -60,10 +60,6 @@ const Page = () => {
     });
   }, [filters]);
 
-  useEffect(() => {
-    console.log('treatments', treatments);
-  }, [treatments]);
-
   return (
     <>
       <TreatmentsPageHeader />

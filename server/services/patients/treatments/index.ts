@@ -2,11 +2,13 @@
 
 import { ListingPagination, PaginatedServerData, ServerResponse } from '@/lib/types';
 import { isAuth } from '@/server/services/common/middelwares';
-import { generateCode, zodValidationData } from '@/lib/utils';
+import { generateCode, isValidUUIDv4, zodValidationData } from '@/lib/utils';
 import { prisma } from '@/lib/prisma';
 import { CreateOrUpdateTreatmentInput, Treatment, TreatmentListingFilters } from '@/lib/types/patients/treatments';
 import { createOrUpdateTreatmentSchema } from '@/lib/schemas/patients/treatments';
 import { transformTreatmentListingFilters } from '@/server/services/patients/treatments/helpers';
+import { CreateOrUpdatePatientInput, Patient } from '@/lib/types/patients';
+import { createOrUpdatePatientSchema } from '@/lib/schemas/patients';
 
 export const createTreatment = async (
   data: CreateOrUpdateTreatmentInput,
@@ -63,6 +65,64 @@ export const createTreatment = async (
 
     return { ok: true, data: createdTreatment };
   } catch (error: any) {
+    return { ok: false, error: error.message as string };
+  }
+};
+
+export const updateTreatment = async (
+  id: string,
+  data: CreateOrUpdateTreatmentInput,
+): Promise<ServerResponse<Treatment>> => {
+  try {
+    const session = await isAuth();
+    const userId = session.user.id;
+
+    isValidUUIDv4(id);
+
+    const validData = (await zodValidationData(
+      data,
+      createOrUpdateTreatmentSchema,
+    )) as CreateOrUpdateTreatmentInput;
+
+    // @ts-ignore
+    const updatedTreatment = (await prisma.treatment.update({
+      where: {
+        id,
+      },
+      data: {
+        nbSessions: validData.nbSessions,
+        status: validData.status,
+        data: validData.data,
+        service: {
+          connect: {
+            id: validData.service.id
+          }
+        },
+        patient: {
+          connect: {
+            id: validData.patient.id
+          }
+        },
+        responsible: {
+          connect: {
+            id: validData.praticien.id
+          }
+        },
+        updatedByUser: {
+          connect: {
+            id: userId
+          }
+        }
+      },
+      include: {
+        createdByUser: true,
+        updatedByUser: true,
+      }
+    })) as Treatment;
+
+    return { ok: true, data: updatedTreatment };
+  } catch (error: any) {
+    console.log('error', error);
     return { ok: false, error: error.message as string };
   }
 };

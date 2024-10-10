@@ -11,14 +11,16 @@ import { User } from '@/lib/types/users';
 
 type UsersMultiselectInputProps = {
   handleChange: (users: User) => void;
+  value?: User;
   reset?: boolean;
 };
 
-export const UsersSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset }) => {
+export const UsersSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset, value }) => {
 
   const [open, setOpen] = useState(false);
   const users = useUserStore((state) => state.cabinetUsers);
-  const [selectedUser, setSelectedUser] = useState<User>({} as User);
+  const [selectedUser, setSelectedUser] = useState<User>((value || {}) as User);
+  const [firstRender, setFirstRender] = useState<boolean>(true);
 
   const checkUserSelected = (item: User) => {
     return selectedUser.id === item.id;
@@ -41,7 +43,11 @@ export const UsersSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, 
   }, [selectedUser]);
 
   useEffect(() => {
-    setSelectedUser({} as User);
+    if(firstRender) {
+      setFirstRender(false);
+    } else {
+      setSelectedUser({} as User);
+    }
   }, [reset]);
 
   return (

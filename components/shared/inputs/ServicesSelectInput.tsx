@@ -13,14 +13,16 @@ import { COLORS } from '@/lib/constants';
 
 type ServicesSelectInputProps = {
   handleChange: (service: Service) => void;
+  value?: Service;
   reset?: boolean;
 };
 
-export const ServicesSelectInput:FC<ServicesSelectInputProps> = ({ handleChange, reset }) => {
+export const ServicesSelectInput:FC<ServicesSelectInputProps> = ({ handleChange, reset, value }) => {
 
   const [open, setOpen] = useState(false);
   const services = useUserStore((state) => state.cabinetServices);
-  const [selectedService, setSelectedService] = useState<Service>({} as Service);
+  const [selectedService, setSelectedService] = useState<Service>((value || {}) as Service);
+  const [firstRender, setFirstRender] = useState<boolean>(true);
 
   const checkServiceSelected = (item: Service) => {
     return selectedService.id === item.id;
@@ -43,7 +45,11 @@ export const ServicesSelectInput:FC<ServicesSelectInputProps> = ({ handleChange,
   }, [selectedService]);
 
   useEffect(() => {
-    setSelectedService({} as Service);
+    if(firstRender) {
+      setFirstRender(false);
+    } else {
+      setSelectedService({} as Service);
+    }
   }, [reset]);
 
   return (

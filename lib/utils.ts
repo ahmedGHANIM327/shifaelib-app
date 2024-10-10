@@ -6,6 +6,8 @@ import { User } from '@/lib/types/users';
 import { SessionDurations } from '@/lib/constants';
 import { Patient } from '@/lib/types/patients';
 import { TreatmentStatus } from '@/lib/types/patients/treatments';
+import { AdditionalQuestionType, Service } from '@/lib/types/services';
+import patient from '@/stores/patient';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -165,4 +167,27 @@ export const convertTreatmentStatus = (status: TreatmentStatus) => {
     case "COMPLETED":
       return 'Terminé'
   }
+}
+
+export const removeDuplicationById = <T extends { id: string }>(entity: T[]): T[] => {
+  const uniqueEntities: Record<string, T> = {};
+
+  entity.forEach(item => {
+    uniqueEntities[item.id] = item;
+  });
+
+  return Object.values(uniqueEntities);
+};
+
+export function removeDuplicateQuestionsById(
+  combined: AdditionalQuestionType[]
+): AdditionalQuestionType[] {
+  const uniqueQuestions: Record<string, AdditionalQuestionType> = {};
+
+  combined.forEach(question => {
+    uniqueQuestions[question.id] = question; // Overwrite with the latest occurrence
+  });
+
+  // Convert the uniqueQuestions object back to an array
+  return Object.values(uniqueQuestions);
 }

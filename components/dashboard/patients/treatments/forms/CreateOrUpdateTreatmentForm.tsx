@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { PencilIcon, Plus } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, removeDuplicationById } from '@/lib/utils';
 import { DialogFormActions } from '@/components/shared/components/DialogFormActions';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import { Input } from '@/components/ui/input';
@@ -19,9 +19,10 @@ import { ServicesSelectInput } from '@/components/shared/inputs/ServicesSelectIn
 import { PatientsSelectInput } from '@/components/shared/inputs/PatientsSelectInput';
 import { AdditionalQuestionType } from '@/lib/types/services';
 import { DynamicInput } from '@/components/shared/inputs/DynamicInput';
-import { createTreatment } from '@/server/services/patients/treatments';
+import { createTreatment, updateTreatment } from '@/server/services/patients/treatments';
 import { CreateOrUpdateTreatmentInput, Treatment } from '@/lib/types/patients/treatments';
 import useTreatmentStore from '@/stores/patient/treatment';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import { Patient } from '@/lib/types/patients';
 
 type CreateOrUpdateTreatmentProps = {
@@ -37,6 +38,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                                                                              }) => {
 
   const setResetFilters = useTreatmentStore((state) => state.setResetFilters);
+  const setReloadTreatments = useTreatmentStore((state) => state.setReloadTreatments);
 
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -45,7 +47,40 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   // @ts-ignore
   const form = useForm<z.infer<typeof createOrUpdateTreatmentSchema>>({
     resolver: zodResolver(createOrUpdateTreatmentSchema),
+    defaultValues: type === 'update' ? {
+      nbSessions: treatmment && treatmment.nbSessions!,
+      status: treatmment && treatmment?.status!
+    } : {}
   });
+
+  const handleCreate = async (data: CreateOrUpdateTreatmentInput) => {
+    const response = await createTreatment(data);
+    if(response.ok) {
+      form.reset();
+      setResetFilters();
+      setIsDialogOpen(false);
+      // @ts-ignore
+      toast.success('Traitement crée avec succès');
+    } else {
+      // @ts-ignore
+      toast.error('Une erreur est servenue. Veuillez réessayer.');
+    }
+  }
+
+  const handleUpdate = async (data: CreateOrUpdateTreatmentInput) => {
+    console.log('data', data);
+    const response = await updateTreatment(treatmment?.id as string, data);
+    if(response.ok) {
+      form.reset();
+      setReloadTreatments(true);
+      setIsDialogOpen(false);
+      // @ts-ignore
+      toast.success('Traitement mis à jour avec succès');
+    } else {
+      // @ts-ignore
+      toast.error('Une erreur est servenue. Veuillez réessayer.');
+    }
+  }
 
   const onSubmit = async (data: z.infer<typeof createOrUpdateTreatmentSchema>) => {
     startTransition(async () => {
@@ -54,16 +89,10 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
           ...data,
           data: additionalData
         } as CreateOrUpdateTreatmentInput;
-        const response = await createTreatment(treatmentData);
-        if(response.ok) {
-          form.reset();
-          setResetFilters();
-          setIsDialogOpen(false);
-          // @ts-ignore
-          toast.success('Traitement crée avec succès');
+        if(type === 'create') {
+          await handleCreate(treatmentData);
         } else {
-          // @ts-ignore
-          toast.error('Une erreur est servenue. Veuillez réessayer.');
+          await handleUpdate(treatmentData);
         }
       } catch (error: any) {
         // @ts-ignore
@@ -102,7 +131,19 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
 
   useEffect(() => {
     if(selectedService && selectedService?.id) {
-      setAdditionalData(selectedService.config as AdditionalQuestionType[]);
+      // create case
+      if (type === 'create') {
+        setAdditionalData(selectedService.config);
+      } else {
+        if(treatmment && treatmment?.service?.id! === selectedService?.id) {
+          const treatmentData = treatmment?.data! as AdditionalQuestionType[];
+          const serviceData = selectedService.config as AdditionalQuestionType[];
+          const combine = removeDuplicationById([...serviceData, ...treatmentData]);
+          setAdditionalData(combine);
+        } else {
+          setAdditionalData(selectedService.config);
+        }
+      }
     }
   }, [selectedService]);
 
@@ -120,6 +161,29 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <DialogFormContainer className='flex flex-col gap-4 pt-0'>
               <div className="flex flex-wrap md:gap-x-[2%] gap-y-4">
+                {type === 'update' && <FormField
+                  control={form.control}
+                  name="status"
+                  render={({field}) => (
+                    <FormItem className="w-[100%] gap-y-0">
+                      <FormLabel>Statut du traitement</FormLabel>
+                      <       Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Statut du traitement"/>
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="IN_PROGRESS">En cours</SelectItem>
+                          <SelectItem value="ON_HOLD">En suspens</SelectItem>
+                          <SelectItem value="COMPLETED">Terminé</SelectItem>
+                          <SelectItem value="CANCELLED">Annulé</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage/>
+                    </FormItem>
+                  )}
+                />}
                 <FormField
                   control={form.control}
                   name="nbSessions"
@@ -140,7 +204,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                     <FormItem className="md:w-[49%] w-[100%] gap-y-0">
                       <FormLabel>Praticien</FormLabel>
                       <FormControl>
-                        <UsersSelectInput handleChange={field.onChange} />
+                        <UsersSelectInput handleChange={field.onChange} value={treatmment?.responsible}/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -153,7 +217,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                     <FormItem className="md:w-[49%] w-[100%] gap-y-0">
                       <FormLabel>Service</FormLabel>
                       <FormControl>
-                        <ServicesSelectInput handleChange={field.onChange} />
+                        <ServicesSelectInput handleChange={field.onChange} value={treatmment?.service}/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -166,7 +230,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                     <FormItem className="md:w-[49%] w-[100%] gap-y-0">
                       <FormLabel>Patient</FormLabel>
                       <FormControl>
-                        <PatientsSelectInput handleChange={field.onChange} />
+                        <PatientsSelectInput handleChange={field.onChange} value={(treatmment?.patient || {}) as Patient}/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
