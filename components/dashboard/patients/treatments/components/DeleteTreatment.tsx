@@ -8,28 +8,25 @@ import { DialogFormActions } from '@/components/shared/components/DialogFormActi
 import { toast } from 'react-toastify';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
 import { Treatment } from '@/lib/types/patients/treatments';
 import { deleteTreatment } from '@/server/services/patients/treatments';
 import useTreatmentStore from '@/stores/patient/treatment';
+import usePatientStore from '@/stores/patient';
 
 export const DeleteTreatment:FC<{ treatment:Treatment; iconeClassName?: string; isFiche?: boolean }> = ({ treatment, iconeClassName, isFiche = false }) => {
 
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const reload = useTreatmentStore((state) => state.setReloadTreatments);
+  const deletePatientTreatment = usePatientStore((state) => state.deletePatientTreatment);
 
   const handleDelete = async () => {
     startTransition(async () => {
       try {
         const response = await deleteTreatment(treatment.id);
         if(response.ok) {
-          if (isFiche) {
-            console.log('delete treatment')
-          } else {
-            reload(true);
-          }
+          deletePatientTreatment(treatment.id);
+          reload(true);
           setIsOpen(false);
           // @ts-ignore
           toast.success('Traitement supprimé avec succès');

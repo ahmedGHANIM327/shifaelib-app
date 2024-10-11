@@ -17,9 +17,10 @@ type UsersMultiselectInputProps = {
   handleChange: (patient: Patient) => void;
   value?: Patient;
   reset?: boolean;
+  disabled?: boolean;
 };
 
-export const PatientsSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset, value }) => {
+export const PatientsSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset, value, disabled = false }) => {
 
   const [open, setOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient>((value || {}) as Patient);
@@ -94,7 +95,8 @@ export const PatientsSelectInput:FC<UsersMultiselectInputProps> = ({ handleChang
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={"justify-between w-full"}
+          className={"justify-between w-full disabled:opacity-100"}
+          disabled={disabled}
         >
           <SelectedTypesLabel />
           <ChevronsUpDown size={13} className={'opacity-50'} />

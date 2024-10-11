@@ -21,6 +21,10 @@ const Page = () => {
     getSelectedPatient(id);
   }, [id]);
 
+  useEffect(() => {
+    console.log('selectedPatient', selectedPatient);
+  }, [selectedPatient]);
+
   if(getSelectedPatientError !== '') {
     return <div className='w-full h-full flex justify-center items-center'>
       {getSelectedPatientError}

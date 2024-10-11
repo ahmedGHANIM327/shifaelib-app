@@ -24,21 +24,28 @@ import { CreateOrUpdateTreatmentInput, Treatment } from '@/lib/types/patients/tr
 import useTreatmentStore from '@/stores/patient/treatment';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import { Patient } from '@/lib/types/patients';
+import usePatientStore from '@/stores/patient';
 
 type CreateOrUpdateTreatmentProps = {
   type: 'create' | 'update';
   treatmment?: Treatment;
   iconeClassName?: string;
+  patient?: Patient;
+  isFiche?: boolean;
 };
 
 export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   type = 'create',
   treatmment,
-  iconeClassName
+  iconeClassName,
+                                                                               patient,
+  isFiche = false
                                                                              }) => {
 
   const setResetFilters = useTreatmentStore((state) => state.setResetFilters);
   const setReloadTreatments = useTreatmentStore((state) => state.setReloadTreatments);
+  const addPatientTreatment = usePatientStore((state) => state.addPatientTreatment);
+  const updatePatientTreatment = usePatientStore((state) => state.updatePatientTreatment);
 
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -56,6 +63,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   const handleCreate = async (data: CreateOrUpdateTreatmentInput) => {
     const response = await createTreatment(data);
     if(response.ok) {
+      addPatientTreatment(response.data as Treatment);
       form.reset();
       setResetFilters();
       setIsDialogOpen(false);
@@ -68,10 +76,9 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   }
 
   const handleUpdate = async (data: CreateOrUpdateTreatmentInput) => {
-    console.log('data', data);
     const response = await updateTreatment(treatmment?.id as string, data);
     if(response.ok) {
-      form.reset();
+      updatePatientTreatment(response.data as Treatment);
       setReloadTreatments(true);
       setIsDialogOpen(false);
       // @ts-ignore
@@ -110,7 +117,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
 
   const TriggerComponent = () => {
     if(type === 'create') {
-      return (<Button className={'w-full'}>
+      return (<Button className={isFiche ? 'w-fit px-10' : 'w-full'}>
         <Plus size={18}/>
         Créer un traitement
       </Button>);
@@ -150,7 +157,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   // @ts-ignore
   return (
     <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <AlertDialogTrigger className={cn(type==='create' && 'w-full')}>
+      <AlertDialogTrigger className={cn(type==='create' && 'w-full', isFiche && 'w-fit')}>
         <TriggerComponent />
       </AlertDialogTrigger>
       <AlertDialogContent className="md:w-[700px] md:max-w-[850px] p-0">
@@ -204,7 +211,10 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                     <FormItem className="md:w-[49%] w-[100%] gap-y-0">
                       <FormLabel>Praticien</FormLabel>
                       <FormControl>
-                        <UsersSelectInput handleChange={field.onChange} value={treatmment?.responsible}/>
+                        <UsersSelectInput
+                          handleChange={field.onChange}
+                          value={treatmment?.responsible}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -217,7 +227,10 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                     <FormItem className="md:w-[49%] w-[100%] gap-y-0">
                       <FormLabel>Service</FormLabel>
                       <FormControl>
-                        <ServicesSelectInput handleChange={field.onChange} value={treatmment?.service}/>
+                        <ServicesSelectInput
+                          handleChange={field.onChange}
+                          value={treatmment?.service}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -230,7 +243,11 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                     <FormItem className="md:w-[49%] w-[100%] gap-y-0">
                       <FormLabel>Patient</FormLabel>
                       <FormControl>
-                        <PatientsSelectInput handleChange={field.onChange} value={(treatmment?.patient || {}) as Patient}/>
+                        <PatientsSelectInput
+                          handleChange={field.onChange}
+                          value={(treatmment?.patient || patient || {}) as Patient}
+                          disabled={isFiche}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { createOrUpdatePatientSchema } from '@/lib/schemas/patients';
 import { Gender } from '@/lib/types';
 import { User } from '@/lib/types/users';
+import { Treatment } from '@/lib/types/patients/treatments';
 
 export type Patient = {
   id: string;
@@ -19,6 +20,7 @@ export type Patient = {
   // Relations
   createdByUser?: User;
   updatedByUser?: User;
+  treatments?: Treatment[];
 }
 
 export type PatientListingFilters = {

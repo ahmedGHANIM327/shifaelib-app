@@ -113,6 +113,9 @@ export const updateTreatment = async (
         }
       },
       include: {
+        responsible: true,
+        patient: true,
+        service: true,
         createdByUser: true,
         updatedByUser: true,
       }

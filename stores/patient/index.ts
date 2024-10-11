@@ -1,11 +1,8 @@
 import { create } from 'zustand';
 import { Patient, PatientListingFilters } from '@/lib/types/patients';
-import { User } from '@/lib/types/users';
-import { transformCurrentUser } from '@/lib/helpers/users';
-import { getCurrentUser } from '@/server/services/users';
-import { signOut } from 'next-auth/react';
 import { getPatientById } from '@/server/services/patients';
-import { updatePatientProfile } from '@/stores/patient/helpers';
+import { selectedPatientEntities, updatePatientProfile } from '@/stores/patient/helpers';
+import { Treatment } from '@/lib/types/patients/treatments';
 
 interface PatientState {
   reloadListingPatients: boolean;
@@ -16,11 +13,15 @@ interface PatientState {
   setResetFilters: () => void;
   // Fiche patient
   selectedPatient: Patient;
+  selectedPatientTreatments: Treatment[];
   isSelectedPatientLoading: boolean;
   getSelectedPatientError: string;
   getSelectedPatient: (id: string) => Promise<void>;
   setSelectedPatient: (newPatient: Patient) => void;
   updatePatientProfile: (patient: Patient) => void;
+  addPatientTreatment: (treatment: Treatment) => void;
+  deletePatientTreatment: (id: string) => void;
+  updatePatientTreatment: (updatedTreatment: Treatment) => void;
 }
 
 const usePatientStore = create<PatientState>((set, get) => ({
@@ -62,7 +63,12 @@ const usePatientStore = create<PatientState>((set, get) => ({
       set({ getSelectedPatientError: '' });
       const response = await getPatientById(id);
       if (response.ok) {
-        set({ selectedPatient: response.data as Patient });
+        const {
+          treatments,
+          patient
+        } = selectedPatientEntities(response.data as Patient);
+        set({ selectedPatient: patient });
+        set({ selectedPatientTreatments: treatments });
       } else {
         set({ getSelectedPatientError: response.error });
       }
@@ -73,6 +79,22 @@ const usePatientStore = create<PatientState>((set, get) => ({
     const currentPatient = get().selectedPatient as Patient;
     const updatedSelectedPatient = updatePatientProfile(currentPatient, updatedPatient);
     set({ selectedPatient: updatedSelectedPatient});
+  },
+  // patient treatments
+  selectedPatientTreatments: [] as Treatment[],
+  addPatientTreatment: (treatment: Treatment) => {
+    const currentTreatments = get().selectedPatientTreatments as Treatment[];
+    set({ selectedPatientTreatments: [treatment, ...currentTreatments] });
+  },
+  updatePatientTreatment: (updatedTreatment: Treatment) => {
+    const currentTreatments = get().selectedPatientTreatments as Treatment[];
+    const filteredTreatments = currentTreatments.filter(t => t.id !== updatedTreatment.id);
+    set({ selectedPatientTreatments: [updatedTreatment, ...filteredTreatments] });
+  },
+  deletePatientTreatment: (id: string) => {
+    const currentTreatments = get().selectedPatientTreatments as Treatment[];
+    const filteredTreatments = currentTreatments.filter(t => t.id !== id);
+    set({ selectedPatientTreatments: filteredTreatments });
   }
 }));
 

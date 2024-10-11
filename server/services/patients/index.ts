@@ -167,6 +167,15 @@ export const getPatientById = async (id: string): Promise<ServerResponse<Patient
       include: {
         createdByUser: true,
         updatedByUser: true,
+        treatments: {
+          include: {
+            patient: true,
+            service: true,
+            responsible: true,
+            createdByUser: true,
+            updatedByUser: true,
+          }
+        },
       }
     })) as Patient;
 
