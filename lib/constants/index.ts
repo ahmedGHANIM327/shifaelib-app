@@ -1,4 +1,5 @@
 import { WeekOpeningHours } from '../types';
+import { Service } from '@/lib/types/services';
 
 export const DefaultOpeningHours: WeekOpeningHours = {
   monday: {
@@ -247,4 +248,13 @@ export const SessionDurations: any[] = [
     value: "120"
   }
 ];
+
+export const NON_SPECIFIED_SERVICE: Service = {
+  id: 'xxxxx-xxxxx-xxxxx-xxxxx',
+  name: 'Non Spécifié',
+  color: 'stone',
+  duration: '',
+  tarif: '',
+  createdAt: new Date()
+}
 

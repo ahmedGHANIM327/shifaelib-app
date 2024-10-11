@@ -18,7 +18,7 @@ export default function DashboardLayout({
         </div>
         <div className="h-full max-w-full bg-accent flex flex-col xl:col-span-6 col-span-7">
           <DashboardHeader />
-          <div className="p-4 xl:pr-6 pb-16 overflow-y-scroll h-full max-w-full">
+          <div className="p-4 xl:pr-6 pb-28 overflow-y-scroll max-h-screen max-w-full">
             {children}
           </div>
         </div>
