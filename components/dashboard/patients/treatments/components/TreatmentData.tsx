@@ -4,6 +4,7 @@ import { ColumnDef, RowData } from '@tanstack/react-table';
 import DataTable from '@/components/shared/components/DataTable';
 import { Treatment } from '@/lib/types/patients/treatments';
 import { TreatmentColumns } from '@/components/dashboard/patients/treatments/components/TreatmentColumns';
+import { TreatmentPhoneCard } from '@/components/dashboard/patients/treatments/components/TreatmentPhoneCard';
 
 export const TreatmentsData:FC<{treatments: Treatment[];isLoading: boolean}> = ({treatments, isLoading}) => {
 
@@ -15,10 +16,10 @@ export const TreatmentsData:FC<{treatments: Treatment[];isLoading: boolean}> = (
     >
       <div className='hidden md:flex'>
         <DataTable columns={TreatmentColumns as ColumnDef<RowData>[]} data={treatments || []}
-                   noDataText={`Pas de traitements`} className={'min-w-[1600px]'}/>
+                   noDataText={`Pas de traitements`} className={'min-w-[1600px]'} />
       </div>
-      <div className='md:hidden flex flex-col gap-4'>
-        {/*patients.map((patient, index) => (<PatientCard patient={patient} key={index} />))*/}
+      <div className='md:hidden flex flex-col gap-4 mt-4'>
+        {treatments.map((treatment, index) => (<TreatmentPhoneCard treatment={treatment} key={index} />))}
       </div>
     </LoadingSection>
   );
