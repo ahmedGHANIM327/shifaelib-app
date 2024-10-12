@@ -59,9 +59,13 @@ export const SearchPatientComonent = () => {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger className='flex items-center gap-x-2 text-primary underline'>
-        <Search size={16} />
-        Rechercher un patient
+      <DialogTrigger>
+        {!isDialogOpen && <SearchInput
+          handleSearch={()=>console.log('')}
+          label={'Rechercher un patient'}
+          className={'w-fit min-w-[300px] cursor-pointer text-primary placeholder:text-primary border-primary'}
+          iconeClassName={'text-primary'}
+        />}
       </DialogTrigger>
       <DialogContent className={cn("md:w-[550px] md:max-w-[850px] p-0")}>
         <DialogFormTitle
@@ -70,7 +74,9 @@ export const SearchPatientComonent = () => {
         <DialogFormContainer className='-mt-4 overflow-auto'>
           <SearchInput
             handleSearch={setSearchInput}
-            className={'-mt-2'}
+            label={'rechercher un patient...'}
+            className={'-mt-2 cursor-pointer text-primary placeholder:text-primary border-primary'}
+            iconeClassName={'text-primary'}
           />
           {
             isLoading ? <div className={'bg-accent w-full flex items-center justify-center py-8 mt-2'}>

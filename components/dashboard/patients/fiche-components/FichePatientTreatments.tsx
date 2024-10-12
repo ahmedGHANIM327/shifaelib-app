@@ -47,25 +47,32 @@ export const FichePatientTreatments:FC<{ patient: Patient }> = ({ patient }) => 
   }, [treatmentState]);
 
   return (
-    <Card className='p-4'>
+    <div className='mt-2'>
       <div className='flex items-center justify-between mb-2'>
         <CardTitle
           title={'Traitements'}
-          icon={<PillIcon />}
+          icon={<PillIcon size={20}/>}
           className={'mb-0'}
         />
         <CreateOrUpdateTreatmentForm type={'create'} patient={patient} isFiche={true}/>
       </div>
-      <FicheTreatmentFilters
-        status={selectedFilter}
-        setStatus={setSelectedFilter}
-        treatments={treatments}
-      />
-      <div className='mt-4 flex flex-col gap-y-2'>
-        {
-          filteredTreatments.map((treatment: Treatment) => (<TreatmentFullCard treatment={treatment} from={'fiche_patient'} key={treatment.id}/>))
-        }
-      </div>
-    </Card>
+      {
+        treatments.length === 0 ? <div className="mt-2 bg-accent text-center py-14">
+          Pas de traitements
+        </div> : <>
+          <FicheTreatmentFilters
+            status={selectedFilter}
+            setStatus={setSelectedFilter}
+            treatments={treatments}
+          />
+
+          <div className='mt-2 flex flex-col gap-y-2'>
+            {
+              filteredTreatments.map((treatment: Treatment) => (<TreatmentFullCard treatment={treatment} from={'fiche_patient'} key={treatment.id}/>))
+            }
+          </div>
+        </>
+      }
+    </div>
   );
 };
