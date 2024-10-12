@@ -4,7 +4,6 @@ import React, { FC, useState, useTransition } from 'react';
 import { CreateOrUpdatePatientInput, Patient } from '@/lib/types/patients';
 import { createOrUpdatePatientSchema } from '@/lib/schemas/patients';
 import { z } from 'zod';
-import { PencilIcon, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { DialogFormTitle } from '@/components/shared/components/DialogFormTitle';
@@ -20,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { createPatient, updatePatient } from '@/server/services/patients';
 import { toast } from 'react-toastify';
 import usePatientStore from '@/stores/patient';
+import { PencilIcon, Plus } from 'lucide-react';
 
 type CreateOrUpdatePatientProps = {
   type: 'create' | 'update';
@@ -108,22 +108,22 @@ export const CreateOrUpdatePatientForm:FC<CreateOrUpdatePatientProps> = (props) 
 
   const TriggerComponent = () => {
     if(type === 'create') {
-      return (<Button className={'w-full'}>
-        <Plus size={18}/>
+      return (<AlertDialogTrigger type={'button'} className={cn('bg-primary text-white flex w-full items-center justify-center gap-x-2 py-2 rounded-md text-sm font-medium')}>
+        <Plus size={17} className={iconeClassName}/>
         Créer un patient
-      </Button>);
+      </AlertDialogTrigger>)
     }
-    return (<Button className={'p-0 hover:bg-transparent'} variant={'ghost'}>
-      <PencilIcon size={15} className={cn('text-primary', iconeClassName)}/>
-    </Button>)
+    else {
+      return (<AlertDialogTrigger type={'button'} className={cn('text-white flex items-center justify-center gap-x-2 py-2 rounded-md text-sm font-medium p-0 hover:bg-transparent bg-transparent')}>
+        <PencilIcon size={15} className={cn('text-primary', iconeClassName)}/>
+      </AlertDialogTrigger>)
+    }
   }
 
   // @ts-ignore
   return (
     <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <AlertDialogTrigger className={cn(type==='create' && 'w-full')}>
-        <TriggerComponent />
-      </AlertDialogTrigger>
+      <TriggerComponent />
       <AlertDialogContent className="md:w-[700px] md:max-w-[850px] p-0">
         <DialogFormTitle
           title={type === 'create'? 'Créer un nouveau patient' : 'Mettre à jour votre patient'}

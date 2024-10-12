@@ -24,6 +24,7 @@ import { CreateOrUpdateTreatmentInput, Treatment } from '@/lib/types/patients/tr
 import useTreatmentStore from '@/stores/patient/treatment';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import { Patient } from '@/lib/types/patients';
+import useUserStore from '@/stores/user';
 
 type CreateOrUpdateTreatmentProps = {
   type: 'create' | 'update';
@@ -43,6 +44,8 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
 
   // state
   const setTreatmentState = useTreatmentStore((state) => state.setState);
+
+  const currentUser = useUserStore((state) => state.currentUser);
 
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -112,14 +115,28 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
 
   const TriggerComponent = () => {
     if(type === 'create') {
-      return (<Button className={isFiche ? 'w-fit px-10' : 'w-full'}>
-        <Plus size={18}/>
-        Créer un traitement
-      </Button>);
+      if(isFiche) {
+        return (<>
+          <AlertDialogTrigger type={'button'} className={cn('bg-primary text-white md:flex hidden w-fit items-center justify-center gap-x-2 py-2 rounded-md text-sm font-medium text-nowrap px-10')}>
+            <Plus size={17} className={iconeClassName}/>
+            Créer un traitement
+          </AlertDialogTrigger>
+          <AlertDialogTrigger type={'button'} className={cn('bg-primary text-white md:hidden flex w-fit items-center justify-center gap-x-2 py-2 rounded-md text-sm font-medium px-2')}>
+            <Plus size={17} className={iconeClassName}/>
+          </AlertDialogTrigger>
+        </>)
+      } else {
+        return (<AlertDialogTrigger type={'button'} className={cn('bg-primary text-white flex w-full items-center justify-center gap-x-2 py-2 rounded-md text-sm font-medium')}>
+          <Plus size={17} className={iconeClassName}/>
+          Créer un traitement
+        </AlertDialogTrigger>)
+      }
     }
-    return (<Button className={'p-0 hover:bg-transparent'} variant={'ghost'}>
-      <PencilIcon size={15} className={cn('text-primary', iconeClassName)}/>
-    </Button>)
+    else {
+      return (<AlertDialogTrigger type={'button'} className={cn('text-white flex items-center justify-center gap-x-2 py-2 rounded-md text-sm font-medium p-0 hover:bg-transparent bg-transparent')}>
+        <PencilIcon size={15} className={cn('text-primary', iconeClassName)}/>
+      </AlertDialogTrigger>)
+    }
   }
 
   // @ts-ignore
@@ -152,9 +169,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   // @ts-ignore
   return (
     <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <AlertDialogTrigger className={cn(type==='create' && 'w-full', isFiche && 'w-fit')}>
-        <TriggerComponent />
-      </AlertDialogTrigger>
+      <TriggerComponent />
       <AlertDialogContent className="md:w-[700px] md:max-w-[850px] p-0">
         <DialogFormTitle
           title={type === 'create'? 'Créer un nouveau traitement' : 'Mettre à jour votre traitement'}
@@ -208,7 +223,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                       <FormControl>
                         <UsersSelectInput
                           handleChange={field.onChange}
-                          value={treatmment?.responsible}
+                          value={treatmment?.responsible || currentUser}
                         />
                       </FormControl>
                       <FormMessage />

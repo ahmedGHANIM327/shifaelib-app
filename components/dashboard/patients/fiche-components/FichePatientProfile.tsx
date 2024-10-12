@@ -10,7 +10,7 @@ import { Patient } from '@/lib/types/patients';
 export const FichePatientProfile:FC<{ patient: Patient }> = ({ patient }) => {
 
   return (
-    <div >
+    <div>
       <div className='flex flex-wrap gap-x-2 justify-between border p-3'>
         <InfoBlock
           label={'Date de naissance'}

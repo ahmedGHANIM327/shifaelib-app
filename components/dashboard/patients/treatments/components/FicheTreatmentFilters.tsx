@@ -30,9 +30,9 @@ export const FicheTreatmentFilters:FC<{
   },[treatments]);
 
   return (
-    <div className='gap-x-4 gap-y-2 mb-4 grid md:grid-cols-2 grid-cols-1 max-w-[600px] text-sm'>
+    <div className='gap-y-2 mb-2 grid md:grid-cols-2 grid-cols-1 max-w-[600px] text-sm'>
       <div
-        className={cn('px-6 py-2 flex justify-center items-center gap-y-4 border border-primary rounded-md text-primary cursor-pointer',
+        className={cn('px-6 py-2 flex justify-center items-center gap-y-4 border border-transparent border-b-primary text-primary cursor-pointer',
           status === 'ALL' && 'bg-primary text-white',
         )}
         onClick={() => setStatus('ALL')}
@@ -43,7 +43,7 @@ export const FicheTreatmentFilters:FC<{
         )}>{data.total}</span>
       </div>
       <div
-        className={cn('px-6 py-2 flex justify-center items-center gap-y-4 border border-green-800 rounded-md text-green-800 cursor-pointer',
+        className={cn('px-6 py-2 flex justify-center items-center gap-y-4 border border-transparent border-b-green-800 text-green-800 cursor-pointer',
           status === 'IN_PROGRESS' && 'bg-green-800 text-white',
         )}
         onClick={() => setStatus('IN_PROGRESS')}

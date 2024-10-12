@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import debounce from 'debounce';
 
-export const SearchInput:FC<{className?:string;handleSearch: (search: string) => void;containerClassName?:string;disabled?:boolean;label?:string}> = ({className,containerClassName,handleSearch, disabled = false, label}) => {
+export const SearchInput:FC<{className?:string;handleSearch: (search: string) => void;containerClassName?:string;disabled?:boolean;label?:string; iconeClassName?: string}> = ({className,containerClassName,handleSearch, disabled = false, label, iconeClassName}) => {
 
   const debouncedHandleSearch = debounce(handleSearch, 500);
 
@@ -22,7 +22,7 @@ export const SearchInput:FC<{className?:string;handleSearch: (search: string) =>
         onChange={(e)=>debouncedHandleSearch(e.target.value)}
       />
       <Search
-        className="absolute left-2 top-0 w-4 h-full text-muted-foreground"
+        className={cn("absolute left-2 top-0 w-4 h-full text-muted-foreground", iconeClassName)}
         aria-hidden="true"/>
     </div>
   )
