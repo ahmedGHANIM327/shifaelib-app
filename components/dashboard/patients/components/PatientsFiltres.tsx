@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { SearchInput } from '@/components/shared/inputs/SearchInput';
 import {
   Select,
@@ -16,45 +16,71 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { User } from '@/lib/types/users';
 import usePatientStore from '@/stores/patient';
+import { PatientListingFilters } from '@/lib/types/patients';
 
-export const PatientsFiltres = () => {
+type PatientsFiltresProps = {
+  filters: PatientListingFilters;
+  setFilters: (newFilters: PatientListingFilters) => void;
+}
 
-  const listingFilters = usePatientStore((state) => state.listingFilters);
-  const setListingFilters = usePatientStore((state) => state.setListingFilters);
-  const resetFilters = usePatientStore((state) => state.resetFilters);
-  const setResetFilters = usePatientStore((state) => state.setResetFilters);
+export const PatientsFiltres:FC<PatientsFiltresProps> = ({ filters, setFilters }) => {
+  const patientState = usePatientStore((state) => state.state);
+  const resetPatientState = usePatientStore((state) => state.resetState);
 
   const [hideFilters, setHideFilters] = React.useState(true);
+  const [reset, setReset] = useState<boolean>(false);
 
   const handleSearch = (e: string) => {
-    setListingFilters({
-      ...listingFilters,
+    setFilters({
+      ...filters,
       search: e
     });
   }
 
   const handleSort = (e: 'creation_date_desc' | 'creation_date_asc') => {
-    setListingFilters({
-      ...listingFilters,
+    setFilters({
+      ...filters,
       sort: e
     });
   }
 
   const handleGender = (e: 'M' | 'F' | 'ALL') => {
-    setListingFilters({
-      ...listingFilters,
+    setFilters({
+      ...filters,
       gender: e
     });
   }
 
   const handleCreatedBy = (users: User[]) => {
     const userIds = users.map(u => u.id);
-    setListingFilters({
-      ...listingFilters,
+    setFilters({
+      ...filters,
       createdBy: userIds
     });
   }
 
+  useEffect(() => {
+    setFilters({
+      search: '',
+      sort: 'creation_date_desc',
+      gender: 'ALL',
+      createdBy: []
+    });
+  }, [reset]);
+
+  useEffect(() => {
+    if(patientState && patientState.type === 'PATIENT_CREATED') {
+      setReset(!reset);
+      // do action
+      resetPatientState();
+    }
+  }, [patientState]);
+
+  const handleReset = () => {
+    setReset(!reset);
+  }
+
+  // @ts-ignore
   return (
     <div className='w-full flex flex-col gap-2 mb-2'>
       <form>
@@ -65,7 +91,7 @@ export const PatientsFiltres = () => {
           />
         </div>
         <div className='md:flex grid grid-cols-3 md:w-fit w-full gap-2'>
-          <Button onClick={setResetFilters} type={'reset'} variant='link' className='px-0 underline'>
+          <Button onClick={handleReset} type={'reset'} variant='link' className='px-0 underline'>
             <RotateCcw size={15}/>
             Réinitialiser
           </Button>
@@ -73,7 +99,7 @@ export const PatientsFiltres = () => {
             <SlidersHorizontal size={14}/>
             Filtrer
           </Button>
-          <Select onValueChange={handleSort} value={listingFilters.sort}>
+          <Select onValueChange={handleSort} value={filters.sort}>
             <SelectTrigger className='bg-white'>
               <SelectValue placeholder="Trier par" />
             </SelectTrigger>
@@ -98,7 +124,7 @@ export const PatientsFiltres = () => {
       <div className={cn('bg-accent rounded-md p-2 grid md:grid-cols-4 grid-cols-1 gap-y-4 gap-x-2 mt-2', hideFilters && 'h-0 p-0 overflow-hidden')}>
           <div className='flex flex-col gap-2'>
             <Label>Genre</Label>
-            <Select onValueChange={handleGender} value={listingFilters.gender}>
+            <Select onValueChange={handleGender} value={filters.gender}>
               <SelectTrigger className={'bg-white'}>
                 <SelectValue placeholder="Genre" />
               </SelectTrigger>
@@ -120,7 +146,7 @@ export const PatientsFiltres = () => {
           </div>
           <div className='flex flex-col gap-2'>
             <Label>Crée par</Label>
-            <UsersMultiselectInput handleChange={handleCreatedBy} reset={resetFilters}
+            <UsersMultiselectInput handleChange={handleCreatedBy} reset={reset}
           />
         </div>
       </div>

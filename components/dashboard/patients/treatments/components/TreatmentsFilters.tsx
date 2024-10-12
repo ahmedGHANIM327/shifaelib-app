@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { SearchInput } from '@/components/shared/inputs/SearchInput';
 import {
   Select,
@@ -22,59 +22,86 @@ import { Patient } from '@/lib/types/patients';
 import { PatientsMultiSelectInput } from '@/components/shared/inputs/PatientsMultiSelectInput';
 import useTreatmentStore from '@/stores/patient/treatment';
 
-export const TreatmentsFiltres = () => {
+type TreatmentsFiltresProps = {
+  filters: TreatmentListingFilters;
+  setFilters: (newFilters: TreatmentListingFilters) => void;
+}
 
-  const listingFilters = useTreatmentStore((state) => state.listingFilters);
-  const setListingFilters = useTreatmentStore((state) => state.setListingFilters);
-  const setResetFilters = useTreatmentStore((state) => state.setResetFilters);
-  const resetFilters = useTreatmentStore((state) => state.resetFilters);
+export const TreatmentsFiltres:FC<TreatmentsFiltresProps> = ({ filters, setFilters }) => {
+
+  const treatmentState = useTreatmentStore((state) => state.state);
+  const resetTreatmentState = useTreatmentStore((state) => state.resetState);
 
   const [hideFilters, setHideFilters] = React.useState(true);
+  const [reset, setReset] = useState<boolean>(false);
 
   const handleSearch = (e: string) => {
-    setListingFilters({
-      ...listingFilters,
+    setFilters({
+      ...filters,
       search: e
     });
   }
 
   const handleSort = (e: 'creation_date_desc' | 'creation_date_asc') => {
-    setListingFilters({
-      ...listingFilters,
+    setFilters({
+      ...filters,
       sort: e
     });
   }
 
   const handleStatus = (e: TreatmentStatus | 'ALL') => {
-    setListingFilters({
-      ...listingFilters,
+    setFilters({
+      ...filters,
       status: e
     });
   }
 
   const handlePraticien = (users: User[]) => {
     const userIds = users.map(u => u.id);
-    setListingFilters({
-      ...listingFilters,
+    setFilters({
+      ...filters,
       responsible: userIds
     });
   }
 
   const handleService = (services: Service[]) => {
     const servicesId = services.map(s => s.id);
-    setListingFilters({
-      ...listingFilters,
+    setFilters({
+      ...filters,
       service: servicesId
     });
   }
 
   const handlePatient = (patients: Patient[]) => {
     const patientsId = patients.map(p => p.id);
-    setListingFilters({
-      ...listingFilters,
+    setFilters({
+      ...filters,
       patient: patientsId
     });
   }
+
+  const handleReset = () => {
+    setReset(!reset);
+  }
+
+  useEffect(() => {
+    setFilters({
+      patient: [],
+      responsible: [],
+      service: [],
+      sort: 'creation_date_desc',
+      search: '',
+      status: 'ALL'
+    });
+  }, [reset]);
+
+  useEffect(() => {
+    if(treatmentState && treatmentState.type === 'TREATMENT_CREATED') {
+      setReset(!reset);
+      // do action
+      resetTreatmentState();
+    }
+  }, [treatmentState]);
 
   return (
     <div className='w-full flex flex-col gap-2 mb-2'>
@@ -87,7 +114,7 @@ export const TreatmentsFiltres = () => {
             />
           </div>
           <div className='md:flex grid grid-cols-3 md:w-fit w-full gap-2'>
-            <Button onClick={setResetFilters} type={'reset'} variant='link' className='px-0 underline'>
+            <Button onClick={handleReset} type={'reset'} variant='link' className='px-0 underline'>
               <RotateCcw size={15}/>
               Réinitialiser
             </Button>
@@ -95,7 +122,7 @@ export const TreatmentsFiltres = () => {
               <SlidersHorizontal size={14}/>
               Filtrer
             </Button>
-            <Select onValueChange={handleSort} value={listingFilters.sort}>
+            <Select onValueChange={handleSort} value={filters.sort}>
               <SelectTrigger className='bg-white'>
                 <SelectValue placeholder="Trier par" />
               </SelectTrigger>
@@ -121,7 +148,7 @@ export const TreatmentsFiltres = () => {
           className={cn('bg-accent rounded-md p-2 py-3 grid md:grid-cols-4 grid-cols-1 gap-y-4 gap-x-3 mt-2', hideFilters && 'h-0 p-0 overflow-hidden')}>
           <div className='flex flex-col gap-2'>
             <Label>Genre</Label>
-            <Select onValueChange={handleStatus} value={listingFilters.status}>
+            <Select onValueChange={handleStatus} value={filters.status}>
               <SelectTrigger className={'bg-white'}>
                 <SelectValue placeholder="Genre" />
               </SelectTrigger>
@@ -149,15 +176,15 @@ export const TreatmentsFiltres = () => {
           </div>
           <div className='flex flex-col gap-2'>
             <Label>Praticien</Label>
-            <UsersMultiselectInput handleChange={handlePraticien} reset={resetFilters} />
+            <UsersMultiselectInput handleChange={handlePraticien} reset={reset} />
           </div>
           <div className='flex flex-col gap-2'>
             <Label>Service</Label>
-            <ServicesMultiSelectInput handleChange={handleService} reset={resetFilters} />
+            <ServicesMultiSelectInput handleChange={handleService} reset={reset} />
           </div>
           <div className='flex flex-col gap-2'>
             <Label>Patient</Label>
-            <PatientsMultiSelectInput handleChange={handlePatient} reset={resetFilters} />
+            <PatientsMultiSelectInput handleChange={handlePatient} reset={reset} />
           </div>
         </div>
       </form>

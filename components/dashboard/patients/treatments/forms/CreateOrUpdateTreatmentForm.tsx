@@ -24,7 +24,6 @@ import { CreateOrUpdateTreatmentInput, Treatment } from '@/lib/types/patients/tr
 import useTreatmentStore from '@/stores/patient/treatment';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import { Patient } from '@/lib/types/patients';
-import usePatientStore from '@/stores/patient';
 
 type CreateOrUpdateTreatmentProps = {
   type: 'create' | 'update';
@@ -42,10 +41,8 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   isFiche = false
                                                                              }) => {
 
-  const setResetFilters = useTreatmentStore((state) => state.setResetFilters);
-  const setReloadTreatments = useTreatmentStore((state) => state.setReloadTreatments);
-  const addPatientTreatment = usePatientStore((state) => state.addPatientTreatment);
-  const updatePatientTreatment = usePatientStore((state) => state.updatePatientTreatment);
+  // state
+  const setTreatmentState = useTreatmentStore((state) => state.setState);
 
   const [isPending, startTransition] = useTransition();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -63,9 +60,8 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   const handleCreate = async (data: CreateOrUpdateTreatmentInput) => {
     const response = await createTreatment(data);
     if(response.ok) {
-      addPatientTreatment(response.data as Treatment);
+      setTreatmentState('TREATMENT_CREATED', JSON.stringify(response.data));
       form.reset();
-      setResetFilters();
       setIsDialogOpen(false);
       // @ts-ignore
       toast.success('Traitement crée avec succès');
@@ -78,8 +74,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   const handleUpdate = async (data: CreateOrUpdateTreatmentInput) => {
     const response = await updateTreatment(treatmment?.id as string, data);
     if(response.ok) {
-      updatePatientTreatment(response.data as Treatment);
-      setReloadTreatments(true);
+      setTreatmentState('TREATMENT_UPDATED', JSON.stringify(response.data));
       setIsDialogOpen(false);
       // @ts-ignore
       toast.success('Traitement mis à jour avec succès');

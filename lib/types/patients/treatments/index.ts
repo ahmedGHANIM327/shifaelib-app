@@ -32,3 +32,10 @@ export type TreatmentListingFilters = {
   service: string[];
   responsible: string[];
 }
+
+export type TreatmentStateActionType = 'TREATMENT_CREATED' | 'TREATMENT_UPDATED' | 'TREATMENT_DELETED';
+export type TreatmentStateAction = {
+  type: TreatmentStateActionType;
+  payload: string;
+  date: Date;
+}

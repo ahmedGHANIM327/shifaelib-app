@@ -1,43 +1,27 @@
 import { create } from 'zustand';
-import { TreatmentListingFilters } from '@/lib/types/patients/treatments';
+import {
+  TreatmentStateAction,
+  TreatmentStateActionType
+} from '@/lib/types/patients/treatments';
 
 interface TreatmentState {
-  reloadListingTreatments: boolean;
-  setReloadTreatments: (e: boolean)=>void;
-  listingFilters: TreatmentListingFilters;
-  setListingFilters: (filters: TreatmentListingFilters) => void;
-  resetFilters: boolean;
-  setResetFilters: () => void;
+  state: TreatmentStateAction | null;
+  setState: (type: TreatmentStateActionType, payload: string) => void;
+  resetState: () => void;
 }
 
 const useTreatmentStore = create<TreatmentState>((set, get) => ({
-  reloadListingTreatments: true,
-  setReloadTreatments: (e: boolean) => {
-    set({ reloadListingTreatments: e });
+  state: null,
+  setState: (type:  TreatmentStateActionType, payload: string) => {
+    const newState = {
+      type,
+      payload,
+      date: new Date()
+    } as TreatmentStateAction;
+    set({ state: newState });
   },
-  listingFilters: {
-    patient: [],
-    responsible: [],
-    service: [],
-    sort: 'creation_date_desc',
-    search: '',
-    status: 'ALL'
-  } as TreatmentListingFilters,
-  setListingFilters: (newFilters: TreatmentListingFilters) => {
-    set({ listingFilters: newFilters });
-  },
-  resetFilters: true,
-  setResetFilters: () => {
-    const currentResetFilters = get().resetFilters;
-    set({ resetFilters: !currentResetFilters });
-    set({listingFilters: {
-        patient: [],
-        responsible: [],
-        service: [],
-        sort: 'creation_date_desc',
-        search: '',
-        status: 'ALL'
-      }});
+  resetState: () => {
+    set({ state: null });
   }
 }));
 

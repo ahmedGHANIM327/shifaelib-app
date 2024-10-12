@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { getFullName } from '@/lib/utils';
 import { CreateOrUpdatePatientForm } from '@/components/dashboard/patients/forms/CreateOrUpdatePatientForm';
 import { DeletePatient } from '@/components/dashboard/patients/components/DeletePatient';
-import usePatientStore from '@/stores/patient';
+import { Patient } from '@/lib/types/patients';
 
-export const FichePatientHeader = () => {
-
-  const patient = usePatientStore((state) => state.selectedPatient);
+export const FichePatientHeader:FC<{ patient: Patient }> = ({ patient }) => {
 
   return (
     <div className={'text-center py-2 rounded-t-md relative bg-primary text-white'}>

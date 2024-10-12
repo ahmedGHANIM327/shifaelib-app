@@ -11,27 +11,21 @@ import { cn, getFullName } from '@/lib/utils';
 import { Patient } from '@/lib/types/patients';
 import usePatientStore from '@/stores/patient';
 import { deletePatient } from '@/server/services/patients';
-import { useRouter } from 'next/navigation';
 
 export const DeletePatient:FC<{ patient:Patient; iconeClassName?: string; isFiche?: boolean }> = ({ patient, iconeClassName, isFiche = false }) => {
 
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const reload = usePatientStore((state) => state.setReloadPatients);
-  const setSelectedPatient = usePatientStore((state) => state.setSelectedPatient);
+
+  // state
+  const setPatientState = usePatientStore((state) => state.setState);
 
   const handleDelete = async () => {
     startTransition(async () => {
       try {
         const response = await deletePatient(patient.id);
         if(response.ok) {
-          if (isFiche) {
-            router.push('/patients');
-            setSelectedPatient({} as Patient);
-          } else {
-            reload(true);
-          }
+          setPatientState('PATIENT_DELETED', patient.id);
           setIsOpen(false);
           // @ts-ignore
           toast.success('Patient supprimé avec succès');

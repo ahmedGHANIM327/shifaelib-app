@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { InfoBlock } from '@/components/shared/components/InfoBlock';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { UserHoverCard } from '@/components/dashboard/user/components/UserHoverCard';
 import { User } from '@/lib/types/users';
 import usePatientStore from '@/stores/patient';
+import { Patient } from '@/lib/types/patients';
 
-export const FichePatientProfile = () => {
-
-  const patient = usePatientStore((state) => state.selectedPatient);
+export const FichePatientProfile:FC<{ patient: Patient }> = ({ patient }) => {
 
   return (
     <div >

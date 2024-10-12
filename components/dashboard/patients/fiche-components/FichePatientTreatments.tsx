@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import usePatientStore from '@/stores/patient';
+import React, { FC, useEffect, useState } from 'react';
 import { FicheTreatmentFilters } from '@/components/dashboard/patients/treatments/components/FicheTreatmentFilters';
 import { PillIcon } from 'lucide-react';
 import { CardTitle } from '@/components/shared/components/CardTitle';
@@ -9,11 +8,15 @@ import {
 import { Card } from '@/components/ui/card';
 import { Treatment } from '@/lib/types/patients/treatments';
 import { TreatmentFullCard } from '@/components/dashboard/patients/treatments/components/TreatmentFullCard';
+import { Patient } from '@/lib/types/patients';
+import useTreatmentStore from '@/stores/patient/treatment';
 
-export const FichePatientTreatments = () => {
-  const treatments = usePatientStore((state) => state.selectedPatientTreatments);
-  const patient = usePatientStore((state) => state.selectedPatient);
 
+export const FichePatientTreatments:FC<{ patient: Patient }> = ({ patient }) => {
+
+  const treatmentState = useTreatmentStore((state) => state.state);
+  const resetTreatmentState = useTreatmentStore((state) => state.resetState);
+  const [treatments, setTreatments] = useState<Treatment[]>(patient.treatments || []);
   const [selectedFilter, setSelectedFilter] = useState<string>('ALL');
   const [filteredTreatments, setFilteredTreatments] = useState<Treatment[]>(treatments);
 
@@ -25,6 +28,23 @@ export const FichePatientTreatments = () => {
       setFilteredTreatments(filtered);
     }
   }, [selectedFilter, treatments]);
+
+  useEffect(() => {
+    if(treatmentState) {
+      if(treatmentState.type === 'TREATMENT_UPDATED') {
+        const updatedTreatment = JSON.parse(treatmentState.payload) as Treatment;
+        setTreatments(treatments.map((e: Treatment) => e.id === updatedTreatment.id ? updatedTreatment : e));
+      } else if(treatmentState.type === 'TREATMENT_DELETED') {
+        const deletedId = treatmentState.payload as string;
+        setTreatments(treatments.filter((e: Treatment) => e.id !== deletedId));
+      } else if(treatmentState.type === 'TREATMENT_CREATED') {
+        const createdTreatment = JSON.parse(treatmentState.payload) as Treatment;
+        setTreatments([createdTreatment, ...treatments]);
+      }
+      // do action
+      resetTreatmentState();
+    }
+  }, [treatmentState]);
 
   return (
     <Card className='p-4'>
