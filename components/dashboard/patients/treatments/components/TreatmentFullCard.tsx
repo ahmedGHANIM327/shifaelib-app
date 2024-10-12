@@ -1,5 +1,5 @@
 'use client';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { COLORS, NON_SPECIFIED_SERVICE } from '@/lib/constants';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';

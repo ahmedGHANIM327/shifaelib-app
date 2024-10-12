@@ -11,22 +11,21 @@ import { cn } from '@/lib/utils';
 import { Treatment } from '@/lib/types/patients/treatments';
 import { deleteTreatment } from '@/server/services/patients/treatments';
 import useTreatmentStore from '@/stores/patient/treatment';
-import usePatientStore from '@/stores/patient';
 
 export const DeleteTreatment:FC<{ treatment:Treatment; iconeClassName?: string; isFiche?: boolean }> = ({ treatment, iconeClassName, isFiche = false }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const reload = useTreatmentStore((state) => state.setReloadTreatments);
-  const deletePatientTreatment = usePatientStore((state) => state.deletePatientTreatment);
+
+  // state
+  const setTreatmentState = useTreatmentStore((state) => state.setState);
 
   const handleDelete = async () => {
     startTransition(async () => {
       try {
         const response = await deleteTreatment(treatment.id);
         if(response.ok) {
-          deletePatientTreatment(treatment.id);
-          reload(true);
+          setTreatmentState('TREATMENT_DELETED', treatment.id);
           setIsOpen(false);
           // @ts-ignore
           toast.success('Traitement supprimé avec succès');

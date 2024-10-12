@@ -37,3 +37,10 @@ export type PatientListingPagination = {
 }
 
 export type CreateOrUpdatePatientInput = z.infer<typeof createOrUpdatePatientSchema>;
+
+export type PatientStateActionType = 'PATIENT_CREATED' | 'PATIENT_UPDATED' | 'PATIENT_DELETED';
+export type PatientStateAction = {
+  type: PatientStateActionType;
+  payload: string;
+  date: Date;
+}

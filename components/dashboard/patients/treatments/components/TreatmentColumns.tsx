@@ -91,9 +91,6 @@ export const TreatmentColumns: ColumnDef<Treatment>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       return (<div className="gap-x-2 flex justify-end items-center">
-        <Link href={`/patients/${row.original.id}`}>
-          <EyeIcon size={15}/>
-        </Link>
         <CreateOrUpdateTreatmentForm type={'update'} treatmment={row.original}/>
         <DeleteTreatment treatment={row.original}/>
       </div>)
