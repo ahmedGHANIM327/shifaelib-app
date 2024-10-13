@@ -8,6 +8,7 @@ import { Patient } from '@/lib/types/patients';
 import { Treatment, TreatmentStatus } from '@/lib/types/patients/treatments';
 import { AdditionalQuestionType, Service } from '@/lib/types/services';
 import patient from '@/stores/patient';
+import { View } from '@syncfusion/ej2-schedule';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -179,6 +180,43 @@ export const removeDuplicationById = <T extends { id: string }>(entity: T[]): T[
   return Object.values(uniqueEntities);
 };
 
-export const replaceEntity = (entiies: Treatment[], newEntity: Treatment) => {
-  return entiies.map((e: Treatment) => e.id === newEntity.id ? newEntity : e);
+export const getViewBounds = (viewType: View, date: Date) => {
+  let start: Date;
+  let end: Date;
+  const [year, month, day] = date.toISOString().split('T')[0].split('-').map(Number);
+  switch (viewType) {
+    case 'Day':
+      start = new Date(Date.UTC(year, month-1, day+1, 0, 0,0));
+      end = new Date(Date.UTC(year, month-1, day+1, 23, 59,59));
+      break;
+    case 'WorkWeek':
+      start = new Date(date);
+      end = new Date(date);
+      const dayOfWorkWeek = start.getDay();
+      const diffT = (dayOfWorkWeek === 0 ? 6 : dayOfWorkWeek - 1);
+      start = new Date(Date.UTC(year, month-1, day - diffT +1, 0, 0,0));
+      end = new Date(Date.UTC(year, month-1, day + (7-diffT), 23, 59,59));
+      break;
+    case 'Week':
+      start = new Date(date);
+      end = new Date(date);
+      const dayOfWeek = start.getDay();
+      const diff = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+      start = new Date(Date.UTC(year, month-1, day - diff+1, 0, 0,0));
+      end = new Date(Date.UTC(year, month-1, day + (7-diff), 23, 59,59));
+      break;
+    case 'Month':
+      start = new Date(Date.UTC(year, month-1, 1, 0, 0,0));
+      end = new Date(Date.UTC(year, month, 1, 0, 0,0));
+      break;
+    default:
+      start = new Date(Date.UTC(year, month-1, 1, 0, 0,0));
+      end = new Date(Date.UTC(year, month, 1, 0, 0,0));
+      break;
+  }
+
+  return {
+    from: start,
+    to: end
+  }
 }

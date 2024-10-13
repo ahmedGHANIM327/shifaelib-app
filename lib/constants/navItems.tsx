@@ -1,6 +1,6 @@
 import { NavItem } from '@/lib/types';
 import {
-  Activity,
+  Activity, CalendarCheck,
   CircleUser,
   HospitalIcon,
   LayoutDashboard, Pill, Stethoscope,
@@ -50,5 +50,11 @@ export const navItems: NavItem[] = [
     href:'/patients/treatments',
     icon: <Pill />,
     isOwnerItem: false
-  }
+  },
+  {
+    title: 'Agenda',
+    href:'/agenda',
+    icon: <CalendarCheck />,
+    isOwnerItem: false
+  },
 ];

@@ -133,17 +133,13 @@ export const deleteTreatment = async (id: string): Promise<ServerResponse<Treatm
     isValidUUIDv4(id);
     await isAuth();
 
-    const treatment = (await prisma.treatment.delete({
+    await prisma.treatment.delete({
       where: {
         id,
       },
-    })) as Treatment;
+    });
 
-    if (!treatment) {
-      throw new Error('TREATMENT_NOT_FOUND');
-    }
-
-    return { ok: true, data: treatment };
+    return { ok: true };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }

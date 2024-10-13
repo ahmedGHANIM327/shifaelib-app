@@ -98,119 +98,153 @@ export const COLORS = [
     bgColor: 'bg-green-600',
     bgLightColor: 'bg-green-50',
     textColor: 'text-green-600',
-    textLightColor: 'text-green-50'
+    textLightColor: 'text-green-50',
+    borderColor: 'border-green-600',
+    borderLightColor: 'border-green-50'
   },
   {
     color: 'lime',
     bgColor: 'bg-lime-600',
     bgLightColor: 'bg-lime-50',
     textColor: 'text-lime-600',
-    textLightColor: 'text-lime-50'
+    textLightColor: 'text-lime-50',
+    borderColor: 'border-lime-600',
+    borderLightColor: 'border-lime-50'
   },
   {
     color: 'teal',
     bgColor: 'bg-teal-600',
     bgLightColor: 'bg-teal-50',
     textColor: 'text-teal-600',
-    textLightColor: 'text-teal-50'
+    textLightColor: 'text-teal-50',
+    borderColor: 'border-teal-600',
+    borderLightColor: 'border-teal-50'
   },
   {
     color: 'red',
     bgColor: 'bg-red-600',
     bgLightColor: 'bg-red-50',
     textColor: 'text-red-600',
-    textLightColor: 'text-red-50'
+    textLightColor: 'text-red-50',
+    borderColor: 'border-red-600',
+    borderLightColor: 'border-red-50'
   },
   {
     color: 'pink',
     bgColor: 'bg-pink-700',
     bgLightColor: 'bg-pink-100',
     textColor: 'text-pink-700',
-    textLightColor: 'text-pink-100'
+    textLightColor: 'text-pink-100',
+    borderColor: 'border-pink-700',
+    borderLightColor: 'border-pink-100'
   },
   {
     color: 'blue',
     bgColor: 'bg-blue-500',
     bgLightColor: 'bg-blue-50',
     textColor: 'text-blue-500',
-    textLightColor: 'text-blue-50'
+    textLightColor: 'text-blue-50',
+    borderColor: 'border-blue-500',
+    borderLightColor: 'border-blue-50'
   },
   {
     color: 'sky',
     bgColor: 'bg-sky-700',
     bgLightColor: 'bg-sky-50',
     textColor: 'text-sky-700',
-    textLightColor: 'text-sky-50'
+    textLightColor: 'text-sky-50',
+    borderColor: 'border-sky-700',
+    borderLightColor: 'border-sky-50'
   },
   {
     color: 'cyan',
     bgColor: 'bg-cyan-600',
     bgLightColor: 'bg-cyan-50',
     textColor: 'text-cyan-600',
-    textLightColor: 'text-cyan-50'
+    textLightColor: 'text-cyan-50',
+    borderColor: 'border-cyan-600',
+    borderLightColor: 'border-cyan-50'
   },
   {
     color: 'indigo',
     bgColor: 'bg-indigo-700',
     bgLightColor: 'bg-indigo-50',
     textColor: 'text-indigo-700',
-    textLightColor: 'text-indigo-50'
+    textLightColor: 'text-indigo-50',
+    borderColor: 'border-indigo-700',
+    borderLightColor: 'border-indigo-50'
   },
   {
     color: 'violet',
     bgColor: 'bg-violet-500',
     bgLightColor: 'bg-violet-50',
     textColor: 'text-violet-500',
-    textLightColor: 'text-violet-50'
+    textLightColor: 'text-violet-50',
+    borderColor: 'border-violet-500',
+    borderLightColor: 'border-violet-50'
   },
   {
     color: 'purple',
     bgColor: 'bg-purple-700',
     bgLightColor: 'bg-purple-50',
     textColor: 'text-purple-700',
-    textLightColor: 'text-purple-50'
+    textLightColor: 'text-purple-50',
+    borderColor: 'border-purple-700',
+    borderLightColor: 'border-purple-50'
   },
   {
     color: 'fuchsia',
     bgColor: 'bg-fuchsia-600',
     bgLightColor: 'bg-fuchsia-50',
     textColor: 'text-fuchsia-600',
-    textLightColor: 'text-fuchsia-50'
+    textLightColor: 'text-fuchsia-50',
+    borderColor: 'border-fuchsia-600',
+    borderLightColor: 'border-fuchsia-50'
   },
   {
     color: 'stone',
     bgColor: 'bg-stone-500',
     bgLightColor: 'bg-stone-50',
     textColor: 'text-stone-500',
-    textLightColor: 'text-stone-50'
+    textLightColor: 'text-stone-50',
+    borderColor: 'border-stone-500',
+    borderLightColor: 'border-stone-50'
   },
   {
     color: 'slate',
     bgColor: 'bg-slate-500',
     bgLightColor: 'bg-slate-50',
     textColor: 'text-slate-500',
-    textLightColor: 'text-slate-50'
+    textLightColor: 'text-slate-50',
+    borderColor: 'border-slate-500',
+    borderLightColor: 'border-slate-50'
   },
   {
     color: 'orange',
     bgColor: 'bg-orange-500',
     bgLightColor: 'bg-orange-50',
     textColor: 'text-orange-500',
-    textLightColor: 'text-orange-50'
+    textLightColor: 'text-orange-50',
+    borderColor: 'border-orange-500',
+    borderLightColor: 'border-orange-50'
   },
   {
     color: 'amber',
     bgColor: 'bg-amber-700',
     bgLightColor: 'bg-amber-50',
     textColor: 'text-amber-700',
-    textLightColor: 'text-amber-50'
+    textLightColor: 'text-amber-50',
+    borderColor: 'border-amber-700',
+    borderLightColor: 'border-amber-50'
   },
   {
     color: 'yellow',
     bgColor: 'bg-yellow-500',
     bgLightColor: 'bg-yellow-50',
     textColor: 'text-yellow-500',
-    textLightColor: 'text-yellow-50'
+    textLightColor: 'text-yellow-50',
+    borderColor: 'border-yellow-500',
+    borderLightColor: 'border-yellow-50'
   }
 ];
 

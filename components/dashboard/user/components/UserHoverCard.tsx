@@ -10,15 +10,39 @@ import { cn, convertGender, getFullName, getInitials } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserAccountStatus } from '@/components/dashboard/user/components/UserAccountStatus';
 
-export const UserHoverCard:FC<{ user: User|null; triggerClassName?: string }> = ({ user, triggerClassName }) => {
+export const UserHoverCard:FC<{ user: User|null; triggerClassName?: string; isAvatar?: boolean; avatarClassName?: string }> = ({ user, triggerClassName, avatarClassName, isAvatar = false }) => {
 
   if(!user) {
+    if(isAvatar) {
+      return (<Avatar className="cursor-pointer">
+        <AvatarImage src={''} alt="profile-photo" />
+        <AvatarFallback className={`bg-green-800 text-white ${avatarClassName}`}>
+          X
+        </AvatarFallback>
+      </Avatar>)
+    }
     return '-';
   }
+
+  const TriggerComponent = () => {
+    if(isAvatar) {
+      return (
+        <Avatar className="cursor-pointer">
+          <AvatarImage src={''} alt="profile-photo" />
+          <AvatarFallback className={`bg-green-800 text-white ${avatarClassName}`}>
+            {getInitials(user)}
+          </AvatarFallback>
+        </Avatar>
+      )
+    } else {
+      return (<Button variant="link" className={cn('px-0 w-fit underline text-foreground', triggerClassName)}>{getFullName(user)}</Button>);
+    }
+  }
+
   return (
     <HoverCard>
-      <HoverCardTrigger asChild>
-        <Button variant="link" className={cn('px-0 w-fit underline text-foreground', triggerClassName)}>{getFullName(user)}</Button>
+      <HoverCardTrigger>
+        <TriggerComponent />
       </HoverCardTrigger>
       <HoverCardContent className="w-80">
         <div className='flex flex-col items-center gap-x-3 mt-2'>

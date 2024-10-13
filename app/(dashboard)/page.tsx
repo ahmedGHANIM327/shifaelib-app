@@ -4,6 +4,7 @@ import React from 'react';
 import useUserStore from '@/stores/user';
 import { getFullName } from '@/lib/utils';
 import { LoadingSection } from '@/components/shared/components/LoadingSection';
+import { AgendaComponent } from '@/components/shared/components/AgendaComponent';
 
 const Page = () => {
   const { isCurrentUserLoading, currentUser } = useUserStore((state) => state);
@@ -18,6 +19,16 @@ const Page = () => {
           Bonjour{' '}
           <span className="text-primary">{getFullName(currentUser)}</span> 👋
         </h1>
+      </LoadingSection>
+      <LoadingSection
+        loading={isCurrentUserLoading || !currentUser.id}
+        loadingClassName={'w-full h-[70vh] bg-white'}
+      >
+        <AgendaComponent
+          users={[currentUser.id]}
+          views={['Day', 'WorkWeek']}
+          height={'70vh'}
+        />
       </LoadingSection>
     </div>
   );
