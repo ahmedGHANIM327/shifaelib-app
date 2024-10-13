@@ -19,7 +19,6 @@ export type Session = {
 }
 
 export type SessionsListingFilters = {
-  sort: 'creation_date_desc' | 'creation_date_asc' | 'start_time_desc' | 'start_time_asc';
   status: 'SCHEDULED' | 'ATTENDED' | 'NOT_ATTENDED'  | 'CANCELED' | 'ALL';
   patient: string[];
   service: string[];
@@ -29,3 +28,10 @@ export type SessionsListingFilters = {
 }
 
 export type SessionStatus = 'SCHEDULED'| 'ATTENDED'| 'NOT_ATTENDED'| 'CANCELED';
+
+export type CalendarSession = {
+  Id: string;
+  StartTime: Date;
+  EndTime: Date;
+  Status: SessionStatus;
+}

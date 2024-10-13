@@ -110,14 +110,14 @@
   @apply text-white;
 }
 
-.e-schedule .e-vertical-view .e-time-cells-wrap table td,
+/*.e-schedule .e-vertical-view .e-time-cells-wrap table td,
 .e-schedule .e-vertical-view .e-work-cells {
   @apply !h-[70px];
 }
 
 .e-schedule .e-vertical-view .e-day-wrapper .e-appointment {
   @apply bg-transparent border-none;
-}
+}*/
 
 /* ========================================== REACT-DATEPICKER STYLES */
 .datePicker {
