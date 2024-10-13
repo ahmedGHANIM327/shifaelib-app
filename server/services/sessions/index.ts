@@ -16,7 +16,16 @@ export const getFilteredSessions = async (filters: SessionsListingFilters): Prom
 
     // @ts-ignore
     const sessions = (await prisma.session.findMany({
-      where
+      where,
+      include: {
+        treatment: {
+          include: {
+            service: true,
+            patient: true,
+            responsible: true
+          }
+        },
+      }
     })) as Session[];
 
     return { ok: true, data: sessions };

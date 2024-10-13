@@ -1,6 +1,7 @@
 import { Treatment } from '@/lib/types/patients/treatments';
 import { User } from '@/lib/types/users';
 import { Payment } from '@/lib/types/patients/paiments';
+import { Service } from '@/lib/types/services';
 
 export type Session = {
   id: string;
@@ -34,4 +35,7 @@ export type CalendarSession = {
   StartTime: Date;
   EndTime: Date;
   Status: SessionStatus;
+  Tarif: string;
+  Note?: string;
+  Treatment: Treatment;
 }
