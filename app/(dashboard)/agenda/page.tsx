@@ -5,14 +5,14 @@ const Page = () => {
 
   return (
     <div className={'rounded-none absolute top-0 left-0 h-[100vh] grid grid-cols-7'}>
-      <div className='col-span-1'>
+      <div className='md:col-span-1 hidden md:flex'>
         Filters
       </div>
       <AgendaComponent
         users={[]}
         views={['Day', 'WorkWeek', 'Week', 'Month']}
         height={'95vh'}
-        containerClassName={'col-span-6'}
+        containerClassName={'md:col-span-6 col-span-7'}
       />
     </div>
   );
