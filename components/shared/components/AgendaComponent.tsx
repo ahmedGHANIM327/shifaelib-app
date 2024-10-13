@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState, useTransition } from 'react';
+import React, { FC, useEffect, useRef, useState, useTransition } from 'react';
 import { L10n, registerLicense } from '@syncfusion/ej2-base';
 import {
   DataBindingEventArgs,
@@ -18,7 +18,7 @@ import * as numbers from 'cldr-data/main/fr/numbers.json';
 import * as timeZoneNames from 'cldr-data/main/fr/timeZoneNames.json';
 import { View } from '@syncfusion/ej2-schedule';
 import { getViewBounds } from '@/lib/utils';
-import { CalendarSession, Session } from '@/lib/types/patients/sessions';
+import { CalendarSession, Session, SessionsListingFilters } from '@/lib/types/patients/sessions';
 import { DataManager } from '@syncfusion/ej2-data';
 import { toast } from 'react-toastify';
 import { getFilteredSessions } from '@/server/services/sessions';
@@ -28,6 +28,7 @@ import useUserStore from '@/stores/user';
 import { DefaultOpeningHours } from '@/lib/constants';
 import { WeekOpeningHours } from '@/lib/types';
 import { SessionTemplate } from '@/components/dashboard/agenda/components/SessionTemplate';
+import { User } from '@/lib/types/users';
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
 
@@ -52,7 +53,14 @@ L10n.load({
   }
 });
 
-export const AgendaComponent = () => {
+type AgendaComponentProps = {
+  users: string[];
+  views: View[];
+  height?: string;
+  containerClassName?: string;
+};
+
+export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height, containerClassName }) => {
   // @ts-ignore
   registerLicense(process.env.NEXT_PUBLIC_AGENDA_API_KEY || '');
 
@@ -78,10 +86,7 @@ export const AgendaComponent = () => {
         const response = await getFilteredSessions({
           from: dateRange.from,
           to: dateRange.to,
-          responsible: [],
-          patient: [],
-          service: [],
-          status: 'ALL'
+          responsible: users
         });
         if(response.ok && response?.data) {
           setSessions(response.data);
@@ -134,9 +139,9 @@ export const AgendaComponent = () => {
   }
 
   return (
-    <div className={'relative'}>
+    <div className={`relative ${containerClassName}`}>
       {isLoading && <div
-        className={'bg-gray-300 opacity-50 absolute top-0 left-0 w-full h-[80vh] z-50 flex items-center justify-center'}>
+        className={`bg-gray-300 opacity-50 absolute top-0 left-0 w-full h-full z-50 flex items-center justify-center`}>
         <LoadingSpinner className={'text-primary'} size={50} />
       </div>}
       <ScheduleComponent
@@ -150,7 +155,7 @@ export const AgendaComponent = () => {
         dataBinding={onDataBinding.bind(this)}
         navigating={onNavigating.bind(this)}
         showTimeIndicator={true}
-        height={'85vh'}
+        height={height || '85vh'}
         firstDayOfWeek={1}
         currentView={view}
         workDays={workingDays}
@@ -164,10 +169,10 @@ export const AgendaComponent = () => {
           }
         }>
         <ViewsDirective>
-          <ViewDirective option='Day' />
-          <ViewDirective option='WorkWeek' />
-          <ViewDirective option='Week' />
-          <ViewDirective option='Month' />
+          {views.includes('Day') && <ViewDirective option='Day' />}
+          {views.includes('WorkWeek') &&<ViewDirective option='WorkWeek' />}
+          {views.includes('Week') &&<ViewDirective option='Week' />}
+          {views.includes('Month') &&<ViewDirective option='Month' />}
         </ViewsDirective>
         <Inject services={[Week, Day, WorkWeek, Month]} />
       </ScheduleComponent>

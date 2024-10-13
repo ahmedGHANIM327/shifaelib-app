@@ -20,9 +20,6 @@ export type Session = {
 }
 
 export type SessionsListingFilters = {
-  status: 'SCHEDULED' | 'ATTENDED' | 'NOT_ATTENDED'  | 'CANCELED' | 'ALL';
-  patient: string[];
-  service: string[];
   responsible: string[];
   from: Date | null;
   to: Date | null;

@@ -11,6 +11,14 @@ export const transformSessionListingFilters = (filters: SessionsListingFilters) 
     }
   };
 
+  if (filters.responsible.length > 0) {
+    where.treatment = {
+      responsibleId: {
+        in: filters.responsible
+      }
+    }
+  };
+
   return {
     where
   }

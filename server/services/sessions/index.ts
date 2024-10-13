@@ -9,7 +9,6 @@ import { transformSessionListingFilters } from '@/server/services/sessions/helpe
 export const getFilteredSessions = async (filters: SessionsListingFilters): Promise<ServerResponse<Session[]>> => {
   try {
     await isAuth();
-
     const {
       where
     } = transformSessionListingFilters(filters);
@@ -30,6 +29,7 @@ export const getFilteredSessions = async (filters: SessionsListingFilters): Prom
 
     return { ok: true, data: sessions };
   } catch (error: any) {
+    console.log('error', error);
     return { ok: false, error: error.message as string };
   }
 }
