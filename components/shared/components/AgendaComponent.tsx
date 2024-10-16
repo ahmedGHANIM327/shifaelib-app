@@ -17,13 +17,18 @@ import * as gregorian from 'cldr-data/main/fr/ca-gregorian.json';
 import * as numbers from 'cldr-data/main/fr/numbers.json';
 import * as timeZoneNames from 'cldr-data/main/fr/timeZoneNames.json';
 import { View } from '@syncfusion/ej2-schedule';
-import { getViewBounds } from '@/lib/utils';
+import { getViewBounds, removeDuplicationById } from '@/lib/utils';
 import { CalendarSession, Session, CreateSessionProps } from '@/lib/types/patients/sessions';
 import { DataManager } from '@syncfusion/ej2-data';
 import { toast } from 'react-toastify';
 import { getFilteredSessions } from '@/server/services/sessions';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
-import { createCalendarSessions, getDaySchedule, getWorkingDays } from '@/lib/helpers/agenda';
+import {
+  convertCalendarSessionToSession,
+  createCalendarSessions,
+  getDaySchedule,
+  getWorkingDays
+} from '@/lib/helpers/agenda';
 import useUserStore from '@/stores/user';
 import { DefaultOpeningHours } from '@/lib/constants';
 import { WeekOpeningHours } from '@/lib/types';
@@ -34,6 +39,7 @@ import { Button } from '@/components/ui/button';
 import useTreatmentStore from '@/stores/patient/treatment';
 import useSessionStore from '@/stores/patient/sessions';
 import { ViewAgendaSessionComponent } from '@/components/dashboard/patients/sessions/components/ViewSessionComponent';
+import { UpdateSessionForm } from '@/components/dashboard/patients/sessions/forms/UpdateSessionForm';
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
 
@@ -155,12 +161,11 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
   const onPopupOpen = (args: PopupOpenEventArgs) => {
     if ((args.type === 'ViewEventInfo' || args.type === 'QuickInfo' || args.type === 'Editor') && args.data!.Id) {
       args.cancel = true;
-      console.log('args', args);
       const selectedSession = args.data as CalendarSession;
       setViewAgendaSession({
         open: true,
         type: 'view',
-        data: selectedSession
+        data: convertCalendarSessionToSession(selectedSession)
       });
     }
 
@@ -180,13 +185,23 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
         const createdSession = JSON.parse(sessionState.payload) as Session;
         setSessions([...sessions, createdSession]);
         resetSessionState();
+      } else if (sessionState.type === 'SESSION_UPDATED') {
+        const updatedSession = JSON.parse(sessionState.payload) as Session;
+        const newSessions = removeDuplicationById([...sessions, updatedSession]);
+        setSessions(newSessions);
+        resetSessionState();
       }
     }
   }, [sessionState]);
 
   return (
     <div className={`relative ${containerClassName}`}>
-      {viewAgendaSession.open && <ViewAgendaSessionComponent />}
+      {viewAgendaSession.open &&
+        <>
+          <ViewAgendaSessionComponent />
+          <UpdateSessionForm />
+        </>
+      }
       <CreateSessionForm data={openCreateSession} handleChange={setOpenCreateSession}/>
       {isLoading && <div
         className={`bg-gray-300 opacity-50 absolute top-0 left-0 w-full h-full z-50 flex items-center justify-center`}>

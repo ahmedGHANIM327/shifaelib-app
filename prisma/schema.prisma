@@ -136,6 +136,7 @@ model Session {
   startTime DateTime
   endTime   DateTime
   status    SessionStatus @default(SCHEDULED)
+  duration  String
   tarif     String
   note      String?
 

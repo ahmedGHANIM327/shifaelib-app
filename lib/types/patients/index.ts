@@ -8,7 +8,7 @@ export type Patient = {
   id: string;
   firstName: string;
   lastName: string;
-  birthDate: string;
+  birthDate?: string;
   gender: Gender;
   phone?: string;
   email?: string;

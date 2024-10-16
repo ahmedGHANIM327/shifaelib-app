@@ -4,7 +4,7 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import useSessionStore from '@/stores/patient/sessions';
 import { Patient } from '@/lib/types/patients';
 import { COLORS, NON_SPECIFIED_SERVICE } from '@/lib/constants';
-import { CalendarSession } from '@/lib/types/patients/sessions';
+import { CalendarSession, Session } from '@/lib/types/patients/sessions';
 import { Banknote, Clock, PencilIcon, Stethoscope, Trash2, UserRound, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CreateOrUpdatePatientForm } from '@/components/dashboard/patients/forms/CreateOrUpdatePatientForm';
@@ -15,6 +15,7 @@ import { UserHoverCard } from '@/components/dashboard/user/components/UserHoverC
 import { PatientHoverCard } from '@/components/dashboard/patients/components/PatientHoverCard';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import sessions from '@/stores/patient/sessions';
 
 export const ViewAgendaSessionComponent = () => {
 
@@ -35,33 +36,42 @@ export const ViewAgendaSessionComponent = () => {
     })
   };
 
-  const session: CalendarSession = viewAgendaSession.data;
-  const patient = session.Treatment.patient as Patient;
-  const praticien = session.Treatment.responsible || null;
-  const service = session.Treatment.service || NON_SPECIFIED_SERVICE;
+  const handleUpdate = () => {
+    setViewAgendaSession({
+      ...viewAgendaSession,
+      type: 'update',
+      open: true
+    })
+  };
+
+  const session = viewAgendaSession.data as Session;
+  const patient = session.treatment.patient as Patient;
+  const praticien = session.treatment.responsible || null;
+  const service = session.treatment.service || NON_SPECIFIED_SERVICE;
   const color = service.color;
   const bgColor = COLORS.find(c => c.color === color)?.bgColor!;
-  const bgLightColor = COLORS.find(c => c.color === color)?.bgLightColor!;
   const textColor = COLORS.find(c => c.color === color)?.textColor!;
   const textLightColor = COLORS.find(c => c.color === color)?.textLightColor!;
   const borderColor = COLORS.find(c => c.color === color)?.borderColor!;
 
   return (
-    <AlertDialog open={viewAgendaSession.open} onOpenChange={setIsOpen}>
+    <AlertDialog open={viewAgendaSession.open && viewAgendaSession.type === 'view'} onOpenChange={setIsOpen}>
       <AlertDialogContent className={cn(`md:w-[550px] md:max-w-[850px] p-0 pb-4 border ${borderColor}`)}>
-        <div className={`flex items-center justify-between py-4 rounded-t-md relative px-2 ${bgColor} ${textLightColor}`}>
+        <div className={`flex items-center justify-between py-4 relative px-2 ${bgColor} ${textLightColor}`}>
           <Button variant={'link'} className={`${textLightColor} p-0 h-fit`} onClick={handleClose}>
             <XIcon size={15} />
           </Button>
-          <p>{service.name} ({session.Treatment.code})</p>
+          <p>{service.name} ({session.treatment.code})</p>
           <div className='flex gap-x-2'>
-            <PencilIcon size={15} />
+            <Button variant={'link'} className={`${textLightColor} p-0 h-fit`} onClick={handleUpdate}>
+              <PencilIcon size={15} />
+            </Button>
             <Trash2 size={15} />
           </div>
         </div>
         <div className="flex flex-wrap gap-y-4 mb-2 px-4">
           <div className='flex items-center gap-x-2 mb-2 w-full justify-center'>
-            <SessionStatusComponent status={session.Status} />
+            <SessionStatusComponent status={session.status} />
           </div>
           <div className="flex flex-col gap-x-4 md:w-[49%] w-full">
             <div className={`flex items-center gap-x-1 font-mono ${textColor}`}>
@@ -83,14 +93,14 @@ export const ViewAgendaSessionComponent = () => {
               <Clock size={13} />
               Horaire
             </div>
-            <p>{format(session.StartTime, "dd LLL y", { locale: fr })} {format(session.StartTime, "HH:mm", { locale: fr })} - {format(session.EndTime, "HH:mm", { locale: fr })}</p>
+            <p>{format(session.startTime, "dd LLL y", { locale: fr })} {format(session.startTime, "HH:mm", { locale: fr })} - {format(session.endTime, "HH:mm", { locale: fr })}</p>
           </div>
           <div className="flex flex-col gap-x-4 md:w-[49%] w-full">
             <div className={`flex items-center gap-x-1 font-mono ${textColor}`}>
               <Banknote size={14} />
               Tarif
             </div>
-            <p>Tarif de cette séance : {session.Tarif || '0'} MAD</p>
+            <p>Tarif de cette séance : {session.tarif || '0'} MAD</p>
           </div>
         </div>
       </AlertDialogContent>

@@ -2,12 +2,13 @@ import { Treatment } from '@/lib/types/patients/treatments';
 import { User } from '@/lib/types/users';
 import { Payment } from '@/lib/types/patients/paiments';
 import { z } from 'zod';
-import { createSessionSchema } from '@/lib/schemas/patients/sessions';
+import { createSessionSchema, updateSessionSchema } from '@/lib/schemas/patients/sessions';
 
 export type Session = {
   id: string;
   startTime: Date;
   endTime: Date;
+  duration: string;
   status: SessionStatus;
   tarif: string;
   note?: string;
@@ -33,12 +34,14 @@ export type CalendarSession = {
   StartTime: Date;
   EndTime: Date;
   Status: SessionStatus;
+  Duration: string;
   Tarif: string;
   Note?: string;
   Treatment: Treatment;
 }
 
 export type CreateSessionInput = z.infer<typeof createSessionSchema>;
+export type UpdateSessionInput = z.infer<typeof updateSessionSchema>;
 
 export type SessionStateActionType = 'SESSION_CREATED' | 'SESSION_UPDATED' | 'SESSION_DELETED';
 export type SessionStateAction = {
