@@ -186,7 +186,7 @@ export const getViewBounds = (viewType: View, date: Date) => {
   const [year, month, day] = date.toISOString().split('T')[0].split('-').map(Number);
   switch (viewType) {
     case 'Day':
-      start = new Date(Date.UTC(year, month-1, day+1, 0, 0,0));
+      start = new Date(Date.UTC(year, month-1, day, 0, 0,0));
       end = new Date(Date.UTC(year, month-1, day+1, 23, 59,59));
       break;
     case 'WorkWeek':
@@ -194,16 +194,16 @@ export const getViewBounds = (viewType: View, date: Date) => {
       end = new Date(date);
       const dayOfWorkWeek = start.getDay();
       const diffT = (dayOfWorkWeek === 0 ? 6 : dayOfWorkWeek - 1);
-      start = new Date(Date.UTC(year, month-1, day - diffT +1, 0, 0,0));
-      end = new Date(Date.UTC(year, month-1, day + (7-diffT), 23, 59,59));
+      start = new Date(Date.UTC(year, month-1, day - diffT, 0, 0,0));
+      end = new Date(Date.UTC(year, month-1, day + (6-diffT), 23, 59,59));
       break;
     case 'Week':
       start = new Date(date);
       end = new Date(date);
       const dayOfWeek = start.getDay();
       const diff = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
-      start = new Date(Date.UTC(year, month-1, day - diff+1, 0, 0,0));
-      end = new Date(Date.UTC(year, month-1, day + (7-diff), 23, 59,59));
+      start = new Date(Date.UTC(year, month-1, day - diff, 0, 0,0));
+      end = new Date(Date.UTC(year, month-1, day + (6-diff), 23, 59,59));
       break;
     case 'Month':
       start = new Date(Date.UTC(year, month-1, 1, 0, 0,0));
@@ -219,4 +219,19 @@ export const getViewBounds = (viewType: View, date: Date) => {
     from: start,
     to: end
   }
+}
+
+export const addMinutesToDate = (date: Date, minutes: string): Date => {
+  const newDate = new Date(date.getTime());
+
+  newDate.setMinutes(newDate.getMinutes() + Number(minutes));
+
+  return newDate;
+}
+
+export const convertDateUTC = (dateStr: string): Date => {
+  const [datePart, timePart] = dateStr.split('T');
+  const [year, month, day] = datePart.split('-').map(Number);
+  const [hours, minutes] = timePart.split(':').map(Number);
+  return new Date(Date.UTC(year, month - 1, day, hours, minutes));
 }

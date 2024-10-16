@@ -287,8 +287,8 @@ export const NON_SPECIFIED_SERVICE: Service = {
   id: 'xxxxx-xxxxx-xxxxx-xxxxx',
   name: 'Non Spécifié',
   color: 'stone',
-  duration: '',
-  tarif: '',
+  duration: '30',
+  tarif: '0',
   createdAt: new Date()
 }
 

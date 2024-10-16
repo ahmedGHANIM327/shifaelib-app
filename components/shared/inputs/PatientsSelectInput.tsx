@@ -8,19 +8,18 @@ import { Command, CommandEmpty, CommandItem, CommandList } from '@/components/ui
 import { cn, getFullName, removeDuplicationById } from '@/lib/utils';
 import { Patient } from '@/lib/types/patients';
 import { SearchInput } from '@/components/shared/inputs/SearchInput';
-import { getFilteredPatients } from '@/server/services/patients';
+import { searchPatients } from '@/server/services/patients';
 import { toast } from 'react-toastify';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
-import { User } from '@/lib/types/users';
 
-type UsersMultiselectInputProps = {
+type PatientSelectInputProps = {
   handleChange: (patient: Patient) => void;
   value?: Patient;
   reset?: boolean;
   disabled?: boolean;
 };
 
-export const PatientsSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset, value, disabled = false }) => {
+export const PatientsSelectInput:FC<PatientSelectInputProps> = ({ handleChange, reset, value, disabled = false }) => {
 
   const [open, setOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient>((value || {}) as Patient);
@@ -60,7 +59,7 @@ export const PatientsSelectInput:FC<UsersMultiselectInputProps> = ({ handleChang
   useEffect(() => {
     startTransition(async () => {
       try {
-        const response = await getFilteredPatients({
+        const response = await searchPatients({
           search: searchInput,
           sort: 'creation_date_desc',
           gender: 'ALL',
