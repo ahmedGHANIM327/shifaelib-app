@@ -33,6 +33,7 @@ import { CreateSessionForm } from '@/components/dashboard/patients/sessions/form
 import { Button } from '@/components/ui/button';
 import useTreatmentStore from '@/stores/patient/treatment';
 import useSessionStore from '@/stores/patient/sessions';
+import { ViewAgendaSessionComponent } from '@/components/dashboard/patients/sessions/components/ViewSessionComponent';
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
 
@@ -70,6 +71,8 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
 
   const sessionState = useSessionStore((state) => state.state);
   const resetSessionState = useSessionStore((state) => state.resetState);
+  const setViewAgendaSession = useSessionStore((state) => state.setViewAgendaSession);
+  const viewAgendaSession = useSessionStore((state) => state.viewAgendaSession);
 
   const [openCreateSession, setOpenCreateSession] = useState<CreateSessionProps>({
     open: false,
@@ -152,6 +155,13 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
   const onPopupOpen = (args: PopupOpenEventArgs) => {
     if ((args.type === 'ViewEventInfo' || args.type === 'QuickInfo' || args.type === 'Editor') && args.data!.Id) {
       args.cancel = true;
+      console.log('args', args);
+      const selectedSession = args.data as CalendarSession;
+      setViewAgendaSession({
+        open: true,
+        type: 'view',
+        data: selectedSession
+      });
     }
 
     if ((args.type === 'Editor' || args.type === 'QuickInfo') && !args.data!.Id) {
@@ -165,7 +175,6 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
   }
 
   useEffect(() => {
-    console.log('here', sessionState);
     if(sessionState) {
       if(sessionState.type === 'SESSION_CREATED') {
         const createdSession = JSON.parse(sessionState.payload) as Session;
@@ -177,6 +186,7 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
 
   return (
     <div className={`relative ${containerClassName}`}>
+      {viewAgendaSession.open && <ViewAgendaSessionComponent />}
       <CreateSessionForm data={openCreateSession} handleChange={setOpenCreateSession}/>
       {isLoading && <div
         className={`bg-gray-300 opacity-50 absolute top-0 left-0 w-full h-full z-50 flex items-center justify-center`}>

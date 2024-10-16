@@ -23,7 +23,15 @@ export const getFilteredSessions = async (filters: SessionsListingFilters): Prom
         treatment: {
           include: {
             service: true,
-            patient: true,
+            patient: {
+              include: {
+                treatments: {
+                  include: {
+                    service: true
+                  }
+                }
+              }
+            },
             responsible: true
           }
         },
