@@ -155,6 +155,52 @@ export const getFilteredPatients = async (
   }
 }
 
+export const searchPatients = async (
+  filters: PatientListingFilters,
+  pagination: PatientListingPagination
+): Promise<ServerResponse<PaginatedServerData<Patient[]>>> => {
+  try {
+    await isAuth();
+    const {
+      where,
+      orderBy
+    } = transformListingFilters(filters);
+    const skip = (pagination.page - 1) * pagination.nbItemPerPage;
+    const take = pagination.nbItemPerPage;
+    // @ts-ignore
+    const patients = (await prisma.patient.findMany({
+      take,
+      skip,
+      where,
+      orderBy,
+      include: {
+        createdByUser: true,
+        updatedByUser: true,
+        treatments: {
+          include: {
+            service: true
+          }
+        }
+      }
+    })) as Patient[];
+
+    // @ts-ignore
+    const count = await prisma.patient.count({
+      where
+    });
+    const nbPages = Math.ceil(count / pagination.nbItemPerPage);
+
+    const response = {
+      data: patients,
+      nbPages
+    };
+
+    return { ok: true, data: response };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
+  }
+}
+
 export const getPatientById = async (id: string): Promise<ServerResponse<Patient>> => {
   try {
     await isAuth();

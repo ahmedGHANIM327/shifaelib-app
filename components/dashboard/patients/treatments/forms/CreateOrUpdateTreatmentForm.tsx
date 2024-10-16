@@ -44,7 +44,6 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
 
   // state
   const setTreatmentState = useTreatmentStore((state) => state.setState);
-
   const currentUser = useUserStore((state) => state.currentUser);
 
   const [isPending, startTransition] = useTransition();

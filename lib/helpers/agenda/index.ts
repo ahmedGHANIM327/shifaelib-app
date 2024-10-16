@@ -1,8 +1,8 @@
 import { CalendarSession, Session, SessionStatus } from '@/lib/types/patients/sessions';
 import { WeekOpeningHours } from '@/lib/types';
+import { convertDateUTC } from '@/lib/utils';
 
 export const createCalendarSessions = (sessions: Session[]): CalendarSession[] => {
-
   return sessions.map((session: Session) => ({
     Id: session.id,
     StartTime: session.startTime,

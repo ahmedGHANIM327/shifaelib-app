@@ -1,7 +1,8 @@
 import { Treatment } from '@/lib/types/patients/treatments';
 import { User } from '@/lib/types/users';
 import { Payment } from '@/lib/types/patients/paiments';
-import { Service } from '@/lib/types/services';
+import { z } from 'zod';
+import { createSessionSchema } from '@/lib/schemas/patients/sessions';
 
 export type Session = {
   id: string;
@@ -35,4 +36,18 @@ export type CalendarSession = {
   Tarif: string;
   Note?: string;
   Treatment: Treatment;
+}
+
+export type CreateSessionInput = z.infer<typeof createSessionSchema>;
+
+export type SessionStateActionType = 'SESSION_CREATED' | 'SESSION_UPDATED' | 'SESSION_DELETED';
+export type SessionStateAction = {
+  type: SessionStateActionType;
+  payload: string;
+  date: Date;
+}
+
+export type CreateSessionProps = {
+  open: boolean;
+  startTime: Date;
 }

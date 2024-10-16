@@ -4,7 +4,7 @@ import { L10n, registerLicense } from '@syncfusion/ej2-base';
 import {
   DataBindingEventArgs,
   Day,
-  Inject, Month, NavigatingEventArgs,
+  Inject, Month, NavigatingEventArgs, PopupOpenEventArgs,
   ScheduleComponent,
   ViewDirective,
   ViewsDirective,
@@ -18,7 +18,7 @@ import * as numbers from 'cldr-data/main/fr/numbers.json';
 import * as timeZoneNames from 'cldr-data/main/fr/timeZoneNames.json';
 import { View } from '@syncfusion/ej2-schedule';
 import { getViewBounds } from '@/lib/utils';
-import { CalendarSession, Session, SessionsListingFilters } from '@/lib/types/patients/sessions';
+import { CalendarSession, Session, CreateSessionProps } from '@/lib/types/patients/sessions';
 import { DataManager } from '@syncfusion/ej2-data';
 import { toast } from 'react-toastify';
 import { getFilteredSessions } from '@/server/services/sessions';
@@ -29,6 +29,10 @@ import { DefaultOpeningHours } from '@/lib/constants';
 import { WeekOpeningHours } from '@/lib/types';
 import { SessionTemplate } from '@/components/dashboard/agenda/components/SessionTemplate';
 import { User } from '@/lib/types/users';
+import { CreateSessionForm } from '@/components/dashboard/patients/sessions/forms/CreateSessionForm';
+import { Button } from '@/components/ui/button';
+import useTreatmentStore from '@/stores/patient/treatment';
+import useSessionStore from '@/stores/patient/sessions';
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
 
@@ -64,6 +68,13 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
   // @ts-ignore
   registerLicense(process.env.NEXT_PUBLIC_AGENDA_API_KEY || '');
 
+  const sessionState = useSessionStore((state) => state.state);
+  const resetSessionState = useSessionStore((state) => state.resetState);
+
+  const [openCreateSession, setOpenCreateSession] = useState<CreateSessionProps>({
+    open: false,
+    startTime: new Date()
+  });
   // @ts-ignore
   const scheduleObj = useRef<ScheduleComponent>(null);
   const [dateRange, setDateRange] = useState<{from: Date; to:Date}>(getViewBounds('WorkWeek', new Date()));
@@ -138,8 +149,35 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
     }
   }
 
+  const onPopupOpen = (args: PopupOpenEventArgs) => {
+    if ((args.type === 'ViewEventInfo' || args.type === 'QuickInfo' || args.type === 'Editor') && args.data!.Id) {
+      args.cancel = true;
+    }
+
+    if ((args.type === 'Editor' || args.type === 'QuickInfo') && !args.data!.Id) {
+      args.cancel = true;
+      const startTime = args.data?.StartTime as Date;
+      setOpenCreateSession({
+        open: true,
+        startTime
+      });
+    }
+  }
+
+  useEffect(() => {
+    console.log('here', sessionState);
+    if(sessionState) {
+      if(sessionState.type === 'SESSION_CREATED') {
+        const createdSession = JSON.parse(sessionState.payload) as Session;
+        setSessions([...sessions, createdSession]);
+        resetSessionState();
+      }
+    }
+  }, [sessionState]);
+
   return (
     <div className={`relative ${containerClassName}`}>
+      <CreateSessionForm data={openCreateSession} handleChange={setOpenCreateSession}/>
       {isLoading && <div
         className={`bg-gray-300 opacity-50 absolute top-0 left-0 w-full h-full z-50 flex items-center justify-center`}>
         <LoadingSpinner className={'text-primary'} size={50} />
@@ -158,13 +196,14 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
         height={height || '85vh'}
         firstDayOfWeek={1}
         currentView={view}
+        popupOpen={onPopupOpen}
         workDays={workingDays}
         rowAutoHeight={true}
         locale='fr'
         timeScale={
           {
             interval: 30,
-            slotCount: 2,
+            slotCount: 1,
 
           }
         }>
