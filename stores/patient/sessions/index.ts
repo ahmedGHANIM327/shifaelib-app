@@ -1,10 +1,18 @@
 import { create } from 'zustand';
-import { SessionStateAction, SessionStateActionType } from '@/lib/types/patients/sessions';
+import { CalendarSession, SessionStateAction, SessionStateActionType } from '@/lib/types/patients/sessions';
+
+type ViewAgendaSessionProps = {
+  open: boolean;
+  type: 'view' | 'update' | 'delete';
+  data: CalendarSession;
+}
 
 interface SessionState {
   state: SessionStateAction | null;
   setState: (type: SessionStateActionType, payload: string) => void;
   resetState: () => void;
+  viewAgendaSession: ViewAgendaSessionProps;
+  setViewAgendaSession: (type: ViewAgendaSessionProps) => void;
 }
 
 const useSessionStore = create<SessionState>((set, get) => ({
@@ -19,7 +27,15 @@ const useSessionStore = create<SessionState>((set, get) => ({
   },
   resetState: () => {
     set({ state: null });
-  }
+  },
+  viewAgendaSession: {
+    open: false,
+    type: 'view',
+    data: {} as CalendarSession
+  },
+  setViewAgendaSession: (newViewSessionState:  ViewAgendaSessionProps) => {
+    set({ viewAgendaSession: newViewSessionState });
+  },
 }));
 
 export default useSessionStore;
