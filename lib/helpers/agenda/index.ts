@@ -9,10 +9,24 @@ export const createCalendarSessions = (sessions: Session[]): CalendarSession[] =
     EndTime: session.endTime,
     Status: session.status,
     Tarif: session.tarif,
+    Duration: session.duration,
     Note: session.note,
     Treatment: session.treatment
   }))
 };
+
+export const convertCalendarSessionToSession = (calendarSession: CalendarSession): Session => {
+  return {
+    id: calendarSession.Id,
+    startTime: calendarSession.StartTime,
+    endTime: calendarSession.EndTime,
+    duration: calendarSession.Duration,
+    status: calendarSession.Status,
+    tarif: calendarSession.Tarif,
+    note: calendarSession.Note,
+    treatment: calendarSession.Treatment
+  } as Session;
+}
 
 export const getDaySchedule = (dayIndex: number, openingHours: WeekOpeningHours): { from: string | null; to: string | null } => {
   const dayIndexes: { [key in keyof WeekOpeningHours]: number } = {
