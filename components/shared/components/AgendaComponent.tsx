@@ -33,13 +33,11 @@ import useUserStore from '@/stores/user';
 import { DefaultOpeningHours } from '@/lib/constants';
 import { WeekOpeningHours } from '@/lib/types';
 import { SessionTemplate } from '@/components/dashboard/agenda/components/SessionTemplate';
-import { User } from '@/lib/types/users';
 import { CreateSessionForm } from '@/components/dashboard/patients/sessions/forms/CreateSessionForm';
-import { Button } from '@/components/ui/button';
-import useTreatmentStore from '@/stores/patient/treatment';
 import useSessionStore from '@/stores/patient/sessions';
 import { ViewAgendaSessionComponent } from '@/components/dashboard/patients/sessions/components/ViewSessionComponent';
 import { UpdateSessionForm } from '@/components/dashboard/patients/sessions/forms/UpdateSessionForm';
+import { DeleteSessionComponent } from '@/components/dashboard/patients/sessions/components/DeleteSessionComponent';
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
 
@@ -190,6 +188,15 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
         const newSessions = removeDuplicationById([...sessions, updatedSession]);
         setSessions(newSessions);
         resetSessionState();
+      } else if (sessionState.type === 'SESSION_DELETED') {
+        const id = sessionState.payload as string;
+        const filteredSession = sessions.filter(s => s.id !== id);
+        setSessions(filteredSession);
+        setViewAgendaSession({
+          ...viewAgendaSession,
+          open: false
+        })
+        resetSessionState();
       }
     }
   }, [sessionState]);
@@ -200,6 +207,7 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
         <>
           <ViewAgendaSessionComponent />
           <UpdateSessionForm />
+          <DeleteSessionComponent />
         </>
       }
       <CreateSessionForm data={openCreateSession} handleChange={setOpenCreateSession}/>

@@ -44,6 +44,14 @@ export const ViewAgendaSessionComponent = () => {
     })
   };
 
+  const handleDelete = () => {
+    setViewAgendaSession({
+      ...viewAgendaSession,
+      type: 'delete',
+      open: true
+    })
+  };
+
   const session = viewAgendaSession.data as Session;
   const patient = session.treatment.patient as Patient;
   const praticien = session.treatment.responsible || null;
@@ -66,7 +74,9 @@ export const ViewAgendaSessionComponent = () => {
             <Button variant={'link'} className={`${textLightColor} p-0 h-fit`} onClick={handleUpdate}>
               <PencilIcon size={15} />
             </Button>
-            <Trash2 size={15} />
+            <Button variant={'link'} className={`${textLightColor} p-0 h-fit`} onClick={handleDelete}>
+              <Trash2 size={15} />
+            </Button>
           </div>
         </div>
         <div className="flex flex-wrap gap-y-4 mb-2 px-4">

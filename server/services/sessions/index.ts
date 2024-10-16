@@ -5,10 +5,11 @@ import { isAuth } from '@/server/services/common/middelwares';
 import { prisma } from '@/lib/prisma';
 import { ServerResponse } from '@/lib/types';
 import { transformSessionListingFilters } from '@/server/services/sessions/helpers';
-import { addMinutesToDate, zodValidationData } from '@/lib/utils';
+import { addMinutesToDate, isValidUUIDv4, zodValidationData } from '@/lib/utils';
 import { createSessionSchema, updateSessionSchema } from '@/lib/schemas/patients/sessions';
 import { omit } from 'ramda';
 import { UpdateSession } from 'next-auth/react';
+import { Treatment } from '@/lib/types/patients/treatments';
 
 export const getFilteredSessions = async (filters: SessionsListingFilters): Promise<ServerResponse<Session[]>> => {
   try {
@@ -162,4 +163,21 @@ export const updateSession = async (id: string, data: UpdateSessionInput): Promi
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }
-}
+};
+
+export const deleteSession = async (id: string): Promise<ServerResponse<any>> => {
+  try {
+    isValidUUIDv4(id);
+    await isAuth();
+
+    await prisma.session.delete({
+      where: {
+        id,
+      },
+    });
+
+    return { ok: true };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
+  }
+};
