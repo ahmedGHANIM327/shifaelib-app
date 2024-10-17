@@ -6,13 +6,16 @@ import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from '@
 import { cn, getFullName } from '@/lib/utils';
 import useUserStore from '@/stores/user';
 import { User } from '@/lib/types/users';
+import { COLORS } from '@/lib/constants';
+import { Checkbox } from '@/components/ui/checkbox';
 
 type UsersMultiselectInputProps = {
   handleChange: (users: User[]) => void;
   reset?: boolean;
+  modal?: boolean;
 };
 
-export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset }) => {
+export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleChange, reset, modal = true }) => {
 
   const [open, setOpen] = useState(false);
   const users = useUserStore((state) => state.cabinetUsers);
@@ -48,6 +51,34 @@ export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleCha
     setSelectedUsers([]);
   }, [reset]);
 
+  if(!modal) {
+    return (<div className="pl-2 w-full">
+      <p className={'font-mono text-primary mb-2'}>Praticiens</p>
+      <div className="w-full flex flex-col max-h-[300px] overflow-y-auto pr-2">
+        {users.map((s) => {
+          return (<div
+            key={s.id}
+            className="rounded-md flex items-center pl-2 gap-x-2 mb-2 text-sm"
+          >
+            <Checkbox
+              checked={checkUserSelected(s)}
+              onCheckedChange={(checked) => {
+                return checked
+                  ? setSelectedUsers([...selectedUsers, s])
+                  : setSelectedUsers(
+                    selectedUsers.filter(
+                      (value) => value.id !== s.id
+                    )
+                  );
+              }}
+              className={cn(`h-4 w-4`)}
+            />
+            {getFullName(s)}</div>);
+        })}
+      </div>
+    </div>)
+  }
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -55,13 +86,13 @@ export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleCha
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={"justify-between w-full"}
+          className={'justify-between w-full'}
         >
           <SelectedTypesLabel />
           <ChevronsUpDown size={13} className={'opacity-50'} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className={"p-0 min-w-[300px] w-full"}>
+      <PopoverContent className={'p-0 min-w-[300px] w-full'}>
         <Command>
           <CommandList>
             <CommandEmpty>Pas de résultats.</CommandEmpty>
@@ -70,7 +101,7 @@ export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleCha
               key={item.id}
               value={JSON.stringify(item)}
               onSelect={() => {
-                if(checkUserSelected(item)) {
+                if (checkUserSelected(item)) {
                   const newValues = selectedUsers.filter((user) => user.id != item.id);
                   setSelectedUsers(newValues);
                 } else {
@@ -80,8 +111,8 @@ export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleCha
             >
               <Check
                 className={cn(
-                  "mr-2 h-4 w-4",
-                  checkUserSelected(item) ? "opacity-100" : "opacity-0"
+                  'mr-2 h-4 w-4',
+                  checkUserSelected(item) ? 'opacity-100' : 'opacity-0'
                 )}
               />
               <div>

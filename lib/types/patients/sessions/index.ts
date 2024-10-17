@@ -22,7 +22,6 @@ export type Session = {
 }
 
 export type SessionsListingFilters = {
-  responsible: string[];
   from: Date | null;
   to: Date | null;
 }
@@ -53,4 +52,11 @@ export type SessionStateAction = {
 export type CreateSessionProps = {
   open: boolean;
   startTime: Date;
+}
+
+export type AgendaFilters = {
+  praticiens: string[];
+  patients: string[];
+  services: string[];
+  status: SessionStatus[];
 }

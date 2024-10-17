@@ -10,13 +10,15 @@ import useUserStore from '@/stores/user';
 import { User } from '@/lib/types/users';
 import { Service } from '@/lib/types/services';
 import { COLORS } from '@/lib/constants';
+import { Checkbox } from '@/components/ui/checkbox';
 
 type ServicesSelectInputProps = {
   handleChange: (service: Service[]) => void;
   reset?: boolean;
+  modal?: boolean;
 };
 
-export const ServicesMultiSelectInput:FC<ServicesSelectInputProps> = ({ handleChange, reset }) => {
+export const ServicesMultiSelectInput:FC<ServicesSelectInputProps> = ({ handleChange, reset, modal = true }) => {
 
   const [open, setOpen] = useState(false);
   const services = useUserStore((state) => state.cabinetServices);
@@ -52,6 +54,40 @@ export const ServicesMultiSelectInput:FC<ServicesSelectInputProps> = ({ handleCh
     setSelectedServices([] as Service[]);
   }, [reset]);
 
+  if(!modal) {
+    return (<div className='pl-2 w-full'>
+      <p className={'font-mono text-primary mb-2'}>Services</p>
+      <div className="w-full flex flex-col max-h-[300px] overflow-y-auto pr-2">
+        {services.map((s) => {
+          //const color = getColorsWithLevels(s.color);
+          const bgColor = COLORS.find(c => c.color === s.color)?.bgColor;
+          const bgLightColor = COLORS.find(c => c.color === s.color)?.bgLightColor;
+          const borderColor = COLORS.find(c => c.color === s.color)?.borderColor;
+          const textLightColor = COLORS.find(c => c.color === s.color)?.textLightColor;
+          return (<div
+            key={s.id}
+            className="rounded-md flex items-center pl-2 gap-x-2 mb-2 text-sm"
+          >
+            <Checkbox
+              checked={checkServiceSelected(s)}
+              onCheckedChange={(checked) => {
+                return checked
+                  ? setSelectedServices([...selectedServices, s])
+                  : setSelectedServices(
+                    selectedServices.filter(
+                      (value) => value.id !== s.id
+                    )
+                  );
+              }}
+              className={cn(`h-4 w-4 ${textLightColor} ${borderColor} ${bgLightColor} data-[state=checked]:${bgColor}`,
+                checkServiceSelected(s) && `${bgColor}`)}
+            />
+            {s.name}</div>);
+        })}
+      </div>
+    </div>)
+  }
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -59,13 +95,13 @@ export const ServicesMultiSelectInput:FC<ServicesSelectInputProps> = ({ handleCh
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={"justify-between w-full"}
+          className={'justify-between w-full'}
         >
           <SelectedTypesLabel />
           <ChevronsUpDown size={13} className={'opacity-50'} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className={"p-0 min-w-[300px] w-full"}>
+      <PopoverContent className={'p-0 min-w-[300px] w-full'}>
         <Command>
           <CommandList>
             <CommandEmpty>Pas de résultats.</CommandEmpty>
@@ -76,7 +112,7 @@ export const ServicesMultiSelectInput:FC<ServicesSelectInputProps> = ({ handleCh
                 key={item.id}
                 value={JSON.stringify(item)}
                 onSelect={() => {
-                  if(checkServiceSelected(item)) {
+                  if (checkServiceSelected(item)) {
                     const newValues = selectedServices.filter((s) => s.id != item.id);
                     setSelectedServices(newValues);
                   } else {
@@ -86,7 +122,7 @@ export const ServicesMultiSelectInput:FC<ServicesSelectInputProps> = ({ handleCh
               >
                 <Check
                   className={cn(
-                    "mr-2 h-4 w-4",
+                    'mr-2 h-4 w-4',
                     checkServiceSelected(item) ? "opacity-100" : "opacity-0"
                   )}
                 />

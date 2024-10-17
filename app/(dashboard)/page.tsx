@@ -25,9 +25,14 @@ const Page = () => {
         loadingClassName={'w-full h-[70vh] bg-white'}
       >
         <AgendaComponent
-          users={[currentUser.id]}
           views={['Day', 'WorkWeek']}
           height={'70vh'}
+          filters={{
+            patients: [],
+            praticiens: [currentUser.id],
+            services: [],
+            status: []
+          }}
         />
       </LoadingSection>
     </div>
