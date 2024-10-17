@@ -8,8 +8,6 @@ import { transformSessionListingFilters } from '@/server/services/sessions/helpe
 import { addMinutesToDate, isValidUUIDv4, zodValidationData } from '@/lib/utils';
 import { createSessionSchema, updateSessionSchema } from '@/lib/schemas/patients/sessions';
 import { omit } from 'ramda';
-import { UpdateSession } from 'next-auth/react';
-import { Treatment } from '@/lib/types/patients/treatments';
 
 export const getFilteredSessions = async (filters: SessionsListingFilters): Promise<ServerResponse<Session[]>> => {
   try {

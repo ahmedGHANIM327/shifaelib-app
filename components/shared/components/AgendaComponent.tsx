@@ -18,14 +18,14 @@ import * as numbers from 'cldr-data/main/fr/numbers.json';
 import * as timeZoneNames from 'cldr-data/main/fr/timeZoneNames.json';
 import { View } from '@syncfusion/ej2-schedule';
 import { getViewBounds, removeDuplicationById } from '@/lib/utils';
-import { CalendarSession, Session, CreateSessionProps } from '@/lib/types/patients/sessions';
+import { CalendarSession, Session, CreateSessionProps, AgendaFilters } from '@/lib/types/patients/sessions';
 import { DataManager } from '@syncfusion/ej2-data';
 import { toast } from 'react-toastify';
 import { getFilteredSessions } from '@/server/services/sessions';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import {
   convertCalendarSessionToSession,
-  createCalendarSessions,
+  createCalendarSessions, filterAgendaSessions,
   getDaySchedule,
   getWorkingDays
 } from '@/lib/helpers/agenda';
@@ -63,13 +63,13 @@ L10n.load({
 });
 
 type AgendaComponentProps = {
-  users: string[];
   views: View[];
   height?: string;
   containerClassName?: string;
+  filters: AgendaFilters;
 };
 
-export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height, containerClassName }) => {
+export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, containerClassName, filters }) => {
   // @ts-ignore
   registerLicense(process.env.NEXT_PUBLIC_AGENDA_API_KEY || '');
 
@@ -89,6 +89,7 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
   const [date, setDate] = useState<Date>(new Date());
   const [isLoading, startTransition] = useTransition();
   const [sessions, setSessions] = useState<Session[]>([] as Session[]);
+  const [filteredSessions, setFilteredSessions] = useState<Session[]>([] as Session[]);
   const [dataManager, setDataManager] = useState(new DataManager(createCalendarSessions(sessions)));
   const openingHours = useUserStore((state) => state.currentCabinet.openingHours) as WeekOpeningHours || DefaultOpeningHours;
   // @ts-ignore
@@ -103,8 +104,7 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
       try {
         const response = await getFilteredSessions({
           from: dateRange.from,
-          to: dateRange.to,
-          responsible: users
+          to: dateRange.to
         });
         if(response.ok && response?.data) {
           setSessions(response.data);
@@ -120,8 +120,15 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ users, views, height,
   }, [dateRange]);
 
   useEffect(() => {
-    setDataManager(new DataManager(createCalendarSessions(sessions)));
-  }, [sessions]);
+    console.log('here filtered sessions', filteredSessions);
+    setDataManager(new DataManager(createCalendarSessions(filteredSessions)));
+  }, [filteredSessions]);
+
+  useEffect(() => {
+    console.log('here filters', filters);
+    console.log('sessions', filterAgendaSessions(sessions, filters));
+    setFilteredSessions(filterAgendaSessions(sessions, filters));
+  }, [filters, sessions]);
 
   const EventTemplate = (event: CalendarSession) => {
     const currentCalendarView = (scheduleObj?.current && scheduleObj?.current.currentView) || 'WorkWeek';

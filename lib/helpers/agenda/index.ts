@@ -1,4 +1,4 @@
-import { CalendarSession, Session, SessionStatus } from '@/lib/types/patients/sessions';
+import { AgendaFilters, CalendarSession, Session, SessionStatus } from '@/lib/types/patients/sessions';
 import { WeekOpeningHours } from '@/lib/types';
 import { convertDateUTC } from '@/lib/utils';
 
@@ -78,4 +78,14 @@ export const convertSessionStatus = (status: SessionStatus, lower: boolean = fal
     case "CANCELED":
       return 'Annulée'
   }
+}
+
+export const filterAgendaSessions = (sessions: Session[], filters: AgendaFilters): Session[] => {
+  return sessions.filter((session: Session) => {
+    const praticiensFiltreParam = filters.praticiens.length === 0 || filters.praticiens.includes((session.treatment?.responsible?.id || '') as string);
+    const patientsFiltreParam = filters.patients.length === 0 || filters.patients.includes(session.treatment.patient.id as string);
+    const servicesFiltreParam = filters.services.length === 0 || filters.services.includes((session.treatment?.service?.id || '') as string);
+    const statusFiltreParam = filters.status.length === 0 || filters.status.includes(session.status);
+    return praticiensFiltreParam && patientsFiltreParam && servicesFiltreParam && statusFiltreParam;
+  });
 }
