@@ -1,14 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
 import {Ban, CheckCheck, Hourglass, X} from "lucide-react";
-import { cn, getFullName } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { SessionStatus } from '@/lib/types/patients/sessions';
 import { convertSessionStatus } from '@/lib/helpers/agenda';
 import { Checkbox } from '@/components/ui/checkbox';
 
 export const SessionStatusFilter:FC<{
   handleChange: (status: SessionStatus[]) => void;
+  reset?: boolean;
 }> = ({
-  handleChange
+  handleChange,
+  reset
       }) => {
 
   const [selectedStatus, setSelectedStatus] = useState<SessionStatus[]>([]);
@@ -22,31 +24,39 @@ export const SessionStatusFilter:FC<{
       id: 0,
       status: 'SCHEDULED',
       icon: <Hourglass size={11}/>,
-      className: 'bg-blue-50 text-blue-600 border-blue-600',
-      selectedClassName: 'text-blue-50 bg-blue-600',
+      className: 'text-blue-600',
+      checkboxNonSelected: 'text-blue-50 border-blue-600 bg-blue-50 data-[state=checked]:bg-blue-600',
+      checkboxSelected: 'bg-blue-600'
     },
     {
       id: 1,
       status: 'ATTENDED',
       icon: <CheckCheck size={11}/>,
-      className: 'bg-green-50 text-green-600 border-green-600',
-      selectedClassName: 'text-green-50 bg-green-600',
+      className: 'text-green-600',
+      checkboxNonSelected: 'text-green-50 border-green-600 bg-green-50 data-[state=checked]:bg-green-600',
+      checkboxSelected: 'bg-green-600'
     },
     {
       id: 2,
       status: 'NOT_ATTENDED',
       icon: <Ban size={11}/>,
-      className: 'bg-gray-50 text-gray-500 border-gray-500',
-      selectedClassName: 'text-gray-50 bg-gray-500',
+      className: 'text-gray-500',
+      checkboxNonSelected: 'text-gray-50 border-gray-500 bg-gray-50 data-[state=checked]:bg-gray-500',
+      checkboxSelected: 'bg-gray-500'
     },
     {
       id: 3,
       status: 'CANCELED',
       icon: <X size={11}/>,
-      className: 'bg-red-50 text-red-500 border-red-500',
-      selectedClassName: 'text-red-50 bg-red-500',
+      className: 'text-red-500',
+      checkboxNonSelected: 'text-red-50 border-red-500 bg-red-50 data-[state=checked]:bg-red-500',
+      checkboxSelected: 'bg-red-500'
     }
   ];
+
+  useEffect(() => {
+    setSelectedStatus([] as SessionStatus[]);
+  }, [reset]);
 
   useEffect(() => {
     handleChange(selectedStatus);
@@ -59,7 +69,7 @@ export const SessionStatusFilter:FC<{
         {items.map((s) => {
           return (<div
             key={s.id}
-            className="rounded-md flex items-center pl-2 gap-x-2 mb-2 text-sm"
+            className={`rounded-md flex items-center pl-2 gap-x-2 mb-2 text-sm ${s.className}`}
           >
             <Checkbox
               checked={checkStatusSelected(s.status as SessionStatus)}
@@ -72,9 +82,12 @@ export const SessionStatusFilter:FC<{
                     )
                   );
               }}
-              className={cn(`h-4 w-4`)}
+              className={cn(`h-4 w-4 ${s.checkboxNonSelected}`,
+                checkStatusSelected(s.status as SessionStatus) && s.checkboxSelected)}
             />
-            {convertSessionStatus(s.status as SessionStatus)}</div>);
+            {convertSessionStatus(s.status as SessionStatus)}
+            {s.icon}
+          </div>);
         })}
       </div>
     </div>

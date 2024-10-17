@@ -120,13 +120,10 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
   }, [dateRange]);
 
   useEffect(() => {
-    console.log('here filtered sessions', filteredSessions);
     setDataManager(new DataManager(createCalendarSessions(filteredSessions)));
   }, [filteredSessions]);
 
   useEffect(() => {
-    console.log('here filters', filters);
-    console.log('sessions', filterAgendaSessions(sessions, filters));
     setFilteredSessions(filterAgendaSessions(sessions, filters));
   }, [filters, sessions]);
 

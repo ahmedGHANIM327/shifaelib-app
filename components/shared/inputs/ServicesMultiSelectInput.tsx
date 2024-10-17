@@ -59,7 +59,6 @@ export const ServicesMultiSelectInput:FC<ServicesSelectInputProps> = ({ handleCh
       <p className={'font-mono text-primary mb-2'}>Services</p>
       <div className="w-full flex flex-col max-h-[300px] overflow-y-auto pr-2">
         {services.map((s) => {
-          //const color = getColorsWithLevels(s.color);
           const bgColor = COLORS.find(c => c.color === s.color)?.bgColor;
           const bgLightColor = COLORS.find(c => c.color === s.color)?.bgLightColor;
           const borderColor = COLORS.find(c => c.color === s.color)?.borderColor;
