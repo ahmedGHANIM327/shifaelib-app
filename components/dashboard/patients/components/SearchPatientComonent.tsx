@@ -63,8 +63,7 @@ export const SearchPatientComonent = () => {
         {!isDialogOpen && <SearchInput
           handleSearch={()=>console.log('')}
           label={'Rechercher un patient'}
-          className={'w-fit min-w-[300px] cursor-pointer text-primary placeholder:text-primary border-primary'}
-          iconeClassName={'text-primary'}
+          className={'w-fit min-w-[300px] cursor-pointer bg-accent'}
         />}
       </DialogTrigger>
       <DialogContent className={cn("md:w-[550px] md:max-w-[850px] p-0")}>

@@ -20,6 +20,7 @@ export const getFilteredSessions = async (filters: SessionsListingFilters): Prom
     const sessions = (await prisma.session.findMany({
       where,
       include: {
+        payments: true,
         treatment: {
           include: {
             service: true,
@@ -40,7 +41,6 @@ export const getFilteredSessions = async (filters: SessionsListingFilters): Prom
 
     return { ok: true, data: sessions };
   } catch (error: any) {
-    console.log('error', error);
     return { ok: false, error: error.message as string };
   }
 }

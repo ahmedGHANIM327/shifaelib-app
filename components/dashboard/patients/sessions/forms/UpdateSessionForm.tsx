@@ -47,8 +47,6 @@ export const UpdateSessionForm = () => {
     }
   });
 
-  console.log('heeree', viewAgendaSession);
-
   const handleClose = () => {
     setViewAgendaSession({
       ...viewAgendaSession,
@@ -107,7 +105,6 @@ export const UpdateSessionForm = () => {
   }
 
   useEffect(() => {
-    console.log('here we are here', viewAgendaSession);
     if(viewAgendaSession.open) {
       const p = viewAgendaSession.data.treatment.patient as Patient;
       setPatient(p);

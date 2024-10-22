@@ -11,7 +11,8 @@ export const createCalendarSessions = (sessions: Session[]): CalendarSession[] =
     Tarif: session.tarif,
     Duration: session.duration,
     Note: session.note,
-    Treatment: session.treatment
+    Treatment: session.treatment,
+    Payments: session.payments || []
   }))
 };
 
@@ -24,7 +25,8 @@ export const convertCalendarSessionToSession = (calendarSession: CalendarSession
     status: calendarSession.Status,
     tarif: calendarSession.Tarif,
     note: calendarSession.Note,
-    treatment: calendarSession.Treatment
+    treatment: calendarSession.Treatment,
+    payments: calendarSession.Payments
   } as Session;
 }
 
