@@ -12,8 +12,11 @@ export type Session = {
   status: SessionStatus;
   tarif: string;
   note?: string;
+  treatmentId: string;
   createdAt: Date;
-  updatedAt: Date;
+  createdBy?: string;
+  updatedAt?: Date;
+  updatedBy?: string;
   //
   payments?: Payment[];
   treatment: Treatment;

@@ -289,6 +289,7 @@ export const NON_SPECIFIED_SERVICE: Service = {
   color: 'stone',
   duration: '30',
   tarif: '0',
-  createdAt: new Date()
+  createdAt: new Date(),
+  cabinetId: ''
 }
 

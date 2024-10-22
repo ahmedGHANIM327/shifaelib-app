@@ -7,7 +7,9 @@ export type Payment = {
   amount: string;
   date: Date;
   createdAt: Date;
+  createdBy?: string;
   updatedAt: Date;
+  updatedBy?: string;
   treatmentId: string;
   sessionId?: string;
   //

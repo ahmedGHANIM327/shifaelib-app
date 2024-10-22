@@ -3,6 +3,8 @@ import { createOrUpdateTreatmentSchema } from '@/lib/schemas/patients/treatments
 import { Patient } from '@prisma/client';
 import { User } from '@/lib/types/users';
 import { Service } from '@/lib/types/services';
+import { Session } from '@/lib/types/patients/sessions';
+import { Payment } from '@/lib/types/patients/paiments';
 
 export type Treatment = {
   id: string;
@@ -11,9 +13,16 @@ export type Treatment = {
   status: TreatmentStatus;
   data: object;
   createdAt: Date;
+  createdBy?: string;
   updatedAt?: Date;
+  updatedBy?: string;
+  serviceId?: string;
+  responsibleId?: string;
+  patientId: string;
   // relations
-  patient: Patient;
+  sessions?: Session[];
+  payments?: Payment[];
+  patient?: Patient;
   responsible?: User;
   service?: Service;
   createdByUser?: User;
