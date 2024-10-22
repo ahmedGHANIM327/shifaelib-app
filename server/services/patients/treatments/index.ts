@@ -123,7 +123,6 @@ export const updateTreatment = async (
 
     return { ok: true, data: updatedTreatment };
   } catch (error: any) {
-    console.log('error', error);
     return { ok: false, error: error.message as string };
   }
 };

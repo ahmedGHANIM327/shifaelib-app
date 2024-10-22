@@ -124,7 +124,6 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
   }, [filteredSessions]);
 
   useEffect(() => {
-    console.log('sessions', sessions);
     setFilteredSessions(filterAgendaSessions(sessions, filters));
   }, [filters, sessions]);
 
