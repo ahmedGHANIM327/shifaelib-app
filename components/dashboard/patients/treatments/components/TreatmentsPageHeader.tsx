@@ -1,7 +1,4 @@
 import React from 'react';
-import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { CreateOrUpdatePatientForm } from '@/components/dashboard/patients/forms/CreateOrUpdatePatientForm';
 import {
   CreateOrUpdateTreatmentForm
 } from '@/components/dashboard/patients/treatments/forms/CreateOrUpdateTreatmentForm';

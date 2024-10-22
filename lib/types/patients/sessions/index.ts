@@ -37,6 +37,7 @@ export type CalendarSession = {
   Tarif: string;
   Note?: string;
   Treatment: Treatment;
+  Payments: Payment[];
 }
 
 export type CreateSessionInput = z.infer<typeof createSessionSchema>;

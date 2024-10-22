@@ -8,9 +8,25 @@ export type Payment = {
   date: Date;
   createdAt: Date;
   updatedAt: Date;
+  treatmentId: string;
+  sessionId?: string;
   //
   session?: Session;
   treatment: Treatment;
   createdByUser?: User;
   updatedByUser?: User;
+}
+
+export type CreateOrUpdatePaymentInput = {
+  amount: string;
+  date: string;
+  treatmentId: string;
+  sessionId?: string;
+}
+
+export type PaymentStateActionType = 'PAYMENT_CREATED' | 'PAYMENT_UPDATED' | 'PAYMENT_DELETED';
+export type PaymentStateAction = {
+  type: PaymentStateActionType;
+  payload: string;
+  date: Date;
 }

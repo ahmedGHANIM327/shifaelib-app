@@ -119,6 +119,14 @@
   @apply bg-transparent border-none;
 }
 
+td.e-time-cells.e-time-slots {
+  @apply flex justify-center !font-semibold;
+}
+
+.e-current-time {
+  @apply !font-semibold;
+}
+
 /* ========================================== REACT-DATEPICKER STYLES */
 .datePicker {
   width: 100%;
