@@ -23,7 +23,7 @@ const Page = () => {
       <AgendaComponent
         filters={filters}
         views={['Day', 'WorkWeek', 'Week', 'Month']}
-        height={'90vh'}
+        height={'95vh'}
         containerClassName={'md:col-span-5 col-span-1'}
       />
     </div>
