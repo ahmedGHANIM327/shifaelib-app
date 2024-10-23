@@ -5,7 +5,7 @@ import { TextIcon } from 'lucide-react';
 export const FichePatientComments = () => {
   const comments = [];
   return (
-    <div className='mt-2'>
+    <div className='p-4'>
       <div className='flex items-center justify-between mb-2'>
         <CardTitle
           title={'Commentaires'}

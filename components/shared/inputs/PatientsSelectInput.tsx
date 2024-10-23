@@ -8,21 +8,21 @@ import { Command, CommandEmpty, CommandItem, CommandList } from '@/components/ui
 import { cn, getFullName, removeDuplicationById } from '@/lib/utils';
 import { Patient } from '@/lib/types/patients';
 import { SearchInput } from '@/components/shared/inputs/SearchInput';
-import { searchPatients } from '@/server/services/patients';
+import { searchPatientsV2 } from '@/server/services/patients';
 import { toast } from 'react-toastify';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 
 type PatientSelectInputProps = {
   handleChange: (patient: Patient) => void;
-  value?: Patient;
   reset?: boolean;
   disabled?: boolean;
+  selectedId?: string;
 };
 
-export const PatientsSelectInput:FC<PatientSelectInputProps> = ({ handleChange, reset, value, disabled = false }) => {
+export const PatientsSelectInput:FC<PatientSelectInputProps> = ({ handleChange, reset, disabled = false, selectedId }) => {
 
   const [open, setOpen] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState<Patient>((value || {}) as Patient);
+  const [selectedPatient, setSelectedPatient] = useState<Patient>({} as Patient);
   const [searchInput, setSearchInput] = useState<string>('');
   const [isLoading, startTransition] = useTransition();
   const [patients, setPatients] = useState<Patient[]>([] as Patient[]);
@@ -59,23 +59,9 @@ export const PatientsSelectInput:FC<PatientSelectInputProps> = ({ handleChange, 
   useEffect(() => {
     startTransition(async () => {
       try {
-        const response = await searchPatients({
-          search: searchInput,
-          sort: 'creation_date_desc',
-          gender: 'ALL',
-          createdBy: []
-        }, {
-          page: 1,
-          changed: true,
-          nbItemPerPage: 5
-        });
+        const response = await searchPatientsV2(searchInput, 5, selectedId);
         if(response.ok && response?.data) {
-          if(value && searchInput === '') {
-            setPatients(removeDuplicationById([value, ...response.data.data]));
-          }
-          else {
-            setPatients(response.data.data);
-          }
+          setPatients(response.data);
         } else {
           // @ts-ignore
           toast.error('Une erreur est servenue. Veuillez réessayer.');
@@ -87,6 +73,13 @@ export const PatientsSelectInput:FC<PatientSelectInputProps> = ({ handleChange, 
     });
   }, [searchInput]);
 
+  useEffect(() => {
+    if(selectedId && !selectedPatient.id) {
+      const currentPatient = patients.find(p=> p.id === selectedId) || {} as Patient;
+      setSelectedPatient(currentPatient);
+    }
+  }, [patients]);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -94,7 +87,7 @@ export const PatientsSelectInput:FC<PatientSelectInputProps> = ({ handleChange, 
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={"justify-between w-full disabled:opacity-100"}
+          className={"justify-between w-full disabled:opacity-100 disabled:cursor-pointer"}
           disabled={disabled}
         >
           <SelectedTypesLabel />

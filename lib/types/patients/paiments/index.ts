@@ -6,13 +6,15 @@ export type Payment = {
   id: string;
   amount: string;
   date: Date;
+  createdBy?: string;
   createdAt: Date;
+  updatedBy?: string;
   updatedAt: Date;
   treatmentId: string;
   sessionId?: string;
   //
   session?: Session;
-  treatment: Treatment;
+  treatment?: Treatment;
   createdByUser?: User;
   updatedByUser?: User;
 }

@@ -28,7 +28,7 @@ import useUserStore from '@/stores/user';
 
 type CreateOrUpdateTreatmentProps = {
   type: 'create' | 'update';
-  treatmment?: Treatment;
+  treatment?: Treatment;
   iconeClassName?: string;
   patient?: Patient;
   isFiche?: boolean;
@@ -36,7 +36,7 @@ type CreateOrUpdateTreatmentProps = {
 
 export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   type = 'create',
-  treatmment,
+  treatment,
   iconeClassName,
                                                                                patient,
   isFiche = false
@@ -54,8 +54,8 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   const form = useForm<z.infer<typeof createOrUpdateTreatmentSchema>>({
     resolver: zodResolver(createOrUpdateTreatmentSchema),
     defaultValues: type === 'update' ? {
-      nbSessions: treatmment && treatmment.nbSessions!,
-      status: treatmment && treatmment?.status!
+      nbSessions: treatment && treatment.nbSessions!,
+      status: treatment && treatment?.status!
     } : {}
   });
 
@@ -74,7 +74,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
   }
 
   const handleUpdate = async (data: CreateOrUpdateTreatmentInput) => {
-    const response = await updateTreatment(treatmment?.id as string, data);
+    const response = await updateTreatment(treatment?.id as string, data);
     if(response.ok) {
       setTreatmentState('TREATMENT_UPDATED', JSON.stringify(response.data));
       setIsDialogOpen(false);
@@ -153,8 +153,8 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
       if (type === 'create') {
         setAdditionalData(selectedService.config);
       } else {
-        if(treatmment && treatmment?.service?.id! === selectedService?.id) {
-          const treatmentData = treatmment?.data! as AdditionalQuestionType[];
+        if(treatment && treatment?.service?.id! === selectedService?.id) {
+          const treatmentData = treatment?.data! as AdditionalQuestionType[];
           const serviceData = selectedService.config as AdditionalQuestionType[];
           const combine = removeDuplicationById([...serviceData, ...treatmentData]);
           setAdditionalData(combine);
@@ -222,7 +222,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                       <FormControl>
                         <UsersSelectInput
                           handleChange={field.onChange}
-                          value={treatmment?.responsible || currentUser}
+                          value={treatment?.responsible || currentUser}
                         />
                       </FormControl>
                       <FormMessage />
@@ -238,7 +238,7 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                       <FormControl>
                         <ServicesSelectInput
                           handleChange={field.onChange}
-                          value={treatmment?.service}
+                          value={treatment?.service}
                         />
                       </FormControl>
                       <FormMessage />
@@ -254,8 +254,8 @@ export const CreateOrUpdateTreatmentForm:FC<CreateOrUpdateTreatmentProps> = ({
                       <FormControl>
                         <PatientsSelectInput
                           handleChange={field.onChange}
-                          value={(treatmment?.patient || patient || {}) as Patient}
                           disabled={isFiche}
+                          selectedId={treatment?.patientId || patient?.id || ''}
                         />
                       </FormControl>
                       <FormMessage />
