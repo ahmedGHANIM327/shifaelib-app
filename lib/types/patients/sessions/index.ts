@@ -3,6 +3,7 @@ import { User } from '@/lib/types/users';
 import { Payment } from '@/lib/types/patients/paiments';
 import { z } from 'zod';
 import { createSessionSchema, updateSessionSchema } from '@/lib/schemas/patients/sessions';
+import { Patient } from '@prisma/client';
 
 export type Session = {
   id: string;
@@ -12,8 +13,11 @@ export type Session = {
   status: SessionStatus;
   tarif: string;
   note?: string;
+  treatmentId: string;
   createdAt: Date;
-  updatedAt: Date;
+  createdBy?: string;
+  updatedAt?: Date;
+  updatedBy?: string;
   //
   payments?: Payment[];
   treatment: Treatment;
@@ -53,6 +57,9 @@ export type SessionStateAction = {
 export type CreateSessionProps = {
   open: boolean;
   startTime: Date;
+  fiche?: boolean;
+  patientId?: string;
+  treatmentId?: string;
 }
 
 export type AgendaFilters = {

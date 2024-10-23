@@ -5,7 +5,6 @@ import { CardTitle } from '@/components/shared/components/CardTitle';
 import {
   CreateOrUpdateTreatmentForm
 } from '@/components/dashboard/patients/treatments/forms/CreateOrUpdateTreatmentForm';
-import { Card } from '@/components/ui/card';
 import { Treatment } from '@/lib/types/patients/treatments';
 import { TreatmentFullCard } from '@/components/dashboard/patients/treatments/components/TreatmentFullCard';
 import { Patient } from '@/lib/types/patients';
@@ -47,7 +46,7 @@ export const FichePatientTreatments:FC<{ patient: Patient }> = ({ patient }) => 
   }, [treatmentState]);
 
   return (
-    <div className='mt-2'>
+    <div className='mt-2 p-4'>
       <div className='flex items-center justify-between mb-2'>
         <CardTitle
           title={'Traitements'}

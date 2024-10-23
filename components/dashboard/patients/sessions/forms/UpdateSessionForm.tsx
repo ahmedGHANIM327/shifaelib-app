@@ -105,13 +105,6 @@ export const UpdateSessionForm = () => {
   }
 
   useEffect(() => {
-    if(viewAgendaSession.open) {
-      const p = viewAgendaSession.data.treatment.patient as Patient;
-      setPatient(p);
-    }
-  }, [viewAgendaSession.open, viewAgendaSession.type]);
-
-  useEffect(() => {
     const patientTreatments = patient?.treatments || [];
     setTreatments(patientTreatments);
   }, [patient]);
@@ -175,7 +168,7 @@ export const UpdateSessionForm = () => {
                 <FormItem className={'md:w-[49%] w-[100%] gap-y-0 z-100'}>
                   <FormLabel>Patient</FormLabel>
                   <FormControl>
-                    <PatientsSelectInput handleChange={setPatient} value={patient}/>
+                    <PatientsSelectInput handleChange={setPatient} selectedId={viewAgendaSession.data.treatment.patientId}/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -273,7 +266,7 @@ export const UpdateSessionForm = () => {
                 className="md:px-16 md:w-fit w-full gap-x-2"
                 disabled={isPending}
               >
-                Créer
+                Mettre à jour
                 {isPending && <LoadingSpinner size={14} />}
               </Button>
             </DialogFormActions>

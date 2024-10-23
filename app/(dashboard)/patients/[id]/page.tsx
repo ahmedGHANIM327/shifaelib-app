@@ -7,7 +7,6 @@ import { Patient } from '@/lib/types/patients';
 import { getPatientById } from '@/server/services/patients';
 import { toast } from 'react-toastify';
 import { FichePatientHeader } from '@/components/dashboard/patients/fiche-components/FichePatientHeader';
-import { FichePatientProfile } from '@/components/dashboard/patients/fiche-components/FichePatientProfile';
 import { FichePatientTreatments } from '@/components/dashboard/patients/fiche-components/FichePatientTreatments';
 import { FichePatientComments } from '@/components/dashboard/patients/fiche-components/FichePatientComments';
 import { Card } from '@/components/ui/card';
@@ -31,6 +30,7 @@ const Page = () => {
       try {
         setError(null);
         const response = await getPatientById(id);
+        console.log('here', response.data);
         if(response.ok && response?.data) {
           setPatient(response.data as Patient);
         } else {
@@ -79,15 +79,10 @@ const Page = () => {
       <FichePatientHeader
         patient={patient}
       />
-      <div className='m-2 p-2 flex flex-col gap-y-4'>
-        <FichePatientProfile
-          patient={patient}
-        />
-        <FichePatientTreatments
-          patient={patient}
-        />
-        <FichePatientComments />
-      </div>
+      <FichePatientTreatments
+        patient={patient}
+      />
+      <FichePatientComments />
     </Card>
   );
 };

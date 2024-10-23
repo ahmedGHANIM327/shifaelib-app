@@ -34,7 +34,7 @@ export const TreatmentPhoneCard:FC<TreatmentPhoneCardProps> = ({ treatment }) =>
       <div className={cn(bgColor, textColor, 'text-center py-2 rounded-t-md relative')}>
         {treatment.code}
         <div className={'flex w-fit gap-x-2 absolute top-[50%] right-2 -translate-y-[50%]'}>
-          <CreateOrUpdateTreatmentForm type={'update'} treatmment={treatment} iconeClassName={textColor} />
+          <CreateOrUpdateTreatmentForm type={'update'} treatment={treatment} iconeClassName={textColor} />
           <DeleteTreatment treatment={treatment} iconeClassName={textColor} />
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import { PaginatedServerData, ServerResponse } from '@/lib/types';
 import { isAuth } from '@/server/services/common/middelwares';
-import { isValidUUIDv4, zodValidationData } from '@/lib/utils';
+import { isValidUUIDv4, removeDuplicationById, zodValidationData } from '@/lib/utils';
 import { prisma } from '@/lib/prisma';
 import {
   CreateOrUpdatePatientInput,
@@ -158,7 +158,7 @@ export const getFilteredPatients = async (
 export const searchPatients = async (
   filters: PatientListingFilters,
   pagination: PatientListingPagination
-): Promise<ServerResponse<PaginatedServerData<Patient[]>>> => {
+): Promise<ServerResponse<Patient[]>> => {
   try {
     await isAuth();
     const {
@@ -184,22 +184,117 @@ export const searchPatients = async (
       }
     })) as Patient[];
 
-    // @ts-ignore
-    const count = await prisma.patient.count({
-      where
-    });
-    const nbPages = Math.ceil(count / pagination.nbItemPerPage);
-
-    const response = {
-      data: patients,
-      nbPages
-    };
-
-    return { ok: true, data: response };
+    return { ok: true, data: patients };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }
 }
+
+export const searchPatientsV2 = async (
+  search: string,
+  take: number,
+  id?: string,
+): Promise<ServerResponse<Patient[]>> => {
+  try {
+    await isAuth();
+
+    let patients: Patient[] = []
+    if(search !== '') {
+      if(id && id !== '') {
+        const selectedPatient = (await prisma.patient.findUnique({
+          where: {
+            id
+          },
+          include: {
+            createdByUser: true,
+            updatedByUser: true,
+            treatments: {
+              include: {
+                service: true
+              }
+            }
+          }
+        })) as Patient;
+        patients = (await prisma.patient.findMany({
+          take,
+          where: {
+            OR: [
+              {
+                firstName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                lastName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
+          include: {
+            createdByUser: true,
+            updatedByUser: true,
+            treatments: {
+              include: {
+                service: true
+              }
+            }
+          }
+        })) as Patient[];
+        patients = removeDuplicationById([selectedPatient, ...patients]);
+      } else {
+        patients = (await prisma.patient.findMany({
+          take,
+          where: {
+            OR: [
+              {
+                firstName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                lastName: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+            ],
+          },
+          include: {
+            createdByUser: true,
+            updatedByUser: true,
+            treatments: {
+              include: {
+                service: true
+              }
+            }
+          }
+        })) as Patient[];
+      }
+    } else {
+      patients = (await prisma.patient.findMany({
+        take,
+        include: {
+          createdByUser: true,
+          updatedByUser: true,
+          treatments: {
+            include: {
+              service: true
+            }
+          }
+        }
+      })) as Patient[];
+    }
+    return { ok: true, data: patients };
+  } catch (error: any) {
+    return { ok: false, error: error.message as string };
+  }
+}
+
+
 
 export const getPatientById = async (id: string): Promise<ServerResponse<Patient>> => {
   try {
@@ -215,7 +310,19 @@ export const getPatientById = async (id: string): Promise<ServerResponse<Patient
         updatedByUser: true,
         treatments: {
           include: {
-            patient: true,
+            sessions: {
+              include: {
+                payments: true,
+                treatment: {
+                  include: {
+                    service: true,
+                    patient: true,
+                    responsible: true
+                  }
+                },
+              }
+            },
+            payments: true,
             service: true,
             responsible: true,
             createdByUser: true,

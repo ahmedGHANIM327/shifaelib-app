@@ -1,6 +1,7 @@
 import { Cabinet } from '@/lib/types/cabinet';
 import { z } from 'zod';
 import { createServiceSchema } from '@/lib/schemas/services';
+import { Treatment } from '@/lib/types/patients/treatments';
 
 export type Service = {
   id: string;
@@ -13,6 +14,7 @@ export type Service = {
   updatedAt?: Date;
   //Relations
   cabinet?: Cabinet;
+  treatments?: Treatment[];
 };
 
 export type AdditionalQuestionType = {

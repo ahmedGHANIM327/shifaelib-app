@@ -46,7 +46,8 @@ export const CreateSessionForm:FC<CreateSessionFormProps> = ({
     resolver: zodResolver(createSessionSchema),
     defaultValues: {
       startTime: format(data.startTime, 'yyyy-MM-dd HH:mm').replace(' ', 'T'),
-      note: ''
+      note: '',
+      treatmentId: data.treatmentId || ''
     }
   });
 
@@ -92,7 +93,9 @@ export const CreateSessionForm:FC<CreateSessionFormProps> = ({
   useEffect(() => {
     if(data.open) {
       // @ts-ignore
-      form.setValue('startTime', format(data.startTime, 'yyyy-MM-dd HH:mm').replace(' ', 'T'))
+      form.setValue('startTime', format(data.startTime, 'yyyy-MM-dd HH:mm').replace(' ', 'T'));
+      // @ts-ignore
+      form.setValue('treatmentId', data.treatmentId || '');
     }
   }, [data]);
 
@@ -112,6 +115,7 @@ export const CreateSessionForm:FC<CreateSessionFormProps> = ({
 
   useEffect(() => {
     if(treatmentSelectedId && treatmentSelectedId !== '') {
+      console.log('here selected treatment', treatmentSelectedId);
       const selectedTreatmentService = treatments.find(t => t.id === treatmentSelectedId)?.service || NON_SPECIFIED_SERVICE;
       setSelectedService(selectedTreatmentService as Service);
     }
@@ -119,6 +123,7 @@ export const CreateSessionForm:FC<CreateSessionFormProps> = ({
 
   useEffect(() => {
     if(selectedService.id) {
+      console.log('here', selectedService);
       // @ts-ignore
       form.setValue('tarif', selectedService.tarif);
       // @ts-ignore
@@ -155,7 +160,7 @@ export const CreateSessionForm:FC<CreateSessionFormProps> = ({
                 <FormItem className={'md:w-[49%] w-[100%] gap-y-0 z-100'}>
                   <FormLabel>Patient</FormLabel>
                   <FormControl>
-                    <PatientsSelectInput handleChange={setPatient} />
+                    <PatientsSelectInput handleChange={setPatient} disabled={data.fiche} selectedId={data.patientId}/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -165,9 +170,9 @@ export const CreateSessionForm:FC<CreateSessionFormProps> = ({
                   render={({ field }) => (
                     <FormItem className="md:w-[49%] w-[100%] gap-y-0">
                       <FormLabel>Traitement</FormLabel>
-                      <Select onValueChange={field.onChange} disabled={!patient.id}>
+                      <Select onValueChange={field.onChange} disabled={!patient.id} value={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className='disabled:opacity-100 disabled:cursor-default'>
                             <SelectValue placeholder="Traitement" />
                           </SelectTrigger>
                         </FormControl>
@@ -190,7 +195,7 @@ export const CreateSessionForm:FC<CreateSessionFormProps> = ({
                   render={({ field }) => (
                     <FormItem className="md:w-[49%] w-[100%] gap-y-0">
                       <FormLabel>Durée de la séance</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value || '30'}>
+                      <Select onValueChange={field.onChange} value={field.value || selectedService.duration || '30'}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Durée moyenne de la séance" />
