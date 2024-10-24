@@ -9,6 +9,10 @@ import { AgendaComponent } from '@/components/shared/components/AgendaComponent'
 const Page = () => {
   const { isCurrentUserLoading, currentUser } = useUserStore((state) => state);
 
+  if(isCurrentUserLoading || !currentUser || !currentUser.id) {
+    return <>Loading...</>
+  }
+
   return (
     <div>
       <LoadingSection
