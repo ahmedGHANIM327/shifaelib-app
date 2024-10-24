@@ -11,6 +11,10 @@ import { FichePatientTreatments } from '@/components/dashboard/patients/fiche-co
 import { FichePatientComments } from '@/components/dashboard/patients/fiche-components/FichePatientComments';
 import { Card } from '@/components/ui/card';
 import usePatientStore from '@/stores/patient';
+import useSessionStore from '@/stores/patient/sessions';
+import { ViewAgendaSessionComponent } from '@/components/dashboard/patients/sessions/components/ViewSessionComponent';
+import { UpdateSessionForm } from '@/components/dashboard/patients/sessions/forms/UpdateSessionForm';
+import { DeleteSessionComponent } from '@/components/dashboard/patients/sessions/components/DeleteSessionComponent';
 
 const Page = () => {
 
@@ -20,6 +24,8 @@ const Page = () => {
 
   const patientState = usePatientStore((state) => state.state);
   const resetPatientState = usePatientStore((state) => state.resetState);
+
+  const viewAgendaSession = useSessionStore((state) => state.viewAgendaSession);
 
   const [isLoading, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -74,6 +80,8 @@ const Page = () => {
     </div>;
   }
 
+  console.log('here viewAgendaSession', viewAgendaSession);
+
   return (
     <Card>
       <FichePatientHeader
@@ -83,6 +91,13 @@ const Page = () => {
         patient={patient}
       />
       <FichePatientComments />
+      {viewAgendaSession.open &&
+        <>
+          <ViewAgendaSessionComponent />
+          <UpdateSessionForm />
+          <DeleteSessionComponent />
+        </>
+      }
     </Card>
   );
 };

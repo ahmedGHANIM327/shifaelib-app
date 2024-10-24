@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { createOrUpdatePaymentSchema } from '@/lib/schemas/patients/paiments';
-import { CreateOrUpdatePaymentInput } from '@/lib/types/patients/paiments';
+import { CreateOrUpdatePaymentInput, Payment } from '@/lib/types/patients/paiments';
 import { DialogFormActions } from '@/components/shared/components/DialogFormActions';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
@@ -29,6 +29,7 @@ type CreateOrUpdatePaimentsFormProps = {
   date?: Date;
   amount?: string;
   type: 'create' | 'update';
+  isFiche?: boolean;
 }
 
 export const CreateOrUpdatePaimentsForm:FC<CreateOrUpdatePaimentsFormProps> = (props) => {
@@ -38,7 +39,8 @@ export const CreateOrUpdatePaimentsForm:FC<CreateOrUpdatePaimentsFormProps> = (p
     sessionId,
     date,
     amount,
-    type = 'create'
+    type = 'create',
+    isFiche = false
   } = props;
 
   const setPaymentState = usePaymentStore((state) => state.setState);
@@ -57,7 +59,11 @@ export const CreateOrUpdatePaimentsForm:FC<CreateOrUpdatePaimentsFormProps> = (p
   const handleCreate = async (data: CreateOrUpdatePaymentInput) => {
     const response = await createPayment(data);
     if(response.ok) {
-      setPaymentState('PAYMENT_CREATED', JSON.stringify(response.data));
+      if(sessionId) {
+        setPaymentState('SESSION_PAYMENT_CREATED', response.data as Payment);
+      } else {
+        setPaymentState('PAYMENT_CREATED', response.data as Payment);
+      }
       form.reset();
       setIsDialogOpen(false);
       // @ts-ignore
@@ -87,10 +93,16 @@ export const CreateOrUpdatePaimentsForm:FC<CreateOrUpdatePaimentsFormProps> = (p
   }
 
   const TriggerComponent = () => {
-    return (<AlertDialogTrigger type={'button'} className={cn('bg-primary text-white flex w-full items-center justify-center gap-x-2 py-2 rounded-md text-sm font-medium')}>
-      <Plus size={17}/>
-      Ajouter un paiement
-    </AlertDialogTrigger>)
+    if(isFiche) {
+      return (<AlertDialogTrigger type={'button'} className={cn('gap-x-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2')}>
+        <Plus size={13}/>
+      </AlertDialogTrigger>)
+    } else {
+      return (<AlertDialogTrigger type={'button'} className={cn('bg-primary text-white flex w-full items-center justify-center gap-x-2 py-2 rounded-md text-sm font-medium')}>
+        <Plus size={17}/>
+        Ajouter un paiement
+      </AlertDialogTrigger>)
+    }
   }
 
   // @ts-ignore

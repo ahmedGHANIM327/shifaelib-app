@@ -74,7 +74,7 @@ export const UpdateSessionForm = () => {
       try {
         const response = await updateSession(viewAgendaSession.data.id, data as UpdateSessionInput);
         if(response.ok) {
-          setSessionState('SESSION_UPDATED', JSON.stringify(response.data));
+          setSessionState('SESSION_UPDATED', response.data as Session);
           setViewAgendaSession({
             ...viewAgendaSession,
             data: response.data as Session,

@@ -10,6 +10,7 @@ import { LoadingSpinner } from '@/components/shared/components/LoadingSpinner';
 import { cn } from '@/lib/utils';
 import usePaymentStore from '@/stores/patient/payment';
 import { deletePayment } from '@/server/services/patients/paiments';
+import { Payment } from '@/lib/types/patients/paiments';
 
 export const DeletePayment:FC<{ id: string }> = ({ id }) => {
 
@@ -24,7 +25,11 @@ export const DeletePayment:FC<{ id: string }> = ({ id }) => {
       try {
         const response = await deletePayment(id);
         if(response.ok) {
-          setPaymentState('PAYMENT_DELETED', id);
+          if(response.data!.sessionId) {
+            setPaymentState('SESSION_PAYMENT_DELETED', response.data as Payment);
+          } else {
+            setPaymentState('PAYMENT_DELETED', response.data as Payment);
+          }
           setIsOpen(false);
           // @ts-ignore
           toast.success('Paiement supprimé avec succès');
