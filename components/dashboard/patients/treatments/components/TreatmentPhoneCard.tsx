@@ -38,7 +38,7 @@ export const TreatmentPhoneCard:FC<TreatmentPhoneCardProps> = ({ treatment }) =>
           <DeleteTreatment treatment={treatment} iconeClassName={textColor} />
         </div>
       </div>
-      <div className="grid grid-cols-3 xs:grid-cols-1 p-4 gap-y-4 gap-x-6 text-sm pb-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 p-4 gap-y-4 gap-x-6 text-sm pb-1">
         <div className="flex flex-col justify-between">
           <p className="font-semibold">Nombre de séances</p>
           <p>{treatment.nbSessions}</p>

@@ -99,6 +99,7 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
   const openingHours = useUserStore((state) => state.currentCabinet.openingHours) as WeekOpeningHours || DefaultOpeningHours;
   // @ts-ignore
   const workingDays = getWorkingDays(openingHours);
+  const WEEK_VIEWS: View[] = ['Day', 'WorkWeek', 'Week'];
 
   useEffect(() => {
     setDateRange(getViewBounds(view, date));
@@ -139,14 +140,13 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
 
   const onNavigating = (args: NavigatingEventArgs): void => {
     if(args.action === 'date') {
-      setDate(args.currentDate as Date);
+      const date = args.currentDate as Date;
+      setDate(date);
     }
     if(args.action === 'view') {
-      if( args.currentView === 'WorkWeek' ) {
-        setView('Week');
-      } else {
-        setView(args.currentView as View);
-      }
+      const view = args.currentView as View;
+      const converted_view: View = WEEK_VIEWS.includes(view) ? 'WorkWeek' : view;
+      setView(converted_view);
     }
   }
 

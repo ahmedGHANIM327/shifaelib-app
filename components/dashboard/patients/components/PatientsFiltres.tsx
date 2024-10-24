@@ -90,7 +90,7 @@ export const PatientsFiltres:FC<PatientsFiltresProps> = ({ filters, setFilters }
             handleSearch={handleSearch}
           />
         </div>
-        <div className='md:flex grid grid-cols-3 md:w-fit w-full gap-2'>
+        <div className='md:flex grid grid-cols-2 sm:grid-cols-3 md:w-fit w-full gap-2'>
           <Button onClick={handleReset} type={'reset'} variant='link' className='px-0 underline'>
             <RotateCcw size={15}/>
             Réinitialiser
@@ -100,7 +100,7 @@ export const PatientsFiltres:FC<PatientsFiltresProps> = ({ filters, setFilters }
             Filtrer
           </Button>
           <Select onValueChange={handleSort} value={filters.sort}>
-            <SelectTrigger className='bg-white'>
+            <SelectTrigger className='bg-white col-span-2 sm:col-span-1'>
               <SelectValue placeholder="Trier par" />
             </SelectTrigger>
             <SelectContent>

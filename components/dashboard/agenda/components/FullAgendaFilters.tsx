@@ -57,8 +57,8 @@ export const FullAgendaFilters:FC<{filters: AgendaFilters; setFilters: (newFilte
     <div>
       <div className='md:hidden bg-white h-full flex items-center gap-x-2 py-1 pl-2'>
         <Sheet>
-          <SheetTrigger type={'button'} className="md:w-full flex gap-x-2 md:hidden border border-primary bg-transparent hover:bg-accent hover:text-primary text-primary rounded-md items-center px-4 py-2">
-            <SlidersHorizontal size={18}/>
+          <SheetTrigger type={'button'} className="md:w-full flex gap-x-2 md:hidden border border-primary bg-transparent hover:bg-accent hover:text-primary text-primary rounded-md items-center px-4 py-2 h-8">
+            <SlidersHorizontal size={15}/>
             Filtrer
           </SheetTrigger>
           <SheetContent side={"right"} className='w-[70%] !max-w-[270px] md:hidden'>
