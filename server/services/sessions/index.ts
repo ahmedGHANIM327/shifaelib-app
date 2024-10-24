@@ -33,6 +33,7 @@ export const getFilteredSessions = async (filters: SessionsListingFilters): Prom
 
     return { ok: true, data: sessions };
   } catch (error: any) {
+    console.log('getFilteredSessions',getFilteredSessions);
     return { ok: false, error: error.message as string };
   }
 }
