@@ -38,6 +38,8 @@ import useSessionStore from '@/stores/patient/sessions';
 import { ViewAgendaSessionComponent } from '@/components/dashboard/patients/sessions/components/ViewSessionComponent';
 import { UpdateSessionForm } from '@/components/dashboard/patients/sessions/forms/UpdateSessionForm';
 import { DeleteSessionComponent } from '@/components/dashboard/patients/sessions/components/DeleteSessionComponent';
+import usePaymentStore from '@/stores/patient/payment';
+import { Payment } from '@/lib/types/patients/paiments';
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
 
@@ -77,6 +79,9 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
   const resetSessionState = useSessionStore((state) => state.resetState);
   const setViewAgendaSession = useSessionStore((state) => state.setViewAgendaSession);
   const viewAgendaSession = useSessionStore((state) => state.viewAgendaSession);
+
+  const paymentState = usePaymentStore((state) => state.state);
+  const resetPaymentState = usePaymentStore((state) => state.resetState);
 
   const [openCreateSession, setOpenCreateSession] = useState<CreateSessionProps>({
     open: false,
@@ -184,11 +189,11 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
   useEffect(() => {
     if(sessionState) {
       if(sessionState.type === 'SESSION_CREATED') {
-        const createdSession = JSON.parse(sessionState.payload) as Session;
+        const createdSession = sessionState.payload as Session;
         setSessions([...sessions, createdSession]);
         resetSessionState();
       } else if (sessionState.type === 'SESSION_UPDATED') {
-        const updatedSession = JSON.parse(sessionState.payload) as Session;
+        const updatedSession = sessionState.payload as Session;
         const newSessions = removeDuplicationById([...sessions, updatedSession]);
         setSessions(newSessions);
         resetSessionState();
@@ -196,14 +201,41 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
         const id = sessionState.payload as string;
         const filteredSession = sessions.filter(s => s.id !== id);
         setSessions(filteredSession);
-        setViewAgendaSession({
-          ...viewAgendaSession,
-          open: false
-        })
         resetSessionState();
       }
     }
   }, [sessionState]);
+
+  useEffect(() => {
+    if(paymentState) {
+      const payment = paymentState.payload as Payment;
+      const sessionId = payment.sessionId!;
+      const session = sessions.find(s => s.id === sessionId);
+      if(session) {
+        let updatedSession = session;
+        if(paymentState.type === 'SESSION_PAYMENT_CREATED') {
+          updatedSession = {
+            ...session,
+            payments: [payment]
+          } as Session;
+        } else if(paymentState.type === 'SESSION_PAYMENT_DELETED') {
+          updatedSession = {
+            ...session,
+            payments: []
+          } as Session;
+        }
+        const updatedSessions = sessions.map((session) => session.id === updatedSession.id ? updatedSession : session);
+        if(viewAgendaSession.data.id === sessionId) {
+          setViewAgendaSession({
+            ...viewAgendaSession,
+            data: updatedSession
+          })
+        }
+        setSessions(updatedSessions);
+      }
+      resetPaymentState();
+    }
+  }, [paymentState]);
 
   return (
     <div className={`relative ${containerClassName}`}>

@@ -16,11 +16,13 @@ export const createPayment = async (data: CreateOrUpdatePaymentInput): Promise<S
       data: {
         amount: data.amount,
         date: new Date(data.date),
-        session: {
-          connect: {
-            id: data.sessionId
+        ...(data.sessionId && {
+          session: {
+            connect: {
+              id: data.sessionId
+            }
           }
-        },
+        }),
         treatment: {
           connect: {
             id: data.treatmentId
@@ -45,18 +47,18 @@ export const createPayment = async (data: CreateOrUpdatePaymentInput): Promise<S
   }
 }
 
-export const deletePayment = async (id: string): Promise<ServerResponse<any>> => {
+export const deletePayment = async (id: string): Promise<ServerResponse<Payment>> => {
   try {
     isValidUUIDv4(id);
     await isAuth();
 
-    await prisma.payment.delete({
+    const deletedPayment = (await prisma.payment.delete({
       where: {
         id,
       },
-    });
+    })) as Payment;
 
-    return { ok: true };
+    return { ok: true, data: deletedPayment };
   } catch (error: any) {
     return { ok: false, error: error.message as string };
   }

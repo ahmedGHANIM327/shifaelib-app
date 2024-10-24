@@ -24,7 +24,7 @@ import { Treatment } from '@/lib/types/patients/treatments';
 import { cn } from '@/lib/utils';
 import { Service } from '@/lib/types/services';
 import { createSession } from '@/server/services/sessions';
-import { CreateSessionInput, CreateSessionProps } from '@/lib/types/patients/sessions';
+import { CreateSessionInput, CreateSessionProps, Session } from '@/lib/types/patients/sessions';
 import useSessionStore from '@/stores/patient/sessions';
 
 type CreateSessionFormProps = {
@@ -63,7 +63,7 @@ export const CreateSessionForm:FC<CreateSessionFormProps> = ({
       try {
         const response = await createSession(data as CreateSessionInput);
         if(response.ok) {
-          setSessionState('SESSION_CREATED', JSON.stringify(response.data));
+          setSessionState('SESSION_CREATED', response.data as Session);
           // @ts-ignore
           toast.success('Séance crée avec succès');
         } else {
@@ -115,15 +115,13 @@ export const CreateSessionForm:FC<CreateSessionFormProps> = ({
 
   useEffect(() => {
     if(treatmentSelectedId && treatmentSelectedId !== '') {
-      console.log('here selected treatment', treatmentSelectedId);
       const selectedTreatmentService = treatments.find(t => t.id === treatmentSelectedId)?.service || NON_SPECIFIED_SERVICE;
       setSelectedService(selectedTreatmentService as Service);
     }
-  }, [treatmentSelectedId]);
+  }, [treatmentSelectedId, treatments]);
 
   useEffect(() => {
     if(selectedService.id) {
-      console.log('here', selectedService);
       // @ts-ignore
       form.setValue('tarif', selectedService.tarif);
       // @ts-ignore
@@ -195,7 +193,7 @@ export const CreateSessionForm:FC<CreateSessionFormProps> = ({
                   render={({ field }) => (
                     <FormItem className="md:w-[49%] w-[100%] gap-y-0">
                       <FormLabel>Durée de la séance</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value || selectedService.duration || '30'}>
+                      <Select onValueChange={field.onChange} value={field.value || selectedService.duration}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Durée moyenne de la séance" />

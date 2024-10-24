@@ -1,35 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { cn, getFullName } from '@/lib/utils';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 import useSessionStore from '@/stores/patient/sessions';
 import { Patient } from '@/lib/types/patients';
 import { COLORS, NON_SPECIFIED_SERVICE } from '@/lib/constants';
-import { CalendarSession, Session } from '@/lib/types/patients/sessions';
+import { Session } from '@/lib/types/patients/sessions';
 import { Banknote, Clock, CoinsIcon, PencilIcon, Stethoscope, Trash2, UserRound, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { CreateOrUpdatePatientForm } from '@/components/dashboard/patients/forms/CreateOrUpdatePatientForm';
-import { DeletePatient } from '@/components/dashboard/patients/components/DeletePatient';
 import { AlertDialog, AlertDialogContent } from '@/components/ui/alert-dialog';
 import { SessionStatusComponent } from '@/components/dashboard/agenda/components/SessionStatusComponent';
 import { UserHoverCard } from '@/components/dashboard/user/components/UserHoverCard';
 import { PatientHoverCard } from '@/components/dashboard/patients/components/PatientHoverCard';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import sessions from '@/stores/patient/sessions';
 import { CreateOrUpdatePaimentsForm } from '@/components/dashboard/patients/paiments/forms/CreateOrUpdatePaimentsForm';
 import { DeletePayment } from '@/components/dashboard/patients/paiments/components/DeletePayment';
-import usePaymentStore from '@/stores/patient/payment';
 import { Payment } from '@/lib/types/patients/paiments';
 
 export const ViewAgendaSessionComponent = () => {
 
   const viewAgendaSession = useSessionStore((state) => state.viewAgendaSession);
-  const setSessionState = useSessionStore((state) => state.setState);
   const setViewAgendaSession = useSessionStore((state) => state.setViewAgendaSession);
-  const resetSessionState = useSessionStore((state) => state.resetState);
-
-  const paymentState = usePaymentStore((state) => state.state);
-  const resetPaymentState = usePaymentStore((state) => state.resetState);
 
   const [payments, setPayments] = useState<Payment[]>([]);
 
@@ -76,37 +66,6 @@ export const ViewAgendaSessionComponent = () => {
   useEffect(() => {
     setPayments(viewAgendaSession.data.payments || []);
   }, [viewAgendaSession.data]);
-
-  useEffect(() => {
-    if(paymentState) {
-      if(paymentState.type === 'PAYMENT_DELETED') {
-        const updatedSession = {
-          ...viewAgendaSession.data,
-          payments: []
-        } as Session;
-        setSessionState('SESSION_UPDATED', JSON.stringify(updatedSession));
-        setViewAgendaSession({
-          ...viewAgendaSession,
-          data: updatedSession,
-          type: 'view'
-        });
-        resetPaymentState();
-      } else if( paymentState.type === 'PAYMENT_CREATED') {
-        const createdPayment = JSON.parse(paymentState.payload) as Payment;
-        const updatedSession = {
-          ...viewAgendaSession.data,
-          payments: [createdPayment]
-        } as Session;
-        setSessionState('SESSION_UPDATED', JSON.stringify(updatedSession));
-        setViewAgendaSession({
-          ...viewAgendaSession,
-          data: updatedSession,
-          type: 'view'
-        });
-        resetPaymentState();
-      }
-    }
-  }, [paymentState]);
 
   return (
     <AlertDialog open={viewAgendaSession.open && viewAgendaSession.type === 'view'} onOpenChange={setIsOpen}>

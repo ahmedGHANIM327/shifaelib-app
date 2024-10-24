@@ -50,7 +50,7 @@ export type UpdateSessionInput = z.infer<typeof updateSessionSchema>;
 export type SessionStateActionType = 'SESSION_CREATED' | 'SESSION_UPDATED' | 'SESSION_DELETED';
 export type SessionStateAction = {
   type: SessionStateActionType;
-  payload: string;
+  payload: Session | string;
   date: Date;
 }
 

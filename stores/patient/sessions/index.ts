@@ -9,7 +9,7 @@ type ViewAgendaSessionProps = {
 
 interface SessionState {
   state: SessionStateAction | null;
-  setState: (type: SessionStateActionType, payload: string) => void;
+  setState: (type: SessionStateActionType, payload: Session | string) => void;
   resetState: () => void;
   viewAgendaSession: ViewAgendaSessionProps;
   setViewAgendaSession: (type: ViewAgendaSessionProps) => void;
@@ -17,7 +17,7 @@ interface SessionState {
 
 const useSessionStore = create<SessionState>((set, get) => ({
   state: null,
-  setState: (type:  SessionStateActionType, payload: string) => {
+  setState: (type:  SessionStateActionType, payload: Session | string) => {
     const newState = {
       type,
       payload,

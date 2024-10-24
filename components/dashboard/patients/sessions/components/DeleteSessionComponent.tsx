@@ -58,6 +58,8 @@ export const DeleteSessionComponent = () => {
       } catch (error: any) {
         // @ts-ignore
         toast.error('Une erreur est servenue. Veuillez réessayer.');
+      } finally {
+        handleClose();
       }
     });
   }

@@ -26,9 +26,9 @@ export type CreateOrUpdatePaymentInput = {
   sessionId?: string;
 }
 
-export type PaymentStateActionType = 'PAYMENT_CREATED' | 'PAYMENT_UPDATED' | 'PAYMENT_DELETED';
+export type PaymentStateActionType = 'PAYMENT_CREATED' | 'PAYMENT_UPDATED' | 'PAYMENT_DELETED' | 'SESSION_PAYMENT_CREATED' | 'SESSION_PAYMENT_DELETED';
 export type PaymentStateAction = {
   type: PaymentStateActionType;
-  payload: string;
+  payload: Payment | string;
   date: Date;
 }
