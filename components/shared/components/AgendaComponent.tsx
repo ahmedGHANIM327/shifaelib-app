@@ -107,6 +107,7 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
   useEffect(() => {
     startTransition(async () => {
       try {
+        console.log('here dateRange', dateRange);
         const response = await getFilteredSessions({
           from: dateRange.from,
           to: dateRange.to
