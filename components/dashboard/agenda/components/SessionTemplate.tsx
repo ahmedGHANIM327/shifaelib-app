@@ -59,8 +59,8 @@ export const SessionTemplate = (event: CalendarSession, view: View) => {
           {format(new Date(event.StartTime), "HH:mm", { locale: fr })} - {format(new Date(event.EndTime), "HH:mm", { locale: fr })}
         </p>
       </div>
-      <div className='flex justify-end'>
-        <UserHoverCard user={praticien} isAvatar={true} avatarClassName={`${bgColor} ${textLightColor} text-xs`}/>
+      <div className='flex justify-end praticien_avatar'>
+        <UserHoverCard user={praticien} isAvatar={true} avatarClassName={`${bgColor} ${textLightColor} text-[0.6rem]`}/>
       </div>
     </div>
   );

@@ -127,6 +127,10 @@ td.e-time-cells.e-time-slots {
   @apply !font-semibold;
 }
 
+.praticien_avatar > a > span {
+  @apply w-8 h-8;
+}
+
 /* ========================================== REACT-DATEPICKER STYLES */
 .datePicker {
   width: 100%;
