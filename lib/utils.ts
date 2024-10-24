@@ -185,10 +185,6 @@ export const getViewBounds = (viewType: View, date: Date) => {
   let end: Date;
   const [year, month, day] = date.toISOString().split('T')[0].split('-').map(Number);
   switch (viewType) {
-    case 'Day':
-      start = new Date(Date.UTC(year, month-1, day, 0, 0,0));
-      end = new Date(Date.UTC(year, month-1, day+1, 23, 59,59));
-      break;
     case 'WorkWeek':
       start = new Date(date);
       end = new Date(date);
@@ -196,14 +192,6 @@ export const getViewBounds = (viewType: View, date: Date) => {
       const diffT = (dayOfWorkWeek === 0 ? 6 : dayOfWorkWeek - 1);
       start = new Date(Date.UTC(year, month-1, day - diffT, 0, 0,0));
       end = new Date(Date.UTC(year, month-1, day + (6-diffT), 23, 59,59));
-      break;
-    case 'Week':
-      start = new Date(date);
-      end = new Date(date);
-      const dayOfWeek = start.getDay();
-      const diff = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
-      start = new Date(Date.UTC(year, month-1, day - diff, 0, 0,0));
-      end = new Date(Date.UTC(year, month-1, day + (6-diff), 23, 59,59));
       break;
     case 'Month':
       start = new Date(Date.UTC(year, month-1, 1, 0, 0,0));
