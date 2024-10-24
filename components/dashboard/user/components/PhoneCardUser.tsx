@@ -9,7 +9,7 @@ import { DeleteUser } from '@/components/dashboard/user/components/DeleteUser';
 
 export const PhoneCardUser:FC<{user: User}> = ({ user }) => {
   return (
-    <Card className='w-full rounded-md p-2 relative'>
+    <Card className='w-full rounded-md p-2 relative overflow-hidden'>
       <div className='flex flex-col items-center gap-x-3 mt-2'>
         <Avatar className="cursor-pointer">
           <AvatarImage src={''} alt="profile-photo" />
@@ -17,19 +17,15 @@ export const PhoneCardUser:FC<{user: User}> = ({ user }) => {
             {getInitials(user)}
           </AvatarFallback>
         </Avatar>
-        <h2 className="mt-2 my-1 font-semibold">{getFullName(user)}</h2>
+        <h2 className="mt-2 my-1 font-semibold text-[15px]">{getFullName(user, true)}</h2>
         <UserAccountStatus status={user.status} />
       </div>
-      <div className='flex justify-between mt-4 px-2 gap-y-2 gap-x-4 flex-wrap'>
-        <div>
-          <p className='font-semibold'>Genre</p>
-          <p>{convertGender(user.gender)}</p>
-        </div>
-        <div>
+      <div className='flex justify-between mt-4 px-2 gap-y-2 gap-x-4 flex-wrap sm:text-sm'>
+        <div className={'text-sm'}>
           <p className='font-semibold'>E-mail</p>
           <p>{user.email}</p>
         </div>
-        <div>
+        <div className={'text-sm'}>
           <p className='font-semibold'>Phone</p>
           <p>{user.phone || '-'}</p>
         </div>
