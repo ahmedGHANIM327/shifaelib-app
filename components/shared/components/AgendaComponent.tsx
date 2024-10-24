@@ -114,10 +114,12 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
         if(response.ok && response?.data) {
           setSessions(response.data);
         } else {
+          console.log('error', response.error);
           // @ts-ignore
           toast.error('Une erreur est servenue. Veuillez réessayer.');
         }
       } catch (error: any) {
+        console.log('error', error);
         // @ts-ignore
         toast.error('Une erreur est servenue. Veuillez réessayer.');
       }
