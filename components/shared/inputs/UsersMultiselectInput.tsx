@@ -8,6 +8,8 @@ import useUserStore from '@/stores/user';
 import { User } from '@/lib/types/users';
 import { COLORS } from '@/lib/constants';
 import { Checkbox } from '@/components/ui/checkbox';
+import { UserAccountStatus } from '@/components/dashboard/user/components/UserAccountStatus';
+import { UserStatus } from '@/lib/types';
 
 type UsersMultiselectInputProps = {
   handleChange: (users: User[]) => void;
@@ -32,7 +34,7 @@ export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleCha
     if(selectedUsers && selectedUsers.length !== 0) {
       return (<p className='flex items-center gap-x-2'>
         {selectedUsers.length > 0 && <div className='flex gap-x-1'>
-          <span className="bg-primary text-white rounded-md py-0 p-2 flex justify-center items-center">{getFullName(selectedUsers[0])}</span>
+          <span className="bg-primary text-white rounded-md py-0 p-2 flex justify-center items-center">{getFullName(selectedUsers[0], true)}</span>
           {selectedUsers.length > 1 && <span className="bg-primary text-white rounded-md py-0 p-2 flex justify-center items-center">+{selectedUsers.length-1}</span>}
         </div>}
       </p>)
@@ -116,8 +118,11 @@ export const UsersMultiselectInput:FC<UsersMultiselectInputProps> = ({ handleCha
                 )}
               />
               <div>
-                <p>{getFullName(item)}</p>
-                <p className='text-xs'>{item.email}</p>
+                <p className={'flex gap-x-2 items-center'}>
+                  {getFullName(item, true)}
+                  <UserAccountStatus status={item.status as UserStatus} onlyPoint={true} />
+                </p>
+                <p className="text-xs">{item.email}</p>
               </div>
             </CommandItem>)}
           </CommandList>

@@ -8,6 +8,8 @@ import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from '@
 import { cn, getFullName } from '@/lib/utils';
 import useUserStore from '@/stores/user';
 import { User } from '@/lib/types/users';
+import { UserStatus } from '@/lib/types';
+import { UserAccountStatus } from '@/components/dashboard/user/components/UserAccountStatus';
 
 type UsersMultiselectInputProps = {
   handleChange: (users: User) => void;
@@ -29,7 +31,7 @@ export const UsersSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, 
   const SelectedTypesLabel = () => {
     if(selectedUser.id) {
       return (<p className='flex items-center gap-x-2'>
-        {getFullName(selectedUser)}
+        {getFullName(selectedUser, true)}
       </p>)
     } else {
       return (<p className='flex items-center font-light'>
@@ -84,8 +86,11 @@ export const UsersSelectInput:FC<UsersMultiselectInputProps> = ({ handleChange, 
                 )}
               />
               <div>
-                <p>{getFullName(item)}</p>
-                <p className='text-xs'>{item.email}</p>
+                <p className={'flex gap-x-2 items-center'}>
+                  {getFullName(item, true)}
+                  <UserAccountStatus status={item.status as UserStatus} onlyPoint={true}/>
+                </p>
+                <p className="text-xs">{item.email}</p>
               </div>
             </CommandItem>)}
           </CommandList>
