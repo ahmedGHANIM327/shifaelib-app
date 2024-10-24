@@ -113,7 +113,7 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
           to: dateRange.to
         });
         console.log('response', response);
-        if(response.ok && response?.data) {
+        if(response && response.ok && response?.data) {
           setSessions(response.data);
         } else {
           console.log('error', response.error);
