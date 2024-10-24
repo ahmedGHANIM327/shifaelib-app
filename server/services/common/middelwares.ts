@@ -3,7 +3,8 @@ import { Session } from 'next-auth';
 
 export const isAuth = async (): Promise<Session> => {
   const session = await auth();
-  if (!session?.user || !session.user.id) {
+  console.log('session', session);
+  if (!session || !session?.user || !session.user.id) {
     throw new Error('INVALID_SESSION');
   }
   return session;

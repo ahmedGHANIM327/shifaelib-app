@@ -11,7 +11,9 @@ import { omit } from 'ramda';
 
 export const getFilteredSessions = async (filters: SessionsListingFilters): Promise<ServerResponse<Session[]>> => {
   try {
-    await isAuth();
+    const session = await isAuth();
+    if(!session) throw new Error('Not authorized');
+    console.log('i am auth here');
     const {
       where
     } = transformSessionListingFilters(filters);
