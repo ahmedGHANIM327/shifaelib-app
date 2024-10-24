@@ -9,14 +9,10 @@ import { AgendaComponent } from '@/components/shared/components/AgendaComponent'
 const Page = () => {
   const { isCurrentUserLoading, currentUser } = useUserStore((state) => state);
 
-  if(isCurrentUserLoading || !currentUser || !currentUser.id) {
-    return <>Loading...</>
-  }
-
   return (
     <div>
       <LoadingSection
-        loading={isCurrentUserLoading || !currentUser.id}
+        loading={isCurrentUserLoading || !currentUser || !currentUser.id}
         loadingClassName={'w-full h-[70px] bg-white'}
       >
         <h1 className="md:text-5xl text-2xl font-semibold md:my-4 my-2">
@@ -25,7 +21,7 @@ const Page = () => {
         </h1>
       </LoadingSection>
       <LoadingSection
-        loading={isCurrentUserLoading || !currentUser.id}
+        loading={isCurrentUserLoading || !currentUser || !currentUser.id}
         loadingClassName={'w-full h-[70vh] bg-white'}
       >
         <AgendaComponent

@@ -107,21 +107,17 @@ export const AgendaComponent:FC<AgendaComponentProps> = ({ views, height, contai
   useEffect(() => {
     startTransition(async () => {
       try {
-        console.log('here dateRange', dateRange);
         const response = await getFilteredSessions({
           from: dateRange.from,
           to: dateRange.to
         });
-        console.log('response', response);
         if(response && response.ok && response?.data) {
           setSessions(response.data);
         } else {
-          console.log('error', response.error);
           // @ts-ignore
           toast.error('Une erreur est servenue. Veuillez réessayer.');
         }
       } catch (error: any) {
-        console.log('error', error);
         // @ts-ignore
         toast.error('Une erreur est servenue. Veuillez réessayer.');
       }
